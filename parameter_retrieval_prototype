@@ -5,22 +5,37 @@ import pydicom as dicom
 filepath=""
 
 dataset=dicom.read_file(filepath, force=True)
-## beam number
+
+## Number of Beams
 print("The number of beams is: " + str(len(dataset.BeamSequence))+"\n")
 i=0
 while i<len(dataset.BeamSequence):
-    print("beam #: "+ str(dataset.BeamSequence[i].BeamNumber))
-    # can't figure out how to find wedge angle
-    # the tag is (300a,00D5) for wedge angle
-    print("The target perscription dose is: "+ str(dataset.DoseReferenceSequence[0].TargetPrescriptionDose))
-    print("The number of Wedges is: "+ str(dataset.BeamSequence[i].NumberOfWedges))
-    ## GantryAngle 
-    print("The Gantry Angle is: " + str(dataset.BeamSequence[i].ControlPointSequence[0].GantryAngle))
-    # SSD in millimetres
-    print("Surface to Surface Distance in centimetres: " + str(dataset.BeamSequence[i].ControlPointSequence[0].SourceToSurfaceDistance/10))
-    # number of fractions
-    print("The number of fractions planned is: " + str(dataset.FractionGroupSequence[0].NumberOfFractionsPlanned))
-    #is Beam Dose the same as Total Dose?
-    #print("The beam dose is: " + str(dataset.FractionGroupSequence[0].ReferencedBeamSequence[0].BeamDose))
-    print("\n")
+    if dataset.BeamSequence[i].BeamDescription!="SETUP beam":
+        print("beam #: "+ str(dataset.BeamSequence[i].BeamNumber))
+
+        #target perscription dose is not complete
+        print("The target perscription dose is: "+ str(dataset.DoseReferenceSequence[0].TargetPrescriptionDose))
+
+        # can't figure out how to find wedge angle
+        # the tag is (300a,00D5) for wedge angle
+        print("The number of Wedges is: "+ str(dataset.BeamSequence[i].NumberOfWedges))
+
+        ## GantryAngle 
+        print("The Gantry Angle is: " + str(dataset.BeamSequence[i].ControlPointSequence[0].GantryAngle))
+
+        # SSD in millimetres
+        print("Source to Surface Distance in centimetres: " + str(dataset.BeamSequence[i].ControlPointSequence[0].SourceToSurfaceDistance/10))
+
+        # number of fractions
+        print("The number of fractions planned is: " + str(dataset.FractionGroupSequence[0].NumberOfFractionsPlanned))
+
+        #Nominal Beam Energy (only number)
+        print("The Nominal Beam Energy is: "+ str(dataset.BeamSequence[i].ControlPointSequence[0].NominalBeamEnergy))
+
+        print("The Monitor Units is: " + str(dataset.FractionGroupSequence[0].ReferencedBeamSequence[i].BeamMeterset))
+        
+        
+        # I suspect override is at (3008, 0066)
+        
+        print("\n")
     i+=1
