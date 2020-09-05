@@ -1,3 +1,7 @@
+# I think the main parameters left to extract are collimator and wedge angle before we get into the harder stuff
+# We are going to get sent files on Monday 7/9 which should help
+# and also we need to code in exceptions where particular values don't exist
+
 #The pydicom library needs to be installed first
 import pydicom as dicom
 
