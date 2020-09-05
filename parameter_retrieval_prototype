@@ -1,4 +1,4 @@
-# I think the main parameters left to extract are collimator and wedge angle before we get into the harder stuff
+# I think the main parameters left to extract are collimator and wedge angle (and maybe overide) before we get into the harder stuff
 # We are going to get sent files on Monday 7/9 which should help
 # and also we need to code in exceptions where particular values don't exist
 
@@ -17,7 +17,7 @@ while i<len(dataset.BeamSequence):
     if dataset.BeamSequence[i].BeamDescription!="SETUP beam":
         print("beam #: "+ str(dataset.BeamSequence[i].BeamNumber))
 
-        #target perscription dose is not complete
+        #target perscription dose is not complete and is probably wrong
         print("The target perscription dose is: "+ str(dataset.DoseReferenceSequence[0].TargetPrescriptionDose))
 
         # can't figure out how to find wedge angle
