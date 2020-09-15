@@ -22,5 +22,5 @@ def parse_arguments():
 	return vars(args)
 	
 	
-if __name__ == "__main__":
-	main()
+#if __name__ == "__main__":
+	#main()
