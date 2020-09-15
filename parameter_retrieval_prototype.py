@@ -3,12 +3,12 @@
 # and also we need to code in exceptions where particular values don't exist
 
 #The pydicom library needs to be installed first
-import pydicom as dicom
+import pydicom
 
 #define the filepath
-filepath=""
+filepath="../data/first samples/IMRT DICOM sample/YellowLvlIII_7a.dcm"
 
-dataset=dicom.read_file(filepath, force=True)
+dataset=pydicom.read_file(filepath, force=True)
 
 ## Number of Beams
 print("The number of beams is: " + str(len(dataset.BeamSequence))+"\n")
@@ -41,5 +41,8 @@ while i<len(dataset.BeamSequence):
         
         # I suspect override is at (3008, 0066)
         
+        # Total Prescription Dose
+        print("The Total Prescription Dose is: "+ str(dataset.DoseReferenceSequence[0].TargetPrescriptionDose))
+
         print("\n")
     i+=1
