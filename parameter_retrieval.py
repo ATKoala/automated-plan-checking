@@ -1,13 +1,13 @@
-# I think the main parameters left to extract are collimator and wedge angle (and maybe overide) before we get into the harder stuff
-# We are going to get sent files on Monday 7/9 which should help
-# and also we need to code in exceptions where particular values don't exist
+"""
+The function to extract parameters from the specified DICOM file.
+"""
 
 # The pydicom library needs to be installed first
 import pydicom as dicom
 import pandas as pd
 
 
-def retrieve_parameters(filepath):
+def extract_parameters(filepath):
     dataset = dicom.read_file(filepath, force=True)
     parameters = {}
 
@@ -77,5 +77,5 @@ def output_csv(Result):
 
 # test comment
 filepath = "Documents/Input/YellowLvlIII_7a.dcm"
-parameters = retrieve_parameters(filepath)
+parameters = extract_parameters(filepath)
 output_csv(parameters)

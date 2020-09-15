@@ -1,4 +1,8 @@
-def output_csv(Result):
+"""Collection of functions to output the extracted parameters into the format specified by the user"""
+
+import pandas as pd
+
+def output_csv(Result, name):
     title = ["Beam Id"]
     allValues = []
     for colomn_name in Result["Beams"][0]:
@@ -21,7 +25,7 @@ def output_csv(Result):
 def output_stdout(parameters, name):
     print("The number of beams: " + str(parameters["Number of Beams"]))
     for beam in parameters["Beams"]:
-        for p in beamretrieve_parameters:
+        for p in beam:
             print(p + " : " + str(beam[p]))
         print("\n")
 
