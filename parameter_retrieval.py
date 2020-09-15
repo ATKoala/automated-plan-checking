@@ -4,8 +4,6 @@ The function to extract parameters from the specified DICOM file.
 
 # The pydicom library needs to be installed first
 import pydicom as dicom
-import pandas as pd
-
 
 def extract_parameters(filepath):
     dataset = dicom.read_file(filepath, force=True)
@@ -54,28 +52,3 @@ def extract_parameters(filepath):
         i += 1
 
     return parameters
-
-
-def output_csv(Result):
-    title = ["Beam Id"]
-    allValues = []
-    for colomn_name in Result["Beams"][0]:
-        title.append(colomn_name)
-
-    i = 0
-    while i + 1 < Result["Number of Beams"]:
-        value = [i + 1]
-        tempdic = Result["Beams"][i]
-        for item in tempdic:
-            value.append(tempdic[item])
-
-        allValues.append(value)
-        i += 1
-
-    test_pd = pd.DataFrame(columns=title, data=allValues)
-    test_pd.to_csv('Documents/Output/Result.csv', encoding='utf-8', index=False)
-
-# test comment
-filepath = "Documents/Input/YellowLvlIII_7a.dcm"
-parameters = extract_parameters(filepath)
-output_csv(parameters)

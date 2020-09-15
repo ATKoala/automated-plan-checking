@@ -2,7 +2,7 @@
 
 import pandas as pd
 
-def output_csv(Result, name):
+def output_csv(Result, filepath):
     title = ["Beam Id"]
     allValues = []
     for colomn_name in Result["Beams"][0]:
@@ -19,10 +19,13 @@ def output_csv(Result, name):
         i += 1
 
     test_pd = pd.DataFrame(columns=title, data=allValues)
-    test_pd.to_csv('Documents/Output/Result.csv', encoding='utf-8', index=False)
+    
+    filepath = filepath + ".csv" if not filepath.endswith(".csv") else filepath
+    test_pd.to_csv(filepath, encoding='utf-8', index=False)
+    return filepath
 
 
-def output_stdout(parameters, name):
+def output_stdout(parameters, filepath):
     print("The number of beams: " + str(parameters["Number of Beams"]))
     for beam in parameters["Beams"]:
         for p in beam:
@@ -36,6 +39,6 @@ formatter = {
 }
 
 
-def output(parameters, name, format):
+def output(parameters, filepath, format):
     formatter_function = formatter[format]
-    formatter_function(parameters, name)
+    return formatter_function(parameters, filepath)
