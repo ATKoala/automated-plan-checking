@@ -75,7 +75,7 @@ def output_csv(Result):
     test_pd = pd.DataFrame(columns=title, data=allValues)
     test_pd.to_csv('Documents/Output/Result.csv', encoding='utf-8', index=False)
 
-
+# test comment
 filepath = "Documents/Input/YellowLvlIII_7a.dcm"
 parameters = retrieve_parameters(filepath)
 output_csv(parameters)
