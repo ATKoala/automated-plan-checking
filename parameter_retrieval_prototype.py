@@ -3,6 +3,7 @@
 # and also we need to code in exceptions where particular values don't exist
 
 #The pydicom library needs to be installed first
+
 import pydicom
 
 #define the filepath
