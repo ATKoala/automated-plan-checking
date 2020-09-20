@@ -35,9 +35,13 @@ def extract_parameters(filepath):
 
             # Nominal Beam Energy (Gy) + Fluence Mode(FFF)
             beam["Nominal Beam Energy"] = dataset.BeamSequence[i].ControlPointSequence[first_sequence_item].NominalBeamEnergy
+            # Fluence Mode, which may indicate if dose is Flattening Filter Free (but might not! DICOM standard defines it as optional)
+            #  -STANDARD     -> not FFF
+            #  -NON_STANDARD -> check Fluence Mode ID for a short description of the fluence mode
+            beam["Fluence Mode"] = dataset.BeamSequence[i].PrimaryFluenceModeSequence[first_sequence_item].FluenceMode
 
             # Total Prescription Dose + Number of fractions
-            beam["Total Prescription Dose"] = dataset.DoseReferenceSequence[first_sequence_item].TargetPrescriptionDose)
+            beam["Total Prescription Dose"] = dataset.DoseReferenceSequence[first_sequence_item].TargetPrescriptionDose
             # Number of fractions - how many fractions the total dose is split up into for treatment
             beam["Number of Fractions Planned"] = dataset.FractionGroupSequence[first_sequence_item].NumberOfFractionsPlanned
 
