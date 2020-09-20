@@ -2,7 +2,7 @@
 The function to extract parameters from the specified DICOM file.
 """
 
-# The pydicom library needs to be installed first
+# We import the pydicom library to use it's DICOM reading methods
 import pydicom as dicom
 
 # TODO investigate whther it's ok to just look for the first item of the sequences
@@ -12,7 +12,7 @@ def extract_parameters(filepath):
     dataset = dicom.read_file(filepath, force=True)
     parameters = {}
 
-    ## Number of Beams
+    # Number of Beams
     parameters["Number of Beams"] = len(dataset.BeamSequence)
     parameters["Beams"] = []
     i = 0
@@ -33,7 +33,7 @@ def extract_parameters(filepath):
             beam["Source to Surface Distance in centimetres"] = \
                 dataset.BeamSequence[i].ControlPointSequence[first_sequence_item].SourceToSurfaceDistance / 10
 
-            # Nominal Beam Energy (Gy) + Fluence Mode(FFF)
+            # Nominal Beam Energy (MV) + Fluence Mode(FFF)
             beam["Nominal Beam Energy"] = dataset.BeamSequence[i].ControlPointSequence[first_sequence_item].NominalBeamEnergy
             # Fluence Mode, which may indicate if dose is Flattening Filter Free (but might not! DICOM standard defines it as optional)
             #  -STANDARD     -> not FFF
