@@ -48,6 +48,10 @@ def extract_parameters(filepath):
             # print("The Monitor Units is: " + str(dataset.FractionGroupSequence[0].ReferencedBeamSequence[i].BeamMeterset))
             beam["Monitor Units"] = dataset.FractionGroupSequence[0].ReferencedBeamSequence[i].BeamMeterset
 
+            # Total Prescription Dose 
+            # TODO investigate whther it's ok to just look for the first primary fluence mode item
+            beam["Total Prescription Dose"] = dataset.DoseReferenceSequence[0].TargetPrescriptionDose)
+
             parameters["Beams"].append(beam)
         i += 1
 
