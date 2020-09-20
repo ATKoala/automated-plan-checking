@@ -10,47 +10,37 @@ def extract_parameters(filepath):
     parameters = {}
 
     ## Number of Beams
-    # print("The number of beams is: " + str(len(dataset.BeamSequence))+"\n")
     parameters["Number of Beams"] = len(dataset.BeamSequence)
     parameters["Beams"] = []
     i = 0
     while i < len(dataset.BeamSequence):
         if dataset.BeamSequence[i].BeamDescription != "SETUP beam":
             beam = {}
-            # print("beam #: "+ str(dataset.BeamSequence[i].BeamNumber))
             beam["Beam Number"] = dataset.BeamSequence[i].BeamNumber
-
-            # target perscription dose is not complete and is probably wrong
-            # print("The target perscription dose is: "+ str(dataset.DoseReferenceSequence[0].TargetPrescriptionDose))
 
             # can't figure out how to find wedge angle
             # the tag is (300a,00D5) for wedge angle
             # print("The number of Wedges is: "+ str(dataset.BeamSequence[i].NumberOfWedges))
             beam["Number of Wedges"] = dataset.BeamSequence[i].NumberOfWedges
 
-            ## GantryAngle
-            # print("The Gantry Angle is: " + str(dataset.BeamSequence[i].ControlPointSequence[0].GantryAngle))
+            ## Gantry Angle
             beam["Gantry Angle"] = dataset.BeamSequence[i].ControlPointSequence[0].GantryAngle
 
-            # SSD in millimetres
-            # print("Source to Surface Distance in centimetres: " + str(dataset.BeamSequence[i].ControlPointSequence[0].SourceToSurfaceDistance/10))
+            # SSD in cm. Originally in millimeters, we convert to cm  
             beam["Source to Surface Distance in centimetres"] = dataset.BeamSequence[i].ControlPointSequence[
                                                                     0].SourceToSurfaceDistance / 10
 
-            # number of fractions
-            # print("The number of fractions planned is: " + str(dataset.FractionGroupSequence[0].NumberOfFractionsPlanned))
-            beam["Number of Fractions Planned"] = dataset.FractionGroupSequence[0].NumberOfFractionsPlanned
-
             # Nominal Beam Energy (only number)
-            # print("The Nominal Beam Energy is: "+ str(dataset.BeamSequence[i].ControlPointSequence[0].NominalBeamEnergy))
             beam["Nominal Beam Energy"] = dataset.BeamSequence[i].ControlPointSequence[0].NominalBeamEnergy
 
-            # print("The Monitor Units is: " + str(dataset.FractionGroupSequence[0].ReferencedBeamSequence[i].BeamMeterset))
+            # Monitor Units aka MU aka meterset
             beam["Monitor Units"] = dataset.FractionGroupSequence[0].ReferencedBeamSequence[i].BeamMeterset
 
             # Total Prescription Dose 
-            # TODO investigate whther it's ok to just look for the first primary fluence mode item
+            # TODO investigate whther it's ok to just look for the first item of the sequences
             beam["Total Prescription Dose"] = dataset.DoseReferenceSequence[0].TargetPrescriptionDose)
+            # Number of fractions - how many fractions the total dose is split up into for treatment
+            beam["Number of Fractions Planned"] = dataset.FractionGroupSequence[0].NumberOfFractionsPlanned
 
             parameters["Beams"].append(beam)
         i += 1
