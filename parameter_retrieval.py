@@ -48,6 +48,9 @@ def extract_parameters(filepath):
             # Monitor Units aka MU aka meterset
             beam["Monitor Units"] = dataset.FractionGroupSequence[0].ReferencedBeamSequence[i].BeamMeterset
 
+            # Colimator(Beam Limiting Device Angle)
+            beam["Colimator"] = dataset.BeamSequence[i].ControlPointSequence[0].BeamLimitingDeviceAngle
+
             parameters["Beams"].append(beam)
         i += 1
 
