@@ -26,11 +26,9 @@ def extract_parameters(filepath):
     ssd_list=[]
 
     ## Number of Beams
-    print("The number of beams is: " + str(len(dataset.BeamSequence))+"\n")
     i=0
     while i<len(dataset.BeamSequence):
         if dataset.BeamSequence[i].BeamDescription!="SETUP beam":
-            print("beam #: "+ str(dataset.BeamSequence[i].BeamNumber))
             
             # WRITE code for mode_req parameter here:
             
@@ -38,12 +36,10 @@ def extract_parameters(filepath):
             # Total Prescription Dose
             # We still need to figure out how to format so we can check it against truth table
             total_prescription_dose=str(int(dataset.DoseReferenceSequence[0].TargetPrescriptionDose))
-            print("The Total Prescription Dose is: "+ total_prescription_dose)
             
             
             # number of fractions
             number_of_fractions=str(dataset.FractionGroupSequence[0].NumberOfFractionsPlanned)
-            print("The number of fractions planned is: " + number_of_fractions)
             
             
             # WRITE code for perscription_point parameter here:
@@ -63,7 +59,6 @@ def extract_parameters(filepath):
             ## GantryAngle
             try:
                 if int(dataset.BeamSequence[i].ControlPointSequence[0].GantryAngle)!=int(dataset.BeamSequence[i].ControlPointSequence[1].GantryAngle):
-                    print('VMAT File: Gantry not recorded')
                     parameter_values['gantry']='VMAT File'
                     file_type='VMAT'
                 else:
@@ -72,9 +67,7 @@ def extract_parameters(filepath):
                         parameter_values['gantry']=gantry_instance
                     else:
                         parameter_values['gantry']+=","+gantry_instance
-                    print("The Gantry Angle is: " + gantry_instance)
             except:
-                print("There is no Gantry Angle")
                 parameter_values['gantry']='-'
             
             
@@ -82,9 +75,7 @@ def extract_parameters(filepath):
             try:
                 ssd_instance=(dataset.BeamSequence[i].ControlPointSequence[0].SourceToSurfaceDistance)/10
                 ssd_list.append(ssd_instance)
-                print("Source to Surface Distance in centimetres: " + str(ssd_instance))
             except:
-                print("There is no SSD")
                 parameter_values['SSD']='-'
             
             
@@ -118,14 +109,12 @@ def extract_parameters(filepath):
             
 
             #Nominal Beam Energy (only number so far)(not complete)
-            print("The Nominal Beam Energy is: "+ str(dataset.BeamSequence[i].ControlPointSequence[0].NominalBeamEnergy))
+            #dataset.BeamSequence[i].ControlPointSequence[0].NominalBeamEnergy
             
             
             #The monitor units is:
-            print("The Monitor Units is: " + str(dataset.FractionGroupSequence[0].ReferencedBeamSequence[i].BeamMeterset))
+            #dataset.FractionGroupSequence[0].ReferencedBeamSequence[i].BeamMeterset
             
-            
-            print("\n")
         i+=1
         
         
