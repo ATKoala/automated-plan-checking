@@ -48,6 +48,9 @@ def extract_parameters(filepath):
             # print("The Monitor Units is: " + str(dataset.FractionGroupSequence[0].ReferencedBeamSequence[i].BeamMeterset))
             beam["Monitor Units"] = dataset.FractionGroupSequence[0].ReferencedBeamSequence[i].BeamMeterset
 
+            # Colimator
+            beam["Colimator"] = dataset.BeamSequence[i].ControlPointSequence[0].BeamLimitingDeviceAngle
+
             parameters["Beams"].append(beam)
         i += 1
 
