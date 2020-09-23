@@ -22,6 +22,7 @@ def extract_parameters(filepath,case):
     parameter_values={'mode req':'','prescription dose/#':'','prescription point':'','isocentre point':'','override':'','collimator':'','gantry':'','SSD':'','couch':'','field size':'','wedge':'','meas':'','energy':''}
 
 
+
     file_type=''
     ssd_list=[]
 
