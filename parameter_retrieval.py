@@ -1,7 +1,7 @@
 # The pydicom library needs to be installed first
 import pydicom as dicom
 
-def extract_parameters(filepath):
+def extract_parameters(filepath,case):
     truth_table_dict={"case":['1','2','3','4','5','6','7','8','9','10','11','12','13','14','15','16','17'],
                  "mode req":['False','False','False','False','False','True','True','True','False','True','True','True','True','True','True','True','True'],
                  "prescription dose/#":['2','2','2','2','50/25','50/25','50/25','50/25','900/3 MU','45/3','24/2','48/4','3','3','20','20','20'],

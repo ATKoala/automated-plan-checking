@@ -13,7 +13,10 @@ def main():
     
     #Extract parameters from the specified DICOM file
     inputfile = user_input["inputfile"]
-    parameters = extract_parameters(inputfile)
+    case_number = user_input["case_number"]
+    #print(case_number)
+    parameters = extract_parameters(inputfile,case_number)
+
     
     #output the extracted parameters into the format specified by user
     output_file = user_input["outputfile"] if user_input.get("outputfile", False) else \
@@ -30,6 +33,8 @@ def parse_arguments():
                         help="The filepath to the output file. Default is same as input file.")
     parser.add_argument("-f", "--format",  choices=["csv", "stdout"], default="stdout",
                         help="The format of the output file. For now, only CSV or print to standard output are available.")
+    parser.add_argument("-c", "--case_number",
+                        help="case number of input number")
     args = parser.parse_args()
     return vars(args)
     
