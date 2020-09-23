@@ -48,7 +48,7 @@ def extract_parameters(filepath,case):
             
             # WRITE code for isocentre_point parameter here:
             # Isocenter Position TODO:Figuring out what does "SoftTiss" etc means
-            parameter_values["Isocenter Position"] = dataset.BeamSequence[i].ControlPointSequence[0].IsocenterPosition
+            #parameter_values["Isocenter Position"] = dataset.BeamSequence[i].ControlPointSequence[0].IsocenterPosition
             
             
             # WRITE code for override parameter here:
@@ -56,8 +56,7 @@ def extract_parameters(filepath,case):
             
             
             # WRITE code for collimator parameter here:         TODO:according to Andrew it seems should be Beam Limiting Device Angle
-            # parameter_values["Colimator"] = dataset.BeamSequence[i].ControlPointSequence[0].BeamLimitingDeviceAngle
-            parameter_values['collimator']=str(int(dataset.BeamSequence[i].ControlPointSequence[0].GantryAngle))
+            parameter_values['collimator']=str(int(dataset.BeamSequence[i].ControlPointSequence[0].BeamLimitingDeviceAngle))
 
 
 
