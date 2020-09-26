@@ -82,12 +82,6 @@ def extract_parameters(filepath):
 
             # WRITE code for mode_req parameter here:
 
-            # Total Prescription Dose
-            total_prescription_dose = str(int(dataset.DoseReferenceSequence[0].TargetPrescriptionDose))
-
-            # number of fractions
-            number_of_fractions = str(dataset.FractionGroupSequence[0].NumberOfFractionsPlanned)
-
             # WRITE code for perscription_point parameter here:
 
             # WRITE code for isocentre_point parameter here:
@@ -203,21 +197,22 @@ def extract_parameters(filepath):
                 parameter_values['SSD'] = '?,89,93,89,?'
             else:
                 parameter_values['SSD'] = "non valid ssd"
-                
+    
+    parameter_values['prescription dose/#'] = extractor_functions['prescription dose/#'](dataset)
     #this section deals with the 'prescription dos/#' parameter
     # Again you need to make sure that the format of parameter_values['perscription dose/#] is exactly the same as truth_table_dict['perscription dose/#'] in cases where the file passes
     # To begin you assign the total_perscription dose to the parameter value
-    parameter_values['prescription dose/#'] = total_prescription_dose
+    #parameter_values['prescription dose/#'] = total_prescription_dose
     # Then when perscription dose is 24,48,50, or 900 you also need to check the amount of fractions
     # and when its 900 the primary dosimeter unit needs to be 'MU' as well
-    if total_prescription_dose == '24':
-        parameter_values['prescription dose/#'] = '24/' + number_of_fractions
-    elif total_prescription_dose == '48':
-        parameter_values['prescription dose/#'] = '48/' + number_of_fractions
-    elif total_prescription_dose == '50':
-        parameter_values['prescription dose/#'] = '50/' + number_of_fractions
-    elif total_prescription_dose == '900' and dataset.BeamSequence[0].PrimaryDosimeterUnit == 'MU':
-        parameter_values['prescription dose/#'] = '900/' + number_of_fractions + ' MU'
+    #if total_prescription_dose == '24':
+    #    parameter_values['prescription dose/#'] = '24/' + number_of_fractions
+    #elif total_prescription_dose == '48':
+    #    parameter_values['prescription dose/#'] = '48/' + number_of_fractions
+    #elif total_prescription_dose == '50':
+    #    parameter_values['prescription dose/#'] = '50/' + number_of_fractions
+    #elif total_prescription_dose == '900' and dataset.BeamSequence[0].PrimaryDosimeterUnit == 'MU':
+    #    parameter_values['prescription dose/#'] = '900/' + number_of_fractions + ' MU'
 
     return parameter_values, file_type
 
@@ -290,3 +285,43 @@ def evaluate_parameters(parameter_values, case, file_type):
                 else:
                     pass_fail_values[param] = truth_table_dict[param][case - 1]
     return pass_fail_values
+
+def _extract_prescription_dose(dataset):
+    # Total Prescription Dose
+    total_prescription_dose = str(int(dataset.DoseReferenceSequence[0].TargetPrescriptionDose))
+    # number of fractions
+    number_of_fractions = str(dataset.FractionGroupSequence[0].NumberOfFractionsPlanned)
+    
+    #this section deals with the 'prescription dos/#' parameter
+    # You need to make sure that the format of parameter_values['perscription dose/#] is exactly the same as truth_table_dict['perscription dose/#'] in cases where the file passes
+    # To begin you assign the total_perscription dose to the parameter value
+    prescription_dose = total_prescription_dose
+    
+    # Then when perscription dose is 24,48,50, or 900 you also need to check the amount of fractions
+    # and when its 900 the primary dosimeter unit needs to be 'MU' as well
+    if total_prescription_dose == '24':
+        prescription_dose = '24/' + number_of_fractions
+    elif total_prescription_dose == '48':
+        prescription_dose = '48/' + number_of_fractions
+    elif total_prescription_dose == '50':
+        prescription_dose = '50/' + number_of_fractions
+    elif total_prescription_dose == '900' and dataset.BeamSequence[0].PrimaryDosimeterUnit == 'MU':
+        prescription_dose = '900/' + number_of_fractions + ' MU'
+    
+    return prescription_dose
+        
+extractor_functions = {
+    'mode req': lambda dataset: '', 
+    'prescription dose/#': _extract_prescription_dose, 
+    'prescription point': '', 
+    'isocentre point': '',
+    'override': '', 
+    'collimator': '', 
+    'gantry': '', 
+    'SSD': '', 
+    'couch': '', 
+    'field size': '',
+    'wedge': '', 
+    'meas': '', 
+    'energy': ''
+}
