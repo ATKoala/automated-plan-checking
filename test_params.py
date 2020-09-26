@@ -11,7 +11,7 @@ Detailed instructions for running tests are in the README.
 '''
 import unittest
 import pydicom
-from parameter_retrieval import extract_parameters
+from parameter_retrieval import extract_parameters, evaluate_parameters
 
 class TestIMRTExtractionEvaluation(unittest.TestCase):
     ''' Tests for verifying that parameters are passed and failed correctly
@@ -21,8 +21,7 @@ class TestIMRTExtractionEvaluation(unittest.TestCase):
     def setUpClass(self):
         # We do some set up that is useful across tests in this class 
         # i.e. running the extraction function once and using the result for each test differently
-        self.extracted = extract_parameters('./Documents/Input/YellowLvlIII_7a.dcm', 6)
-        print(self.extracted)
+        self.dummy_parameters = None
 
     def test_total_prescription_dose(self):
         pass

@@ -8,48 +8,13 @@ import pydicom as dicom
 # TODO investigate whther it's ok to just look for the first item of the sequences
 first_sequence_item = 0
 
+def main():
+    extract_parameters("./Documents/Input/YellowLvlIII_7a.dcm",6)
+
 def extract_parameters(filepath, case):
     dataset = dicom.read_file(filepath, force=True)
     # print(dataset)
-    truth_table_dict = {
-        "case": ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17'],
-        "mode req": ['False', 'False', 'False', 'False', 'False', 'True', 'True', 'True', 'False', 'True', 'True',
-                     'True', 'True', 'True', 'True', 'True', 'True'],
-        "prescription dose/#": ['2', '2', '2', '2', '50/25', '50/25', '50/25', '50/25', '900/3 MU', '45/3', '24/2',
-                                '48/4', '3', '3', '20', '20', '20'],
-        "prescription point": ['1 or 3', '5', '3', '3', 'chair', 'CShape', 'CShape', 'C8Target', '-', 'SoftTissTarget',
-                               'SpineTarget', 'LungTarget', '1', '1', 'PTV_c14_c15', '-', '-'],
-        "isocentre point": ['surf', '3', '3', '3', '3', '3', '3', '3', 'SoftTiss', 'SoftTiss', 'Spine', 'Lung', '1',
-                            '1', '1', '-', '-'],
-        "override": ['bone', 'no override', 'no override', 'no override', 'no override', 'lungs', 'no override',
-                     'no override', 'lungs', 'lungs', 'no override', 'no override', 'central cube', 'central cube',
-                     'central cube', 'central cube', 'central cube'],
-        "collimator": ['0', '-', '-', '-', '0', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-'],
-        "gantry": ['0', '270,0,90', '90', '90', '0', '150,60,0,300,210', '150,60,0,300,210', '150,60,0,300,210', '-',
-                   '-', '-', '-', '-', '-', '-', '-', '-'],
-        "SSD": ['100', '86,93,86', '86', '86', '93', '?,89,93,89,?', '?,89,93,89,?', '?,89,93,89,?', '90', '-', '-',
-                '-', '-', '-', '-', '-', '-'],
-        'couch': ['-', '-', '-', '-', '-', 'couch?', 'couch?', 'couch?', '-', 'couch?', 'couch?', 'couch?', '-', '-',
-                  'couch?', 'couch?', 'couch?'],
-        'field size': ['10x10', '10x6,10x12,10x6', '10x12', '10x12', '-', '-', '-', '-', '3x3,2x2,1x1', '-', '-', '-',
-                       '3x3', '1.5x1.5', '-', '-', '-'],
-        'wedge': ['0', '30,0,30', '0', '60', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-'],
-        'meas': ["'1','3','10','-','-','-','-','-','-'",
-                 "'5_RLAT','8_RLAT','5_AP','8_AP','5_LLAT','8_LLAT','-','-','-'", "'3','5','-','-','-','-','-','-','-'",
-                 "'3','5','-','-','-','-','-','-','-'", "'11','12','13','14','15','18','19','20','21'",
-                 "'11','12','13','14','15','16','17','-','-'", "'11','12','13','14','15','16','17','-','-'",
-                 "'11','12','13','14','15','17','18','-','-'",
-                 "'SoftTiss_3','SoftTiss_2','SoftTiss_1','-','-','-','-','-','-'",
-                 "'SoftTiss','-','-','-','-','-','-','-','-'", "'Spine2Inf','Spine1Sup','Cord','-','-','-','-','-','-'",
-                 "'Lung','-','-','-','-','-','-','-','-'", "'1_3','1_4','-','-','-','-','-','-','-'",
-                 "'1_1.5','4_1.5','-','-','-','-','-','-','-'", "'1','3','-','-','-','-','-','-','-'",
-                 "'1','3','-','-','-','-','-','-','-'", "'1','2','3','-','-','-','-','-','-'"],
-        'energy': ["6,6FFF,10,10FFF,18", "6,6FFF,10,10FFF,18", "6,6FFF,10,10FFF,18", "6,6FFF,10,10FFF,18",
-                   "6,6FFF,10,10FFF,18", "6,6FFF,10,10FFF,18", "6,6FFF,10,10FFF,18", "6,6FFF,10,10FFF,18",
-                   "6,6FFF,10,10FFF,18", "6,6FFF,10,10FFF,18", "6,6FFF,10,10FFF,18", "6,6FFF,10,10FFF,18",
-                   "6,6FFF,10,10FFF,18", "6,6FFF,10,10FFF,18", "6,6FFF,10,10FFF,18", "6,6FFF,10,10FFF,18",
-                   "6,6FFF,10,10FFF,18"]}
-
+    
     parameters = ['mode req', 'prescription dose/#', 'prescription point', 'isocentre point', 'override', 'collimator',
                   'gantry', 'SSD', 'couch', 'field size', 'wedge', 'meas', 'energy']
     parameter_values = {'mode req': '', 'prescription dose/#': '', 'prescription point': '', 'isocentre point': '',
@@ -179,22 +144,65 @@ def extract_parameters(filepath, case):
     elif total_prescription_dose == '900' and dataset.BeamSequence[0].PrimaryDosimeterUnit == 'MU':
         parameter_values['prescription dose/#'] = '900/' + number_of_fractions + ' MU'
 
-    # print(parameter_values)
-    # print(case)
+    return parameter_values, file_type
+
+
+def evaluate_parameters(parameters, case, file_type):
+
+    truth_table_dict = {
+        "case": ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17'],
+        "mode req": ['False', 'False', 'False', 'False', 'False', 'True', 'True', 'True', 'False', 'True', 'True',
+                     'True', 'True', 'True', 'True', 'True', 'True'],
+        "prescription dose/#": ['2', '2', '2', '2', '50/25', '50/25', '50/25', '50/25', '900/3 MU', '45/3', '24/2',
+                                '48/4', '3', '3', '20', '20', '20'],
+        "prescription point": ['1 or 3', '5', '3', '3', 'chair', 'CShape', 'CShape', 'C8Target', '-', 'SoftTissTarget',
+                               'SpineTarget', 'LungTarget', '1', '1', 'PTV_c14_c15', '-', '-'],
+        "isocentre point": ['surf', '3', '3', '3', '3', '3', '3', '3', 'SoftTiss', 'SoftTiss', 'Spine', 'Lung', '1',
+                            '1', '1', '-', '-'],
+        "override": ['bone', 'no override', 'no override', 'no override', 'no override', 'lungs', 'no override',
+                     'no override', 'lungs', 'lungs', 'no override', 'no override', 'central cube', 'central cube',
+                     'central cube', 'central cube', 'central cube'],
+        "collimator": ['0', '-', '-', '-', '0', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-'],
+        "gantry": ['0', '270,0,90', '90', '90', '0', '150,60,0,300,210', '150,60,0,300,210', '150,60,0,300,210', '-',
+                   '-', '-', '-', '-', '-', '-', '-', '-'],
+        "SSD": ['100', '86,93,86', '86', '86', '93', '?,89,93,89,?', '?,89,93,89,?', '?,89,93,89,?', '90', '-', '-',
+                '-', '-', '-', '-', '-', '-'],
+        'couch': ['-', '-', '-', '-', '-', 'couch?', 'couch?', 'couch?', '-', 'couch?', 'couch?', 'couch?', '-', '-',
+                  'couch?', 'couch?', 'couch?'],
+        'field size': ['10x10', '10x6,10x12,10x6', '10x12', '10x12', '-', '-', '-', '-', '3x3,2x2,1x1', '-', '-', '-',
+                       '3x3', '1.5x1.5', '-', '-', '-'],
+        'wedge': ['0', '30,0,30', '0', '60', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-'],
+        'meas': ["'1','3','10','-','-','-','-','-','-'",
+                 "'5_RLAT','8_RLAT','5_AP','8_AP','5_LLAT','8_LLAT','-','-','-'", "'3','5','-','-','-','-','-','-','-'",
+                 "'3','5','-','-','-','-','-','-','-'", "'11','12','13','14','15','18','19','20','21'",
+                 "'11','12','13','14','15','16','17','-','-'", "'11','12','13','14','15','16','17','-','-'",
+                 "'11','12','13','14','15','17','18','-','-'",
+                 "'SoftTiss_3','SoftTiss_2','SoftTiss_1','-','-','-','-','-','-'",
+                 "'SoftTiss','-','-','-','-','-','-','-','-'", "'Spine2Inf','Spine1Sup','Cord','-','-','-','-','-','-'",
+                 "'Lung','-','-','-','-','-','-','-','-'", "'1_3','1_4','-','-','-','-','-','-','-'",
+                 "'1_1.5','4_1.5','-','-','-','-','-','-','-'", "'1','3','-','-','-','-','-','-','-'",
+                 "'1','3','-','-','-','-','-','-','-'", "'1','2','3','-','-','-','-','-','-'"],
+        'energy': ["6,6FFF,10,10FFF,18", "6,6FFF,10,10FFF,18", "6,6FFF,10,10FFF,18", "6,6FFF,10,10FFF,18",
+                   "6,6FFF,10,10FFF,18", "6,6FFF,10,10FFF,18", "6,6FFF,10,10FFF,18", "6,6FFF,10,10FFF,18",
+                   "6,6FFF,10,10FFF,18", "6,6FFF,10,10FFF,18", "6,6FFF,10,10FFF,18", "6,6FFF,10,10FFF,18",
+                   "6,6FFF,10,10FFF,18", "6,6FFF,10,10FFF,18", "6,6FFF,10,10FFF,18", "6,6FFF,10,10FFF,18",
+                   "6,6FFF,10,10FFF,18"]}
+
     case = int(case)
     pass_fail_values = {}
     if case in range(1, 18):
         #print(case)
-        for param in parameter_values:
+        for param in parameters:
             #print(param)
-            if truth_table_dict[param][case - 1] == parameter_values[param] or truth_table_dict[param][
+            if truth_table_dict[param][case - 1] == parameters[param] or truth_table_dict[param][
                 case - 1] == '-' or (file_type == 'VMAT' and (param == 'gantry' or param == 'SSD')):
                 pass_fail_values[param] = "PASS"
             else:
-                if parameter_values[param] != '':
+                if parameters[param] != '':
                     pass_fail_values[param] = "FAIL"
                 else:
                     pass_fail_values[param] = truth_table_dict[param][case - 1]
-
-    #print(pass_fail_values)
     return pass_fail_values
+
+if __name__ == "__main__":
+    main() 

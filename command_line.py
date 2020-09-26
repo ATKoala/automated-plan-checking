@@ -4,7 +4,7 @@ The main function asks for user inputs using command line arguments, then pass i
 The extractor result is then passed to the outputter.
 """
 import argparse
-from parameter_retrieval import extract_parameters
+from parameter_retrieval import extract_parameters, evaluate_parameters
 from outputter import output
 
 
@@ -16,12 +16,15 @@ def main():
     inputfile = user_input["inputfile"]
     case_number = user_input["case_number"]
     # print(case_number)
-    parameters = extract_parameters(inputfile, case_number)
+    parameters, file_type = extract_parameters(inputfile, case_number)
+    print(parameters)
+    evaluations = evaluate_parameters(parameters, case_number, file_type)
+    print(evaluations)
 
     # output the extracted parameters into the format specified by user
     output_file = user_input["outputfile"] if user_input.get("outputfile", False) else \
         user_input["inputfile"][0: len(user_input["inputfile"]) - 4]  # remove the ".dcm" file extension
-    output_file = output(parameters, output_file, user_input["format"])
+    output_file = output(evaluations, output_file, user_input["format"])
     if output_file:
         print("Extracted to file " + output_file)
 
