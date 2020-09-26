@@ -20,4 +20,4 @@ Examples:
 
 ## Testing
 
-Run the tests with `test command`
+Run the tests with `python -m unittest`
