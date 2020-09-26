@@ -91,33 +91,9 @@ def extract_parameters(filepath):
             # WRITE code for override parameter here:
             # I suspect override is at (3008, 0066) tag in the DICOM file but I'm not sure
 
-            # WRITE code for collimator parameter here
-            # record collimator value in the parameter_values dictionary as a string to be consistant with truth_table format 
-            # According to the truth table the collimator only needs to be recorded for cases 1&5 where only 1 beam occurs
-            parameter_values['collimator'] = str(
-                int(dataset.BeamSequence[i].ControlPointSequence[0].BeamLimitingDeviceAngle))
-
             # WRITE code for couch parameter here:
 
             # WRITE code for field size parameter here:
-
-            # Wedge Angles
-            # It may need more work to deal with VMAT files for cases 6,7,8
-            # First determine the amount of wedges
-            num_wedges = int(dataset.BeamSequence[i].NumberOfWedges)
-            # This first if else statement is simply so that there is a comma between wedge angles for cases where there are mulitiple wedge angles
-            if parameter_values['wedge'] == '':
-                #A zero is added if there is no wedge angle otherwise the wedge angle is added
-                if num_wedges == 0:
-                    parameter_values['wedge'] += '0'
-                elif num_wedges == 1:
-                    parameter_values['wedge'] += str(int(dataset.BeamSequence[0].WedgeSequence[0].WedgeAngle))
-            else:
-                #A zero is added if there is no wedge angle otherwise the wedge angle is added
-                if num_wedges == 0:
-                    parameter_values['wedge'] += ',0'
-                elif num_wedges == 1:
-                    parameter_values['wedge'] += ',' + str(int(dataset.BeamSequence[0].WedgeSequence[0].WedgeAngle))
 
             # WRITE code for meas parameter here:
 
@@ -136,11 +112,13 @@ def extract_parameters(filepath):
 
         i += 1
 
+    parameter_values['collimator'] = extractor_functions['collimator'](dataset)
     parameter_values['gantry'] = extractor_functions['gantry'](dataset)
     # print(parameter_values)
     
     parameter_values['SSD'] = extractor_functions['SSD'](dataset)
     parameter_values['prescription dose/#'] = extractor_functions['prescription dose/#'](dataset)
+    parameter_values['wedge'] = extractor_functions['wedge'](dataset)
 
     return parameter_values, file_type
 
@@ -244,6 +222,13 @@ def _extract_prescription_dose(dataset):
     
     return prescription_dose
     
+def _extract_collimator(dataset):
+    # record collimator value in the parameter_values dictionary as a string to be consistant with truth_table format 
+	# According to the truth table the collimator only needs to be recorded for cases 1&5 where only 1 beam occurs
+    beams = list(filter(lambda beam: beam.BeamDescription != "SETUP beam", dataset.BeamSequence))
+    collimator_value = beams[len(beams)-1].ControlPointSequence[0].BeamLimitingDeviceAngle
+    return str(int(collimator_value))
+    
 def _extract_gantry(dataset):
     try:
         file_type = _extract_file_type(dataset)
@@ -310,26 +295,35 @@ def _extract_ssd(dataset):
         else:
             return "non valid ssd"
 
+def _extract_wedge(dataset):
+    # It may need more work to deal with VMAT files for cases 6,7,8
+    
+    #ignore setup beams
+    beams = list(filter(lambda beam: beam.BeamDescription != "SETUP beam", dataset.BeamSequence))
+    # if there are wedges, get the wedge angle of the beam. Otherwise, get 0
+    wedge_angles = list(map(lambda beam: str(int(beam.WedgeSequence[0].WedgeAngle)) if int(beam.NumberOfWedges) > 0 else '0', beams))
+    return ','.join(wedge_angles)
+    
 
-#just a placeholder function to indicate which parameters have not been implemented
+#just a placeholder function to indicate which parameter extractions have not been implemented
 def to_be_implemented(dataset):
     return ''
 
 extractor_functions = {
-    'mode req': to_be_implemented, 
-    'prescription dose/#': _extract_prescription_dose, 
-    'prescription point': to_be_implemented, 
-    'isocentre point': to_be_implemented,
+    'mode req'                : to_be_implemented, 
+    'prescription dose/#'     : _extract_prescription_dose, 
+    'prescription point'      : to_be_implemented, 
+    'isocentre point'         : to_be_implemented,
         # Isocenter Position TODO:Figuring out what does "SoftTiss" etc means
         # parameter_values["Isocenter Position"] = dataset.BeamSequence[i].ControlPointSequence[0].IsocenterPosition
-    'override': to_be_implemented, 
+    'override'                : to_be_implemented, 
         #I suspect override is at (3008, 0066) tag in the DICOM file but I'm not sure
-    'collimator': '', 
-    'gantry': _extract_gantry, 
-    'SSD': _extract_ssd, 
-    'couch': '', 
-    'field size': '',
-    'wedge': '', 
-    'meas': '', 
-    'energy': ''
+    'collimator'              : _extract_collimator, 
+    'gantry'                  : _extract_gantry, 
+    'SSD'                     : _extract_ssd, 
+    'couch'                   : to_be_implemented, 
+    'field size'              : to_be_implemented,
+    'wedge'                   : _extract_wedge, 
+    'meas'                    : '', 
+    'energy'                  : ''
 }
