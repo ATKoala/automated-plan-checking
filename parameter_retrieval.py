@@ -8,51 +8,50 @@ import pydicom as dicom
 # TODO investigate whther it's ok to just look for the first item of the sequences
 first_sequence_item = 0
 
+# truth_table_dict defines the truth table in the form a dictionary
+# Each key(i.e. case, mode req, etc) refers to a column of the truth table
+# Each key has an associated list which gives every row value corresponing to that column in order
+truth_table_dict = {
+    "case": ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17'],
+    "mode req": ['False', 'False', 'False', 'False', 'False', 'True', 'True', 'True', 'False', 'True', 'True',
+                 'True', 'True', 'True', 'True', 'True', 'True'],
+    "prescription dose/#": ['2', '2', '2', '2', '50/25', '50/25', '50/25', '50/25', '900/3 MU', '45/3', '24/2',
+                            '48/4', '3', '3', '20', '20', '20'],
+    "prescription point": ['1 or 3', '5', '3', '3', 'chair', 'CShape', 'CShape', 'C8Target', '-', 'SoftTissTarget',
+                           'SpineTarget', 'LungTarget', '1', '1', 'PTV_c14_c15', '-', '-'],
+    "isocentre point": ['surf', '3', '3', '3', '3', '3', '3', '3', 'SoftTiss', 'SoftTiss', 'Spine', 'Lung', '1',
+                        '1', '1', '-', '-'],
+    "override": ['bone', 'no override', 'no override', 'no override', 'no override', 'lungs', 'no override',
+                 'no override', 'lungs', 'lungs', 'no override', 'no override', 'central cube', 'central cube',
+                 'central cube', 'central cube', 'central cube'],
+    "collimator": ['0', '-', '-', '-', '0', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-'],
+    "gantry": ['0', '270,0,90', '90', '90', '0', '150,60,0,300,210', '150,60,0,300,210', '150,60,0,300,210', '-',
+               '-', '-', '-', '-', '-', '-', '-', '-'],
+    "SSD": ['100', '86,93,86', '86', '86', '93', '?,89,93,89,?', '?,89,93,89,?', '?,89,93,89,?', '90', '-', '-',
+            '-', '-', '-', '-', '-', '-'],
+    'couch': ['-', '-', '-', '-', '-', 'couch?', 'couch?', 'couch?', '-', 'couch?', 'couch?', 'couch?', '-', '-',
+              'couch?', 'couch?', 'couch?'],
+    'field size': ['10x10', '10x6,10x12,10x6', '10x12', '10x12', '-', '-', '-', '-', '3x3,2x2,1x1', '-', '-', '-',
+                   '3x3', '1.5x1.5', '-', '-', '-'],
+    'wedge': ['0', '30,0,30', '0', '60', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-'],
+    'meas': ["'1','3','10','-','-','-','-','-','-'",
+             "'5_RLAT','8_RLAT','5_AP','8_AP','5_LLAT','8_LLAT','-','-','-'", "'3','5','-','-','-','-','-','-','-'",
+             "'3','5','-','-','-','-','-','-','-'", "'11','12','13','14','15','18','19','20','21'",
+             "'11','12','13','14','15','16','17','-','-'", "'11','12','13','14','15','16','17','-','-'",
+             "'11','12','13','14','15','17','18','-','-'",
+             "'SoftTiss_3','SoftTiss_2','SoftTiss_1','-','-','-','-','-','-'",
+             "'SoftTiss','-','-','-','-','-','-','-','-'", "'Spine2Inf','Spine1Sup','Cord','-','-','-','-','-','-'",
+             "'Lung','-','-','-','-','-','-','-','-'", "'1_3','1_4','-','-','-','-','-','-','-'",
+             "'1_1.5','4_1.5','-','-','-','-','-','-','-'", "'1','3','-','-','-','-','-','-','-'",
+             "'1','3','-','-','-','-','-','-','-'", "'1','2','3','-','-','-','-','-','-'"],
+    'energy': ["6,6FFF,10,10FFF,18", "6,6FFF,10,10FFF,18", "6,6FFF,10,10FFF,18", "6,6FFF,10,10FFF,18",
+               "6,6FFF,10,10FFF,18", "6,6FFF,10,10FFF,18", "6,6FFF,10,10FFF,18", "6,6FFF,10,10FFF,18",
+               "6,6FFF,10,10FFF,18", "6,6FFF,10,10FFF,18", "6,6FFF,10,10FFF,18", "6,6FFF,10,10FFF,18",
+               "6,6FFF,10,10FFF,18", "6,6FFF,10,10FFF,18", "6,6FFF,10,10FFF,18", "6,6FFF,10,10FFF,18",
+               "6,6FFF,10,10FFF,18"]}
+
 def extract_parameters(filepath):
     dataset = dicom.read_file(filepath, force=True)
-    # print(dataset)
-    
-    # truth_table_dict defines the truth table in the form a dictionary
-    # Each key(i.e. case, mode req, etc) refers to a column of the truth table
-    # Each key has an associated list which gives every row value corresponing to that column in order
-    truth_table_dict = {
-        "case": ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17'],
-        "mode req": ['False', 'False', 'False', 'False', 'False', 'True', 'True', 'True', 'False', 'True', 'True',
-                     'True', 'True', 'True', 'True', 'True', 'True'],
-        "prescription dose/#": ['2', '2', '2', '2', '50/25', '50/25', '50/25', '50/25', '900/3 MU', '45/3', '24/2',
-                                '48/4', '3', '3', '20', '20', '20'],
-        "prescription point": ['1 or 3', '5', '3', '3', 'chair', 'CShape', 'CShape', 'C8Target', '-', 'SoftTissTarget',
-                               'SpineTarget', 'LungTarget', '1', '1', 'PTV_c14_c15', '-', '-'],
-        "isocentre point": ['surf', '3', '3', '3', '3', '3', '3', '3', 'SoftTiss', 'SoftTiss', 'Spine', 'Lung', '1',
-                            '1', '1', '-', '-'],
-        "override": ['bone', 'no override', 'no override', 'no override', 'no override', 'lungs', 'no override',
-                     'no override', 'lungs', 'lungs', 'no override', 'no override', 'central cube', 'central cube',
-                     'central cube', 'central cube', 'central cube'],
-        "collimator": ['0', '-', '-', '-', '0', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-'],
-        "gantry": ['0', '270,0,90', '90', '90', '0', '150,60,0,300,210', '150,60,0,300,210', '150,60,0,300,210', '-',
-                   '-', '-', '-', '-', '-', '-', '-', '-'],
-        "SSD": ['100', '86,93,86', '86', '86', '93', '?,89,93,89,?', '?,89,93,89,?', '?,89,93,89,?', '90', '-', '-',
-                '-', '-', '-', '-', '-', '-'],
-        'couch': ['-', '-', '-', '-', '-', 'couch?', 'couch?', 'couch?', '-', 'couch?', 'couch?', 'couch?', '-', '-',
-                  'couch?', 'couch?', 'couch?'],
-        'field size': ['10x10', '10x6,10x12,10x6', '10x12', '10x12', '-', '-', '-', '-', '3x3,2x2,1x1', '-', '-', '-',
-                       '3x3', '1.5x1.5', '-', '-', '-'],
-        'wedge': ['0', '30,0,30', '0', '60', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-'],
-        'meas': ["'1','3','10','-','-','-','-','-','-'",
-                 "'5_RLAT','8_RLAT','5_AP','8_AP','5_LLAT','8_LLAT','-','-','-'", "'3','5','-','-','-','-','-','-','-'",
-                 "'3','5','-','-','-','-','-','-','-'", "'11','12','13','14','15','18','19','20','21'",
-                 "'11','12','13','14','15','16','17','-','-'", "'11','12','13','14','15','16','17','-','-'",
-                 "'11','12','13','14','15','17','18','-','-'",
-                 "'SoftTiss_3','SoftTiss_2','SoftTiss_1','-','-','-','-','-','-'",
-                 "'SoftTiss','-','-','-','-','-','-','-','-'", "'Spine2Inf','Spine1Sup','Cord','-','-','-','-','-','-'",
-                 "'Lung','-','-','-','-','-','-','-','-'", "'1_3','1_4','-','-','-','-','-','-','-'",
-                 "'1_1.5','4_1.5','-','-','-','-','-','-','-'", "'1','3','-','-','-','-','-','-','-'",
-                 "'1','3','-','-','-','-','-','-','-'", "'1','2','3','-','-','-','-','-','-'"],
-        'energy': ["6,6FFF,10,10FFF,18", "6,6FFF,10,10FFF,18", "6,6FFF,10,10FFF,18", "6,6FFF,10,10FFF,18",
-                   "6,6FFF,10,10FFF,18", "6,6FFF,10,10FFF,18", "6,6FFF,10,10FFF,18", "6,6FFF,10,10FFF,18",
-                   "6,6FFF,10,10FFF,18", "6,6FFF,10,10FFF,18", "6,6FFF,10,10FFF,18", "6,6FFF,10,10FFF,18",
-                   "6,6FFF,10,10FFF,18", "6,6FFF,10,10FFF,18", "6,6FFF,10,10FFF,18", "6,6FFF,10,10FFF,18",
-                   "6,6FFF,10,10FFF,18"]}
     
     # define a list of parameters that need to be found
     parameters = ['mode req', 'prescription dose/#', 'prescription point', 'isocentre point', 'override', 'collimator',
@@ -65,106 +64,14 @@ def extract_parameters(filepath):
                         'override': '', 'collimator': '', 'gantry': '', 'SSD': '', 'couch': '', 'field size': '',
                         'wedge': '', 'meas': '', 'energy': ''}
 
-    # created a variable file_type in circumstances where it is useful to identify whether the file is a VMAT for example
-    # at the moment it does this by identifying wheter the control point index has different gantry angles for different control points of the same beam
-    file_type = _extract_file_type(dataset)
-    
-    # ssd_list is defined to keep track of ssd values as an intermediate step
-    # later the code uses this list to match the values against the truth table
-    ssd_list = []
-
-    # The idea of this while loop is that it iterates through every Beam in the Dicom file to find the relevant information
-    i = 0
-    while i < len(dataset.BeamSequence):
-        # This if statement is used to ignore any setup beams
-        if dataset.BeamSequence[i].BeamDescription != "SETUP beam":
-            # Each parameter is divided into its own section
-
-            # WRITE code for mode_req parameter here:
-
-            # WRITE code for perscription_point parameter here:
-
-            # WRITE code for isocentre_point parameter here:
-            # Isocenter Position TODO:Figuring out what does "SoftTiss" etc means
-            # parameter_values["Isocenter Position"] = dataset.BeamSequence[i].ControlPointSequence[0].IsocenterPosition
-
-            # WRITE code for override parameter here:
-            # I suspect override is at (3008, 0066) tag in the DICOM file but I'm not sure
-
-            # WRITE code for couch parameter here:
-
-            # WRITE code for field size parameter here:
-
-            # WRITE code for meas parameter here:
-
-            #TODO extra LVL3 files given by client are still showing all STANDARD; need to confirm that one of them really 
-            #      is meant to be FFF so we can say this parameter is a bust or some other method is required.
-            # Nominal Beam Energy (MV) + Fluence Mode(STANDARD/NONSTANDARD)
-            parameter_values["energy"] = dataset.BeamSequence[i].ControlPointSequence[first_sequence_item].NominalBeamEnergy
-            # Fluence Mode, which may indicate if dose is Flattening Filter Free (but might not! DICOM standard defines it as optional)
-            #  -STANDARD     -> not FFF
-            #  -NON_STANDARD -> check Fluence Mode ID for a short description of the fluence mode (could be FFF)
-            if dataset.BeamSequence[i].PrimaryFluenceModeSequence[first_sequence_item].FluenceMode != 'STANDARD':
-                parameter_values["energy"] += dataset.BeamSequence[i].PrimaryFluenceModeSequence[first_sequence_item].FluenceModeID
-
-            # The monitor units is:
-            # dataset.FractionGroupSequence[0].ReferencedBeamSequence[i].BeamMeterset
-
-        i += 1
-
-    parameter_values['collimator'] = extractor_functions['collimator'](dataset)
-    parameter_values['gantry'] = extractor_functions['gantry'](dataset)
-    # print(parameter_values)
-    
-    parameter_values['SSD'] = extractor_functions['SSD'](dataset)
-    parameter_values['prescription dose/#'] = extractor_functions['prescription dose/#'](dataset)
-    parameter_values['wedge'] = extractor_functions['wedge'](dataset)
-	parameter_values['energy'] = extractor_functions['energy'](dataset)
+    #run the extraction functions for each parameter and store the values in parameter_values dictionary
+    for parameter in parameters:
+        parameter_values[parameter] = extractor_functions[parameter](dataset)
 
     return parameter_values, file_type
 
 
 def evaluate_parameters(parameter_values, case, file_type):
-
-    truth_table_dict = {
-        "case": ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17'],
-        "mode req": ['False', 'False', 'False', 'False', 'False', 'True', 'True', 'True', 'False', 'True', 'True',
-                     'True', 'True', 'True', 'True', 'True', 'True'],
-        "prescription dose/#": ['2', '2', '2', '2', '50/25', '50/25', '50/25', '50/25', '900/3 MU', '45/3', '24/2',
-                                '48/4', '3', '3', '20', '20', '20'],
-        "prescription point": ['1 or 3', '5', '3', '3', 'chair', 'CShape', 'CShape', 'C8Target', '-', 'SoftTissTarget',
-                               'SpineTarget', 'LungTarget', '1', '1', 'PTV_c14_c15', '-', '-'],
-        "isocentre point": ['surf', '3', '3', '3', '3', '3', '3', '3', 'SoftTiss', 'SoftTiss', 'Spine', 'Lung', '1',
-                            '1', '1', '-', '-'],
-        "override": ['bone', 'no override', 'no override', 'no override', 'no override', 'lungs', 'no override',
-                     'no override', 'lungs', 'lungs', 'no override', 'no override', 'central cube', 'central cube',
-                     'central cube', 'central cube', 'central cube'],
-        "collimator": ['0', '-', '-', '-', '0', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-'],
-        "gantry": ['0', '270,0,90', '90', '90', '0', '150,60,0,300,210', '150,60,0,300,210', '150,60,0,300,210', '-',
-                   '-', '-', '-', '-', '-', '-', '-', '-'],
-        "SSD": ['100', '86,93,86', '86', '86', '93', '?,89,93,89,?', '?,89,93,89,?', '?,89,93,89,?', '90', '-', '-',
-                '-', '-', '-', '-', '-', '-'],
-        'couch': ['-', '-', '-', '-', '-', 'couch?', 'couch?', 'couch?', '-', 'couch?', 'couch?', 'couch?', '-', '-',
-                  'couch?', 'couch?', 'couch?'],
-        'field size': ['10x10', '10x6,10x12,10x6', '10x12', '10x12', '-', '-', '-', '-', '3x3,2x2,1x1', '-', '-', '-',
-                       '3x3', '1.5x1.5', '-', '-', '-'],
-        'wedge': ['0', '30,0,30', '0', '60', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-'],
-        'meas': ["'1','3','10','-','-','-','-','-','-'",
-                 "'5_RLAT','8_RLAT','5_AP','8_AP','5_LLAT','8_LLAT','-','-','-'", "'3','5','-','-','-','-','-','-','-'",
-                 "'3','5','-','-','-','-','-','-','-'", "'11','12','13','14','15','18','19','20','21'",
-                 "'11','12','13','14','15','16','17','-','-'", "'11','12','13','14','15','16','17','-','-'",
-                 "'11','12','13','14','15','17','18','-','-'",
-                 "'SoftTiss_3','SoftTiss_2','SoftTiss_1','-','-','-','-','-','-'",
-                 "'SoftTiss','-','-','-','-','-','-','-','-'", "'Spine2Inf','Spine1Sup','Cord','-','-','-','-','-','-'",
-                 "'Lung','-','-','-','-','-','-','-','-'", "'1_3','4_3','-','-','-','-','-','-','-'",
-                 "'1_1.5','4_1.5','-','-','-','-','-','-','-'", "'1','3','-','-','-','-','-','-','-'",
-                 "'1','3','-','-','-','-','-','-','-'", "'1','2','3','-','-','-','-','-','-'"],
-        'energy': ["6,6FFF,10,10FFF,18", "6,6FFF,10,10FFF,18", "6,6FFF,10,10FFF,18", "6,6FFF,10,10FFF,18",
-                   "6,6FFF,10,10FFF,18", "6,6FFF,10,10FFF,18", "6,6FFF,10,10FFF,18", "6,6FFF,10,10FFF,18",
-                   "6,6FFF,10,10FFF,18", "6,6FFF,10,10FFF,18", "6,6FFF,10,10FFF,18", "6,6FFF,10,10FFF,18",
-                   "6,6FFF,10,10FFF,18", "6,6FFF,10,10FFF,18", "6,6FFF,10,10FFF,18", "6,6FFF,10,10FFF,18",
-                   "6,6FFF,10,10FFF,18"]}
-
     case = int(case)
     # Initialise a dictionary where every key is a parameter and every associated value will either be "PASS","FAIL" or if that can't be determined the truth table value associated with that case will be added
     pass_fail_values = {}
@@ -224,9 +131,10 @@ def _extract_prescription_dose(dataset):
     return prescription_dose
     
 def _extract_collimator(dataset):
-    # record collimator value in the parameter_values dictionary as a string to be consistant with truth_table format 
-	# According to the truth table the collimator only needs to be recorded for cases 1&5 where only 1 beam occurs
+    #ignore setup beams
     beams = list(filter(lambda beam: beam.BeamDescription != "SETUP beam", dataset.BeamSequence))
+    # record collimator value in the parameter_values dictionary as a string to be consistant with truth_table format 
+    # According to the truth table the collimator only needs to be recorded for cases 1&5 where only 1 beam occurs    
     collimator_value = beams[len(beams)-1].ControlPointSequence[0].BeamLimitingDeviceAngle
     return str(int(collimator_value))
     
@@ -308,6 +216,7 @@ def _extract_wedge(dataset):
 def _extract_energy(dataset):
     energies = []
     for beam in dataset.BeamSequence:
+        #ignore setup beams
         if beam.BeamDescription == "SETUP beam":
             continue
         
