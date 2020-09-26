@@ -8,9 +8,6 @@ import pydicom as dicom
 # TODO investigate whther it's ok to just look for the first item of the sequences
 first_sequence_item = 0
 
-def main():
-    extract_parameters("./Documents/Input/YellowLvlIII_7a.dcm",6)
-
 def extract_parameters(filepath, case):
     dataset = dicom.read_file(filepath, force=True)
     # print(dataset)
@@ -203,6 +200,3 @@ def evaluate_parameters(parameters, case, file_type):
                 else:
                     pass_fail_values[param] = truth_table_dict[param][case - 1]
     return pass_fail_values
-
-if __name__ == "__main__":
-    main() 
