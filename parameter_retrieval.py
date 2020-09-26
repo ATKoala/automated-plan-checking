@@ -67,7 +67,7 @@ def extract_parameters(filepath):
 
     # created a variable file_type in circumstances where it is useful to identify whether the file is a VMAT for example
     # at the moment it does this by identifying wheter the control point index has different gantry angles for different control points of the same beam
-    file_type = ''
+    file_type = _extract_file_type(dataset)
     
     # ssd_list is defined to keep track of ssd values as an intermediate step
     # later the code uses this list to match the values against the truth table
@@ -98,22 +98,22 @@ def extract_parameters(filepath):
                 int(dataset.BeamSequence[i].ControlPointSequence[0].BeamLimitingDeviceAngle))
 
             ## GantryAngle
-            try:
-                # This if statement test whether the gantry angle changes within a single beam if so that indicates it is a VMAT file and the Gantry is then assumed to be irrelevant
-                if int(dataset.BeamSequence[i].ControlPointSequence[0].GantryAngle) != int(
-                        dataset.BeamSequence[i].ControlPointSequence[1].GantryAngle):
-                    parameter_values['gantry'] = 'VMAT File'
-                    file_type = 'VMAT'
-                else:
-                    # else where it is not a VMAT the gantry angle of a specific beam is recorded as gantry_instance
-                    gantry_instance = str(int(dataset.BeamSequence[i].ControlPointSequence[0].GantryAngle))
-                    # the next section adds the gantry_instance to the parameter_values['gantry'] it tests whether or not it is empty so far so you can determine whether or not to add a comma
-                    if parameter_values['gantry'] == '':
-                        parameter_values['gantry'] = gantry_instance
-                    else:
-                        parameter_values['gantry'] += "," + gantry_instance
-            except:
-                parameter_values['gantry'] = '-'
+            #try:
+            #    # This if statement test whether the gantry angle changes within a single beam if so that indicates it is a VMAT file and the Gantry is then assumed to be irrelevant
+            #    if int(dataset.BeamSequence[i].ControlPointSequence[0].GantryAngle) != int(
+            #            dataset.BeamSequence[i].ControlPointSequence[1].GantryAngle):
+            #        parameter_values['gantry'] = 'VMAT File'
+            #        file_type = 'VMAT'
+            #    else:
+            #        # else where it is not a VMAT the gantry angle of a specific beam is recorded as gantry_instance
+            #        gantry_instance = str(int(dataset.BeamSequence[i].ControlPointSequence[0].GantryAngle))
+            #        # the next section adds the gantry_instance to the parameter_values['gantry'] it tests whether or not it is empty so far so you can determine whether or not to add a comma
+            #        if parameter_values['gantry'] == '':
+            #            parameter_values['gantry'] = gantry_instance
+            #        else:
+            #            parameter_values['gantry'] += "," + gantry_instance
+            #except:
+            #   parameter_values['gantry'] = '-'
 
             # SSD in centimetres
             try:
@@ -163,6 +163,7 @@ def extract_parameters(filepath):
 
         i += 1
 
+    parameter_values['gantry'] = extractor_functions['gantry'](dataset)
     # print(parameter_values)
     
     # The ssd_list contains SSD values for each beam
@@ -286,6 +287,12 @@ def evaluate_parameters(parameter_values, case, file_type):
                     pass_fail_values[param] = truth_table_dict[param][case - 1]
     return pass_fail_values
 
+def _extract_file_type(dataset):
+    #Test whether the gantry angle changes within a single beam. If so, that indicates it is a VMAT file
+    gantry_angle_changed = int(dataset.BeamSequence[0].ControlPointSequence[0].GantryAngle) != \
+                            int(dataset.BeamSequence[0].ControlPointSequence[1].GantryAngle)
+    return 'VMAT' if gantry_angle_changed else 'IMRT'
+ 
 def _extract_prescription_dose(dataset):
     # Total Prescription Dose
     total_prescription_dose = str(int(dataset.DoseReferenceSequence[0].TargetPrescriptionDose))
@@ -309,15 +316,40 @@ def _extract_prescription_dose(dataset):
         prescription_dose = '900/' + number_of_fractions + ' MU'
     
     return prescription_dose
+    
+def _extract_gantry(dataset):
+    try:
+        file_type = _extract_file_type(dataset)
         
+        #If the dataset is a VMAT file,the Gantry is then assumed to be irrelevant
+        if file_type == 'VMAT':
+            return 'VMAT File'
+		# If not, then return the Gantry Angle of all beams, separated by commas
+        else:
+			#ignore setup beams
+            beams = list(filter(lambda beam: beam.BeamDescription != "SETUP beam", dataset.BeamSequence))
+			#obtain the gantry angles of all beams
+            gantry_instances = map(lambda beam: int(beam.ControlPointSequence[0].GantryAngle), beams)
+			
+            return ','.join(gantry_instances)
+    except:
+        return '-'
+
+#just a placeholder function to indicate which parameters have not been implemented
+def to_be_implemented(dataset):
+    return ''
+
 extractor_functions = {
-    'mode req': lambda dataset: '', 
+    'mode req': to_be_implemented, 
     'prescription dose/#': _extract_prescription_dose, 
-    'prescription point': '', 
-    'isocentre point': '',
-    'override': '', 
+    'prescription point': to_be_implemented, 
+    'isocentre point': to_be_implemented,
+        # Isocenter Position TODO:Figuring out what does "SoftTiss" etc means
+        # parameter_values["Isocenter Position"] = dataset.BeamSequence[i].ControlPointSequence[0].IsocenterPosition
+    'override': to_be_implemented, 
+        #I suspect override is at (3008, 0066) tag in the DICOM file but I'm not sure
     'collimator': '', 
-    'gantry': '', 
+    'gantry': _extract_gantry, 
     'SSD': '', 
     'couch': '', 
     'field size': '',
