@@ -97,33 +97,6 @@ def extract_parameters(filepath):
             parameter_values['collimator'] = str(
                 int(dataset.BeamSequence[i].ControlPointSequence[0].BeamLimitingDeviceAngle))
 
-            ## GantryAngle
-            #try:
-            #    # This if statement test whether the gantry angle changes within a single beam if so that indicates it is a VMAT file and the Gantry is then assumed to be irrelevant
-            #    if int(dataset.BeamSequence[i].ControlPointSequence[0].GantryAngle) != int(
-            #            dataset.BeamSequence[i].ControlPointSequence[1].GantryAngle):
-            #        parameter_values['gantry'] = 'VMAT File'
-            #        file_type = 'VMAT'
-            #    else:
-            #        # else where it is not a VMAT the gantry angle of a specific beam is recorded as gantry_instance
-            #        gantry_instance = str(int(dataset.BeamSequence[i].ControlPointSequence[0].GantryAngle))
-            #        # the next section adds the gantry_instance to the parameter_values['gantry'] it tests whether or not it is empty so far so you can determine whether or not to add a comma
-            #        if parameter_values['gantry'] == '':
-            #            parameter_values['gantry'] = gantry_instance
-            #        else:
-            #            parameter_values['gantry'] += "," + gantry_instance
-            #except:
-            #   parameter_values['gantry'] = '-'
-
-            # SSD in centimetres
-            try:
-                # finds the SSD for a specific beam and adds it to the SSD list
-                # in the DICOM file the SSD is given in millimetres so its divided by 10 so its in centimetres
-                ssd_instance = dataset.BeamSequence[i].ControlPointSequence[0].SourceToSurfaceDistance / 10
-                ssd_list.append(ssd_instance)
-            except:
-                parameter_values['SSD'] = '-'
-
             # WRITE code for couch parameter here:
 
             # WRITE code for field size parameter here:
@@ -166,54 +139,8 @@ def extract_parameters(filepath):
     parameter_values['gantry'] = extractor_functions['gantry'](dataset)
     # print(parameter_values)
     
-    # The ssd_list contains SSD values for each beam
-    # This code converts those values into a format that is the same as the truth table
-    # A key assumption is that the SSD value needs to be within one centimetre of the truth_table value for it to pass
-    if len(ssd_list) > 0:
-        # checks instances where there is only one ssd value
-        if len(ssd_list) == 1:
-            # 100, 86, 93, or 90 are the only single value SSDs in the truth table
-            if abs(ssd_list[0] - 100) <= 1:
-                parameter_values['SSD'] = '100'
-            elif abs(ssd_list[0] - 86) <= 1:
-                parameter_values['SSD'] = '86'
-            elif abs(ssd_list[0] - 93) <= 1:
-                parameter_values['SSD'] = '93'
-            elif abs(ssd_list[0] - 90) <= 1:
-                parameter_values['SSD'] = '90'
-            # if the SSD isn't any of the above values we just assign it value it was closest to
-            # Then it will only pass the truth table when the corresponing thruth table value is a '-'
-            else:
-                parameter_values['SSD'] = str(ssd_list[0])
-        
-        elif len(ssd_list) == 3:
-            # '86,93,86' is the only truth table value of length 3 that needs to be checked
-            if abs(ssd_list[0] - 86) <= 1 and abs(ssd_list[1] - 93) <= 1 and abs(ssd_list[2] - 86) <= 1:
-                parameter_values['SSD'] = '86,93,86'
-            else:
-                parameter_values['SSD'] = "non valid ssd"
-        elif len(ssd_list) == 5:
-            # '?,86,93,86,?' is the only truth table value of length 5 that needs to be checked
-            if abs(ssd_list[1] - 89) <= 1 and abs(ssd_list[2] - 93) <= 1 and abs(ssd_list[3] - 89) <= 1:
-                parameter_values['SSD'] = '?,89,93,89,?'
-            else:
-                parameter_values['SSD'] = "non valid ssd"
-    
+    parameter_values['SSD'] = extractor_functions['SSD'](dataset)
     parameter_values['prescription dose/#'] = extractor_functions['prescription dose/#'](dataset)
-    #this section deals with the 'prescription dos/#' parameter
-    # Again you need to make sure that the format of parameter_values['perscription dose/#] is exactly the same as truth_table_dict['perscription dose/#'] in cases where the file passes
-    # To begin you assign the total_perscription dose to the parameter value
-    #parameter_values['prescription dose/#'] = total_prescription_dose
-    # Then when perscription dose is 24,48,50, or 900 you also need to check the amount of fractions
-    # and when its 900 the primary dosimeter unit needs to be 'MU' as well
-    #if total_prescription_dose == '24':
-    #    parameter_values['prescription dose/#'] = '24/' + number_of_fractions
-    #elif total_prescription_dose == '48':
-    #    parameter_values['prescription dose/#'] = '48/' + number_of_fractions
-    #elif total_prescription_dose == '50':
-    #    parameter_values['prescription dose/#'] = '50/' + number_of_fractions
-    #elif total_prescription_dose == '900' and dataset.BeamSequence[0].PrimaryDosimeterUnit == 'MU':
-    #    parameter_values['prescription dose/#'] = '900/' + number_of_fractions + ' MU'
 
     return parameter_values, file_type
 
@@ -324,16 +251,65 @@ def _extract_gantry(dataset):
         #If the dataset is a VMAT file,the Gantry is then assumed to be irrelevant
         if file_type == 'VMAT':
             return 'VMAT File'
-		# If not, then return the Gantry Angle of all beams, separated by commas
+        # If not, then return the Gantry Angle of all beams, separated by commas
         else:
-			#ignore setup beams
+            #ignore setup beams
             beams = list(filter(lambda beam: beam.BeamDescription != "SETUP beam", dataset.BeamSequence))
-			#obtain the gantry angles of all beams
-            gantry_instances = map(lambda beam: int(beam.ControlPointSequence[0].GantryAngle), beams)
-			
+            #obtain the gantry angles of all beams
+            gantry_instances = map(lambda beam: str(int(beam.ControlPointSequence[0].GantryAngle)), beams)
+            
             return ','.join(gantry_instances)
     except:
         return '-'
+        
+def _extract_ssd(dataset):
+#find SSD in centimeters    
+    ssd_list = []
+    try:
+        #ignore setup beams
+        beams = list(filter(lambda beam: beam.BeamDescription != "SETUP beam", dataset.BeamSequence))
+        #obtain the ssd of all beams
+        #in the DICOM file the SSD is given in millimetres so its divided by 10 so its in centimetres
+        ssd_list = list(map(lambda beam: int(beam.ControlPointSequence[0].SourceToSurfaceDistance / 10), beams))
+    except:
+        return '-'
+    
+    if len(ssd_list) == 0:
+        return '-'
+        
+    # The ssd_list contains SSD values for each beam
+    # This code converts those values into a format that is the same as the truth table
+    # A key assumption is that the SSD value needs to be within one centimetre of the truth_table value for it to pass
+    # checks instances where there is only one ssd value
+    if len(ssd_list) == 1:
+        # 100, 86, 93, or 90 are the only single value SSDs in the truth table
+        if abs(ssd_list[0] - 100) <= 1:
+            return '100'
+        elif abs(ssd_list[0] - 86) <= 1:
+            return '86'
+        elif abs(ssd_list[0] - 93) <= 1:
+            return '93'
+        elif abs(ssd_list[0] - 90) <= 1:
+            return '90'
+        # if the SSD isn't any of the above values we just assign it value it was closest to
+        # Then it will only pass the truth table when the corresponing thruth table value is a '-'
+        else:
+            return str(ssd_list[0])
+    
+    elif len(ssd_list) == 3:
+        # '86,93,86' is the only truth table value of length 3 that needs to be checked
+        if abs(ssd_list[0] - 86) <= 1 and abs(ssd_list[1] - 93) <= 1 and abs(ssd_list[2] - 86) <= 1:
+            return '86,93,86'
+        else:
+            return "non valid ssd"
+    
+    elif len(ssd_list) == 5:
+        # '?,86,93,86,?' is the only truth table value of length 5 that needs to be checked
+        if abs(ssd_list[1] - 89) <= 1 and abs(ssd_list[2] - 93) <= 1 and abs(ssd_list[3] - 89) <= 1:
+            return '?,89,93,89,?'
+        else:
+            return "non valid ssd"
+
 
 #just a placeholder function to indicate which parameters have not been implemented
 def to_be_implemented(dataset):
@@ -350,7 +326,7 @@ extractor_functions = {
         #I suspect override is at (3008, 0066) tag in the DICOM file but I'm not sure
     'collimator': '', 
     'gantry': _extract_gantry, 
-    'SSD': '', 
+    'SSD': _extract_ssd, 
     'couch': '', 
     'field size': '',
     'wedge': '', 
