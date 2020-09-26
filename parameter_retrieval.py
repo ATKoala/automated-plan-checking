@@ -119,6 +119,7 @@ def extract_parameters(filepath):
     parameter_values['SSD'] = extractor_functions['SSD'](dataset)
     parameter_values['prescription dose/#'] = extractor_functions['prescription dose/#'](dataset)
     parameter_values['wedge'] = extractor_functions['wedge'](dataset)
+	parameter_values['energy'] = extractor_functions['energy'](dataset)
 
     return parameter_values, file_type
 
@@ -304,6 +305,25 @@ def _extract_wedge(dataset):
     wedge_angles = list(map(lambda beam: str(int(beam.WedgeSequence[0].WedgeAngle)) if int(beam.NumberOfWedges) > 0 else '0', beams))
     return ','.join(wedge_angles)
     
+def _extract_energy(dataset):
+    energies = []
+    for beam in dataset.BeamSequence:
+        if beam.BeamDescription == "SETUP beam":
+            continue
+        
+        #TODO extra LVL3 files given by client are still showing all STANDARD; need to confirm that one of them really 
+        #      is meant to be FFF so we can say this parameter is a bust or some other method is required.
+        # Nominal Beam Energy (MV) + Fluence Mode(STANDARD/NONSTANDARD)
+        energy = str(int(beam.ControlPointSequence[first_sequence_item].NominalBeamEnergy))
+        # Fluence Mode, which may indicate if dose is Flattening Filter Free (but might not! DICOM standard defines it as optional)
+        #  -STANDARD     -> not FFF
+        #  -NON_STANDARD -> check Fluence Mode ID for a short description of the fluence mode (could be FFF)
+        if beam.PrimaryFluenceModeSequence[first_sequence_item].FluenceMode != 'STANDARD':
+            energy += beam.PrimaryFluenceModeSequence[first_sequence_item].FluenceModeID
+        
+        energies.append(energy)
+    return ','.join(energies)
+    
 
 #just a placeholder function to indicate which parameter extractions have not been implemented
 def to_be_implemented(dataset):
@@ -324,6 +344,7 @@ extractor_functions = {
     'couch'                   : to_be_implemented, 
     'field size'              : to_be_implemented,
     'wedge'                   : _extract_wedge, 
-    'meas'                    : '', 
-    'energy'                  : ''
+    'meas'                    : to_be_implemented, 
+    'energy'                  : _extract_energy,
+#   'monitor unit'            : # dataset.FractionGroupSequence[0].ReferencedBeamSequence[i].BeamMeterset
 }
