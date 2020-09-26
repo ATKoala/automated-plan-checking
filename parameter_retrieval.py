@@ -1,6 +1,12 @@
-# The pydicom library needs to be installed first
+"""
+The function to extract parameters from the specified DICOM file.
+"""
+
+# We import the pydicom library to use it's DICOM reading methods
 import pydicom as dicom
 
+# TODO investigate whther it's ok to just look for the first item of the sequences
+first_sequence_item = 0
 
 def extract_parameters(filepath, case):
     dataset = dicom.read_file(filepath, force=True)
@@ -123,8 +129,15 @@ def extract_parameters(filepath, case):
 
             # WRITE code for meas parameter here:
 
-            # Nominal Beam Energy (only number so far)(not complete)
-            # dataset.BeamSequence[i].ControlPointSequence[0].NominalBeamEnergy
+            #TODO extra LVL3 files given by client are still showing all STANDARD; need to confirm that one of them really 
+            #      is meant to be FFF so we can say this parameter is a bust or some other method is required.
+            # Nominal Beam Energy (MV) + Fluence Mode(STANDARD/NONSTANDARD)
+            parameter_values["energy"] = dataset.BeamSequence[i].ControlPointSequence[first_sequence_item].NominalBeamEnergy
+            # Fluence Mode, which may indicate if dose is Flattening Filter Free (but might not! DICOM standard defines it as optional)
+            #  -STANDARD     -> not FFF
+            #  -NON_STANDARD -> check Fluence Mode ID for a short description of the fluence mode (could be FFF)
+            if dataset.BeamSequence[i].PrimaryFluenceModeSequence[first_sequence_item].FluenceMode != 'STANDARD':
+                parameter_values["energy"] += dataset.BeamSequence[i].PrimaryFluenceModeSequence[first_sequence_item].FluenceModeID
 
             # The monitor units is:
             # dataset.FractionGroupSequence[0].ReferencedBeamSequence[i].BeamMeterset
