@@ -133,21 +133,23 @@ def extract_parameters(filepath, case):
 
             # WRITE code for field size parameter here:
 
-            # can't figure out how to find wedge angle unless there are no wedges
-            # the tag is (300a,00D5) for wedge angle or (0014,5107)
-            
+            # Wedge Angles
+            # It may need more work to deal with VMAT files for cases 6,7,8
+            # First determine the amount of wedges
             num_wedges = int(dataset.BeamSequence[i].NumberOfWedges)
+            # This first if else statement is simply so that there is a comma between wedge angles for cases where there are mulitiple wedge angles
             if parameter_values['wedge'] == '':
+                #A zero is added if there is no wedge angle otherwise the wedge angle is added
                 if num_wedges == 0:
                     parameter_values['wedge'] += '0'
                 elif num_wedges == 1:
                     parameter_values['wedge'] += str(int(dataset.BeamSequence[0].WedgeSequence[0].WedgeAngle))
             else:
+                #A zero is added if there is no wedge angle otherwise the wedge angle is added
                 if num_wedges == 0:
                     parameter_values['wedge'] += ',0'
                 elif num_wedges == 1:
                     parameter_values['wedge'] += ',' + str(int(dataset.BeamSequence[0].WedgeSequence[0].WedgeAngle))
-            # write an else statement for cases where wedge angles exist
 
             # WRITE code for meas parameter here:
 
@@ -167,9 +169,14 @@ def extract_parameters(filepath, case):
         i += 1
 
     # print(parameter_values)
-
+    
+    # The ssd_list contains SSD values for each beam
+    # This code converts those values into a format that is the same as the truth table
+    # A key assumption is that the SSD value needs to be within one centimetre of the truth_table value for it to pass
     if len(ssd_list) > 0:
+        # checks instances where there is only one ssd value
         if len(ssd_list) == 1:
+            # 100, 86, 93, or 90 are the only single value SSDs in the truth table
             if abs(ssd_list[0] - 100) <= 1:
                 parameter_values['SSD'] = '100'
             elif abs(ssd_list[0] - 86) <= 1:
@@ -178,20 +185,30 @@ def extract_parameters(filepath, case):
                 parameter_values['SSD'] = '93'
             elif abs(ssd_list[0] - 90) <= 1:
                 parameter_values['SSD'] = '90'
+            # if the SSD isn't any of the above values we just assign it value it was closest to
+            # Then it will only pass the truth table when the corresponing thruth table value is a '-'
             else:
                 parameter_values['SSD'] = str(ssd_list[0])
+        
         elif len(ssd_list) == 3:
+            # '86,93,86' is the only truth table value of length 3 that needs to be checked
             if abs(ssd_list[0] - 86) <= 1 and abs(ssd_list[1] - 93) <= 1 and abs(ssd_list[2] - 86) <= 1:
                 parameter_values['SSD'] = '86,93,86'
             else:
                 parameter_values['SSD'] = "non valid ssd"
         elif len(ssd_list) == 5:
+            # '?,86,93,86,?' is the only truth table value of length 5 that needs to be checked
             if abs(ssd_list[1] - 89) <= 1 and abs(ssd_list[2] - 93) <= 1 and abs(ssd_list[3] - 89) <= 1:
                 parameter_values['SSD'] = '?,89,93,89,?'
             else:
                 parameter_values['SSD'] = "non valid ssd"
-
+                
+    #this section deals with the 'prescription dos/#' parameter
+    # Again you need to make sure that the format of parameter_values['perscription dose/#] is exactly the same as truth_table_dict['perscription dose/#'] in cases where the file passes
+    # To begin you assign the total_perscription dose to the parameter value
     parameter_values['prescription dose/#'] = total_prescription_dose
+    # Then when perscription dose is 24,48,50, or 900 you also need to check the amount of fractions
+    # and when its 900 the primary dosimeter unit needs to be 'MU' as well
     if total_prescription_dose == '24':
         parameter_values['prescription dose/#'] = '24/' + number_of_fractions
     elif total_prescription_dose == '48':
@@ -203,20 +220,34 @@ def extract_parameters(filepath, case):
 
     # print(parameter_values)
     # print(case)
+    # Convert the inputted case number to an integer
     case = int(case)
+    # Initialise a dictionary where every key is a parameter and every associated value will either be "PASS","FAIL" or if that can't be determined the truth table value associated with that case will be added
     pass_fail_values = {}
+    
+    # Check if the case number is valid
     if case in range(1, 18):
         #print(case)
+        #iterate through each parameter you want to check
         for param in parameter_values:
             #print(param)
+            # This line checks whether the parameter value found is the same as the truth table value (this is why the formating of the two dictionaries is important) and gives a "PASS" value
+            # Also there are other instances where a PASS is given such as if the Truth Table is a dash for a given parameter in that case any value will satisfy
+            # Or if the file is a VMAT and the parameter is either a gantry or an SSD
+            # note case-1 is because the first case is 1 but the index position in the list is 0
             if truth_table_dict[param][case - 1] == parameter_values[param] or truth_table_dict[param][
                 case - 1] == '-' or (file_type == 'VMAT' and (param == 'gantry' or param == 'SSD')):
                 pass_fail_values[param] = "PASS"
             else:
+                # this else statement covers situations where we can't determine a PASS Value
+                # if the parameter_values[param]!='' this means that the param has been extracted since this value has been changed which means it was tested and found to FAIL
                 if parameter_values[param] != '':
                     pass_fail_values[param] = "FAIL"
+                # if the parameter_values[param] hasn't been changed it means the param wasn't extracted and we cant determine PASS/FAIL
+                # in these instances we return what the truth table value would need to be for a PASS and return that instead
                 else:
                     pass_fail_values[param] = truth_table_dict[param][case - 1]
-
+    
+    # Return a dictionary of PASS/FAIL
     #print(pass_fail_values)
     return pass_fail_values
