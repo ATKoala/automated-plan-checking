@@ -99,6 +99,7 @@ def extract_parameters(filepath, case):
 
             # WRITE code for collimator parameter here
             # record collimator value in the parameter_values dictionary as a string to be consistant with truth_table format 
+            # According to the truth table the collimator only needs to be recorded for cases 1&5 where only 1 beam occurs
             parameter_values['collimator'] = str(
                 int(dataset.BeamSequence[i].ControlPointSequence[0].BeamLimitingDeviceAngle))
 
