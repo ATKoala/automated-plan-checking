@@ -20,4 +20,8 @@ Examples:
 
 ## Testing
 
-Run the tests with `python -m unittest`
+Test code is in `test_params.py`. There are currently 2 classes; TestExtractionValues contains tests for the values extracted and TestExtractionEvaluation contains tests for the application of truth table to sets of values.
+
+- Run the tests with `python -m unittest`
+- Run tests for a particular class with `python -m unittest test_params.ClassName` e.g `python -m unittest test_params.TestExtractionEvaluation` or `python -m unittest test_params.TestExtractionValues`
+- Run tests for a particular parameter (i.e prescription dose) with `python -m unittest test_params.TestExtractionEvaluation.test_total_prescription_dose`
