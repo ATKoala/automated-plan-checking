@@ -41,7 +41,7 @@ truth_table_dict = {
              "'11','12','13','14','15','17','18','-','-'",
              "'SoftTiss_3','SoftTiss_2','SoftTiss_1','-','-','-','-','-','-'",
              "'SoftTiss','-','-','-','-','-','-','-','-'", "'Spine2Inf','Spine1Sup','Cord','-','-','-','-','-','-'",
-             "'Lung','-','-','-','-','-','-','-','-'", "'1_3','1_4','-','-','-','-','-','-','-'",
+             "'Lung','-','-','-','-','-','-','-','-'", "'1_3','4_3','-','-','-','-','-','-','-'",
              "'1_1.5','4_1.5','-','-','-','-','-','-','-'", "'1','3','-','-','-','-','-','-','-'",
              "'1','3','-','-','-','-','-','-','-'", "'1','2','3','-','-','-','-','-','-'"],
     'energy': ["6,6FFF,10,10FFF,18", "6,6FFF,10,10FFF,18", "6,6FFF,10,10FFF,18", "6,6FFF,10,10FFF,18",
@@ -52,6 +52,10 @@ truth_table_dict = {
 
 def extract_parameters(filepath):
     dataset = dicom.read_file(filepath, force=True)
+    
+    # created a variable file_type in circumstances where it is useful to identify whether the file is a VMAT for example
+    # at the moment it does this by identifying wheter the control point index has different gantry angles for different control points of the same beam
+    file_type = _extract_file_type(dataset)
     
     # define a list of parameters that need to be found
     parameters = ['mode req', 'prescription dose/#', 'prescription point', 'isocentre point', 'override', 'collimator',
@@ -164,7 +168,7 @@ def _extract_ssd(dataset):
         beams = list(filter(lambda beam: beam.BeamDescription != "SETUP beam", dataset.BeamSequence))
         #obtain the ssd of all beams
         #in the DICOM file the SSD is given in millimetres so its divided by 10 so its in centimetres
-        ssd_list = list(map(lambda beam: int(beam.ControlPointSequence[0].SourceToSurfaceDistance / 10), beams))
+        ssd_list = list(map(lambda beam: beam.ControlPointSequence[0].SourceToSurfaceDistance / 10, beams))
     except:
         return '-'
     
@@ -214,7 +218,8 @@ def _extract_wedge(dataset):
     return ','.join(wedge_angles)
     
 def _extract_energy(dataset):
-    energies = []
+    #energies = []
+    energy = ''
     for beam in dataset.BeamSequence:
         #ignore setup beams
         if beam.BeamDescription == "SETUP beam":
@@ -223,15 +228,15 @@ def _extract_energy(dataset):
         #TODO extra LVL3 files given by client are still showing all STANDARD; need to confirm that one of them really 
         #      is meant to be FFF so we can say this parameter is a bust or some other method is required.
         # Nominal Beam Energy (MV) + Fluence Mode(STANDARD/NONSTANDARD)
-        energy = str(int(beam.ControlPointSequence[first_sequence_item].NominalBeamEnergy))
+        energy = beam.ControlPointSequence[first_sequence_item].NominalBeamEnergy
         # Fluence Mode, which may indicate if dose is Flattening Filter Free (but might not! DICOM standard defines it as optional)
         #  -STANDARD     -> not FFF
         #  -NON_STANDARD -> check Fluence Mode ID for a short description of the fluence mode (could be FFF)
         if beam.PrimaryFluenceModeSequence[first_sequence_item].FluenceMode != 'STANDARD':
             energy += beam.PrimaryFluenceModeSequence[first_sequence_item].FluenceModeID
         
-        energies.append(energy)
-    return ','.join(energies)
+        #energies.append(energy)
+    return energy
     
 
 #just a placeholder function to indicate which parameter extractions have not been implemented
