@@ -8,7 +8,7 @@ import pydicom as dicom
 # TODO investigate whther it's ok to just look for the first item of the sequences
 first_sequence_item = 0
 
-def extract_parameters(filepath, case):
+def extract_parameters(filepath):
     dataset = dicom.read_file(filepath, force=True)
     # print(dataset)
     

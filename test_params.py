@@ -26,7 +26,7 @@ class TestIMRTExtractionValues(unittest.TestCase):
     def setUpClass(self):
         # We do some set up that is useful across tests in this class 
         # i.e. running the extraction function once and using the result for each test differently
-        self.extracted, _ = extract_parameters('./Documents/Input/YellowLvlIII_7a.dcm', 6)
+        self.extracted, _ = extract_parameters('./Documents/Input/YellowLvlIII_7a.dcm')
 
     def test_prescription_dose(self):
         self.assertEqual(self.extracted['prescription dose/#'], f'{50}/{25}')
@@ -59,8 +59,7 @@ class TestVMATExtractionValues(unittest.TestCase):
     def setUpClass(self):
         # We do some set up that is useful across tests in this class 
         # i.e. running the extraction function once and using the result for each test differently
-        temp_case = 6 #TODO is case for this really 6?
-        self.extracted, _ = extract_parameters('./Documents/Input/YellowLvlIII_7b.dcm', temp_case)
+        self.extracted, _ = extract_parameters('./Documents/Input/YellowLvlIII_7b.dcm')
 
     def test_prescription_dose(self):
         self.assertEqual(self.extracted['prescription dose/#'], f'{50}/{25}')
@@ -91,7 +90,7 @@ class TestEvaluation(unittest.TestCase):
     ''' Tests for verifying that parameters are passed and failed correctly
     The correct answers are derived from the truth table 
 
-    Note that values of -1 are used for parameters where any value should be accepted (until a better representation is found)
+    Note that values of None are used for parameters where any value should be accepted (until a better representation is found)
     '''
     @classmethod
     def setUpClass(self):
@@ -122,13 +121,13 @@ class TestEvaluation(unittest.TestCase):
         passing_parameters = {
             'mode req':'False',
             'prescription dose/#':'2',
-            'prescription point':'1',
+            'prescription point':'1 or 3', #TODO this should work for either 1 or 3, not the string "1 or 3"??? Change the evaluation function
             'isocentre point':'surf',
             'override':'bone',
             'collimator':'0',
             'gantry':'0',
             'SSD':'100',
-            'couch':'-1',
+            'couch':None,
             'field size':'10x10',
             'wedge':'0',
             'meas':"'1','3','10','-','-','-','-','-','-'",#TODO disagree with this meas(ure) format
@@ -136,24 +135,6 @@ class TestEvaluation(unittest.TestCase):
         }
         treatment_type = 'IMRT'
         self.assertEqual(evaluate_parameters(passing_parameters, case, treatment_type), self.pass_evaluation)
-        
-        # failing_parameters is one of a few possible failing sets of parameters
-        failing_parameters = {
-            'mode req':'True',
-            'prescription dose/#':'2',
-            'prescription point':'1',
-            'isocentre point':'surf',
-            'override':'bone',
-            'collimator':'0',
-            'gantry':'0',
-            'SSD':'100',
-            'couch':'-1',
-            'field size':'10x10',
-            'wedge':'0',
-            'meas':"'1','3','10'",
-            'energy':"6,6FFF,10,10FFF,18"
-        }
-        self.assertNotEqual(evaluate_parameters(failing_parameters, case, treatment_type), self.pass_evaluation)
 
     def test_case_2(self):
         case = 2
@@ -163,10 +144,10 @@ class TestEvaluation(unittest.TestCase):
             'prescription point':'5',
             'isocentre point':'3',
             'override':'no override',
-            'collimator':'-1',
+            'collimator':None,
             'gantry':'270,0,90',
             'SSD':'86,93,86',
-            'couch':'-1',
+            'couch':None,
             'field size':'10x6,10x12,10x6',
             'wedge':'30,0,30',
             'meas':"'5_RLAT','8_RLAT','5_AP','8_AP','5_LLAT','8_LLAT','-','-','-'",
@@ -174,23 +155,6 @@ class TestEvaluation(unittest.TestCase):
         }
         treatment_type = 'IMRT'
         self.assertEqual(evaluate_parameters(passing_parameters, case, treatment_type), self.pass_evaluation)
-        
-        failing_parameters = {
-            'mode req':'False',
-            'prescription dose/#':'2',
-            'prescription point':'1',
-            'isocentre point':'surf',
-            'override':'bone',
-            'collimator':'0',
-            'gantry':'0',
-            'SSD':'100',
-            'couch':'-1',
-            'field size':'10x10',
-            'wedge':'0',
-            'meas':"'1','3','10'",
-            'energy':"6,6FFF,10,10FFF,18"
-        }
-        self.assertNotEqual(evaluate_parameters(failing_parameters, case, treatment_type), self.pass_evaluation)
 
     def test_case_3(self):
         case = 3
@@ -200,10 +164,10 @@ class TestEvaluation(unittest.TestCase):
             'prescription point':'3',
             'isocentre point':'3',
             'override':'no override',
-            'collimator':'-1',
+            'collimator':None,
             'gantry':'90',
             'SSD':'86',
-            'couch':'-1',
+            'couch':None,
             'field size':'10x12',
             'wedge':'0',
             'meas':"'3','5','-','-','-','-','-','-','-'",
@@ -211,26 +175,289 @@ class TestEvaluation(unittest.TestCase):
         }
         treatment_type = 'IMRT'
         self.assertEqual(evaluate_parameters(passing_parameters, case, treatment_type), self.pass_evaluation)
-        
-        failing_parameters = {
-            'mode req':'True',
+
+    def test_case_4(self):
+        case = 4
+        passing_parameters = {
+            'mode req':'False',
             'prescription dose/#':'2',
-            'prescription point':'1',
-            'isocentre point':'surf',
-            'override':'bone',
-            'collimator':'0',
-            'gantry':'0',
-            'SSD':'100',
-            'couch':'-1',
-            'field size':'10x10',
-            'wedge':'0',
-            'meas':"'1','3','10'",
+            'prescription point':'3',
+            'isocentre point':'3',
+            'override':'no override',
+            'collimator':None,
+            'gantry':'90',
+            'SSD':'86',
+            'couch':None,
+            'field size':'10x12',
+            'wedge':'60',
+            'meas':"'3','5','-','-','-','-','-','-','-'",
             'energy':"6,6FFF,10,10FFF,18"
         }
-        self.assertNotEqual(evaluate_parameters(failing_parameters, case, treatment_type), self.pass_evaluation)
+        treatment_type = 'IMRT'
+        self.assertEqual(evaluate_parameters(passing_parameters, case, treatment_type), self.pass_evaluation)
+        
+    def test_case_5(self):
+        case = 5
+        passing_parameters = {
+            'mode req':'False',
+            'prescription dose/#':'50/25',
+            'prescription point':'chair',
+            'isocentre point':'3',
+            'override':'no override',
+            'collimator':'0',
+            'gantry':'0',
+            'SSD':'93',
+            'couch':None,
+            'field size':None,
+            'wedge':None,
+            'meas':"'11','12','13','14','15','18','19','20','21'",
+            'energy':"6,6FFF,10,10FFF,18"
+        }
+        treatment_type = 'IMRT'
+        self.assertEqual(evaluate_parameters(passing_parameters, case, treatment_type), self.pass_evaluation)
 
-    #TODO add cases up till 18??? wew
+    def test_case_6(self):
+        case = 6
+        passing_parameters = {
+            'mode req':'True',
+            'prescription dose/#':'50/25',
+            'prescription point':'CShape',
+            'isocentre point':'3',
+            'override':'lungs',
+            'collimator':None,
+            'gantry':'150,60,0,300,210',
+            'SSD':'?,89,93,89,?',
+            'couch':'couch?',
+            'field size':None,
+            'wedge':None,
+            'meas':"'11','12','13','14','15','16','17','-','-'",
+            'energy':"6,6FFF,10,10FFF,18"
+        }
+        treatment_type = 'IMRT'
+        self.assertEqual(evaluate_parameters(passing_parameters, case, treatment_type), self.pass_evaluation)
 
+    def test_case_7(self):
+        case = 7
+        passing_parameters = {
+            'mode req':'True',
+            'prescription dose/#':'50/25',
+            'prescription point':'CShape',
+            'isocentre point':'3',
+            'override':'no override',
+            'collimator':None,
+            'gantry':'150,60,0,300,210',
+            'SSD':'?,89,93,89,?',
+            'couch':'couch?',
+            'field size':None,
+            'wedge':None,
+            'meas':"'11','12','13','14','15','16','17','-','-'",
+            'energy':"6,6FFF,10,10FFF,18"
+        }
+        treatment_type = 'IMRT'
+        self.assertEqual(evaluate_parameters(passing_parameters, case, treatment_type), self.pass_evaluation)
+
+    def test_case_8(self):
+        case = 8
+        passing_parameters = {
+            'mode req':'True',
+            'prescription dose/#':'50/25',
+            'prescription point':'C8Target',
+            'isocentre point':'3',
+            'override':'no override',
+            'collimator':None,
+            'gantry':'150,60,0,300,210',
+            'SSD':'?,89,93,89,?',
+            'couch':'couch?',
+            'field size':None,
+            'wedge':None,
+            'meas':"'11','12','13','14','15','17','18','-','-'",
+            'energy':"6,6FFF,10,10FFF,18"
+        }
+        treatment_type = 'IMRT'
+        self.assertEqual(evaluate_parameters(passing_parameters, case, treatment_type), self.pass_evaluation)
+
+    def test_case_9(self):
+        case = 9
+        passing_parameters = {
+            'mode req':'False',
+            'prescription dose/#':'900/3 MU',
+            'prescription point':'C8Target',
+            'isocentre point':'SoftTiss',
+            'override':'lungs',
+            'collimator':None,
+            'gantry':None,
+            'SSD':'90',
+            'couch':None,
+            'field size':'3x3,2x2,1x1',
+            'wedge':None,
+            'meas':"'SoftTiss_3','SoftTiss_2','SoftTiss_1','-','-','-','-','-','-'",
+            'energy':"6,6FFF,10,10FFF,18"
+        }
+        treatment_type = 'IMRT'
+        self.assertEqual(evaluate_parameters(passing_parameters, case, treatment_type), self.pass_evaluation)
+
+    def test_case_10(self):
+        case = 10
+        passing_parameters = {
+            'mode req':'True',
+            'prescription dose/#':'45/3',
+            'prescription point':'SoftTissTarget',
+            'isocentre point':'SoftTiss',
+            'override':'lungs',
+            'collimator':None,
+            'gantry':None,
+            'SSD':None,
+            'couch':'couch?',
+            'field size':None,
+            'wedge':None,
+            'meas':"'SoftTiss','-','-','-','-','-','-','-','-'",
+            'energy':"6,6FFF,10,10FFF,18"
+        }
+        treatment_type = 'IMRT'
+        self.assertEqual(evaluate_parameters(passing_parameters, case, treatment_type), self.pass_evaluation)
+
+
+    def test_case_11(self):
+        case = 11
+        passing_parameters = {
+            'mode req':'True',
+            'prescription dose/#':'24/2',
+            'prescription point':'SpineTarget',
+            'isocentre point':'Spine',
+            'override':'no override',
+            'collimator':None,
+            'gantry':None,
+            'SSD':None,
+            'couch':'couch?',
+            'field size':None,
+            'wedge':None,
+            'meas':"'Spine2Inf','Spine1Sup','Cord','-','-','-','-','-','-'",
+            'energy':"6,6FFF,10,10FFF,18"
+        }
+        treatment_type = 'IMRT'
+        self.assertEqual(evaluate_parameters(passing_parameters, case, treatment_type), self.pass_evaluation)
+
+    def test_case_12(self):
+        case = 12
+        passing_parameters = {
+            'mode req':'True',
+            'prescription dose/#':'48/4',
+            'prescription point':'LungTarget',
+            'isocentre point':'lung',
+            'override':'no override',
+            'collimator':None,
+            'gantry':None,
+            'SSD':None,
+            'couch':'couch?',
+            'field size':None,
+            'wedge':None,
+            'meas':"'Lung','-','-','-','-','-','-','-','-'",
+            'energy':"6,6FFF,10,10FFF,18"
+        }
+        treatment_type = 'IMRT'
+        self.assertEqual(evaluate_parameters(passing_parameters, case, treatment_type), self.pass_evaluation)
+
+    def test_case_13(self):
+        case = 13
+        passing_parameters = {
+            'mode req':'True',
+            'prescription dose/#':'3',
+            'prescription point':'1',
+            'isocentre point':'1',
+            'override':'central cube',
+            'collimator':None,
+            'gantry':None,
+            'SSD':None,
+            'couch':None,
+            'field size':'3x3',
+            'wedge':None,
+            'meas':"'1_3','4_3','-','-','-','-','-','-','-'",
+            'energy':"6,6FFF,10,10FFF,18"
+        }
+        treatment_type = 'IMRT'
+        self.assertEqual(evaluate_parameters(passing_parameters, case, treatment_type), self.pass_evaluation)
+
+
+    def test_case_14(self):
+        case = 14
+        passing_parameters = {
+            'mode req':'True',
+            'prescription dose/#':'3',
+            'prescription point':'1',
+            'isocentre point':'1',
+            'override':'central cube',
+            'collimator':None,
+            'gantry':None,
+            'SSD':None,
+            'couch':None,
+            'field size':'1.5x1.5',
+            'wedge':None,
+            'meas':"'1_1.5','4_1.5','-','-','-','-','-','-','-'",
+            'energy':"6,6FFF,10,10FFF,18"
+        }
+        treatment_type = 'IMRT'
+        self.assertEqual(evaluate_parameters(passing_parameters, case, treatment_type), self.pass_evaluation)
+
+
+    def test_case_15(self):
+        case = 15
+        passing_parameters = {
+            'mode req':'True',
+            'prescription dose/#':'20',
+            'prescription point':'PTV_c14_c15',
+            'isocentre point':'1',
+            'override':'central cube',
+            'collimator':None,
+            'gantry':None,
+            'SSD':None,
+            'couch':'couch?',
+            'field size':None,
+            'wedge':None,
+            'meas':"'1','3','-','-','-','-','-','-','-'",
+            'energy':"6,6FFF,10,10FFF,18"
+        }
+        treatment_type = 'IMRT'
+        self.assertEqual(evaluate_parameters(passing_parameters, case, treatment_type), self.pass_evaluation)
+
+    def test_case_16(self):
+        case = 16
+        passing_parameters = {
+            'mode req':'True',
+            'prescription dose/#':'20',
+            'prescription point':None,
+            'isocentre point':None,
+            'override':'central cube',
+            'collimator':None,
+            'gantry':None,
+            'SSD':None,
+            'couch':'couch?',
+            'field size':None,
+            'wedge':None,
+            'meas':"'1','3','-','-','-','-','-','-','-'",
+            'energy':"6,6FFF,10,10FFF,18"
+        }
+        treatment_type = 'IMRT'
+        self.assertEqual(evaluate_parameters(passing_parameters, case, treatment_type), self.pass_evaluation)
+
+    def test_case_17(self):
+        case = 17
+        passing_parameters = {
+            'mode req':'True',
+            'prescription dose/#':'20',
+            'prescription point':None,
+            'isocentre point':None,
+            'override':'central cube',
+            'collimator':None,
+            'gantry':None,
+            'SSD':None,
+            'couch':'couch?',
+            'field size':None,
+            'wedge':None,
+            'meas':"'1','2','3','-','-','-','-','-','-'",
+            'energy':"6,6FFF,10,10FFF,18"
+        }
+        treatment_type = 'IMRT'
+        self.assertEqual(evaluate_parameters(passing_parameters, case, treatment_type), self.pass_evaluation)
 
 if __name__ == '__main__':
     unittest.main()
