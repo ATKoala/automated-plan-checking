@@ -1,8 +1,5 @@
 """Collection of functions to output the extracted parameters into the format specified by the user"""
 
-import pandas as pd
-
-
 def output_csv(Result, filepath):
     title = ["Beam Id"]
     allValues = []
