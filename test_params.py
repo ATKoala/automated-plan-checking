@@ -339,7 +339,7 @@ class TestEvaluation(unittest.TestCase):
             'mode req':'True',
             'prescription dose/#':'48/4',
             'prescription point':'LungTarget',
-            'isocentre point':'lung',
+            'isocentre point':'Lung',
             'override':'no override',
             'collimator':None,
             'gantry':None,
