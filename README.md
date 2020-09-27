@@ -20,8 +20,11 @@ Examples:
 
 ## Testing
 
-Test code is in `test_params.py`. There are currently 2 classes; TestExtractionValues contains tests for the values extracted and TestExtractionEvaluation contains tests for the application of truth table to sets of values.
+Test code is in `test_params.py`. There are currently 3 classes; *TestEvaluation* is a collection of
+tests of the parameter evaluation: given a set of parameters, it verifies that the pass/fail results are as expected.
+*TestIMRTExtractionValues* is a collection of tests verifying that the correct values are extracted from IMRT file (YellowLvlIII_7a.dcm)
+*TestVMATExtractionValues* is a collection of tests verifying that the correct values are extracted from VMAT file (YellowLvlIII_7b.dcm)
 
 - Run the tests with `python -m unittest`
-- Run tests for a particular class with `python -m unittest test_params.ClassName` e.g `python -m unittest test_params.TestIMRTExtractionEvaluation` or `python -m unittest test_params.TestIMRTExtractionValues`
-- Run tests for a particular parameter (i.e prescription dose) with `python -m unittest test_params.TestIMRTExtractionEvaluation.test_total_prescription_dose`
+- Run tests for a particular class with `python -m unittest test_params.ClassName` e.g `python -m unittest test_params.TestIMRTExtractionValues` or `python -m unittest test_params.TestEvaluation`
+- Run a particular test (i.e prescription dose) with `python -m unittest test_params.ClassName.FunctionName` e.g. `python -m unittest test_params.TestIMRTExtractionValues.test_total_prescription_dose`
