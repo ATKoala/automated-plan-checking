@@ -1,4 +1,5 @@
 """Collection of functions to output the extracted parameters into the format specified by the user"""
+import pandas as pd
 
 def output_csv(Result, filepath):
     title = ["Beam Id"]
@@ -52,7 +53,7 @@ def update_output_csv(Result, filepath):
 
 def update_output_stdout(parameters, filepath):
     for item in parameters:
-        print(item + ": " + parameters[item])
+        print(item + ": " + str(parameters[item]))
 
 
 formatter = {
