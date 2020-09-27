@@ -16,7 +16,7 @@ def main():
     inputfile = user_input["inputfile"]
     case_number = user_input["case_number"]
     # print(case_number)
-    parameters, file_type = extract_parameters(inputfile, case_number)
+    parameters, file_type = extract_parameters(inputfile)
     evaluations = evaluate_parameters(parameters, case_number, file_type)
 
     # output the extracted parameters into the format specified by user
