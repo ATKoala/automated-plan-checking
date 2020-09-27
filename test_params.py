@@ -1,4 +1,4 @@
-''' Tests for parameters extracted
+''' Tests for parameters extraction and evaluation
 
 This module contains a number of tests using python's unittest library.
 See https://docs.python.org/3/library/unittest.html for more information about unittest.
@@ -11,12 +11,81 @@ See https://docs.python.org/3/library/unittest.html for more information about u
 The 2 dicom files are included in the Documents subdirectory.
 The correct values for each test are derived from the corresponding pdf reports in each of IMRT and VMAT directories (7a.pdf, 7b.pdf).
 
-Basic method to run these tests: `python -m unittest`
+Basic method to run all tests: `python -m unittest`
 Detailed instructions for running tests are in the README. 
 '''
 import unittest
 import pydicom
 from parameter_retrieval import extract_parameters, evaluate_parameters
+
+class TestIMRTExtractionValues(unittest.TestCase):
+    ''' Tests for verifying the correct values are extracted for IMRT file
+    The 'correct' answers are derived from the vendor report: Documents/Input/7a.pdf
+    '''
+    @classmethod
+    def setUpClass(self):
+        # We do some set up that is useful across tests in this class 
+        # i.e. running the extraction function once and using the result for each test differently
+        self.extracted, _ = extract_parameters('./Documents/Input/YellowLvlIII_7a.dcm', 6)
+
+    def test_prescription_dose(self):
+        self.assertEqual(self.extracted['prescription dose/#'], f'{50}/{25}')
+
+    def test_collimator(self):
+        self.assertEqual(self.extracted['collimator'], f'{0}')
+
+    def test_gantry_angle(self):
+        self.assertEqual(self.extracted['gantry'], f'{150},{60},{0},{300},{210}')
+
+    def test_ssd(self):
+        #don't agree with this an an extraction output; 
+        # - the pdf has SSDs as 85.19, 89.42, 92.67 89.57, 85.19
+        # - testing against this is no longer in the spirit of using the pdf as a reference
+        self.assertEqual(self.extracted['SSD'], f'?,89,93,89,?')
+
+    def test_energy(self):
+        self.assertEqual(self.extracted['energy'], 6.0)
+
+    def test_wedge_angles(self):
+        # TODO Can't find this in pdf
+        # self.assertEqual(f'{0},{0},{0},{0},{0}',self.extracted['wedge']) 
+        pass
+
+class TestVMATExtractionValues(unittest.TestCase):
+    ''' Tests for verifying the correct values are extracted
+    The 'correct' answers are derived from the vendor report: Documents/Input/7b.pdf
+    '''
+    @classmethod
+    def setUpClass(self):
+        # We do some set up that is useful across tests in this class 
+        # i.e. running the extraction function once and using the result for each test differently
+        temp_case = 6 #TODO is case for this really 6?
+        self.extracted, _ = extract_parameters('./Documents/Input/YellowLvlIII_7b.dcm', temp_case)
+
+    def test_prescription_dose(self):
+        self.assertEqual(self.extracted['prescription dose/#'], f'{50}/{25}')
+
+    def test_collimator(self):
+        self.assertEqual(self.extracted['collimator'], f'{355}')
+
+    def test_gantry_angle(self):
+        #TODO PDF shows 180/360 for a single beam for this one, 
+        # - Naturally this is because of VMAT style of rotating the beam around the patient
+        # - In the dicom, the first ControlPointSequuence item is at 180, 
+        #   does a 360 loop around back to 180, then 360 again back the other way to 180
+        # The only thing is, how are we planning to display this? what value should we show? After we decide I'll update this test case
+        # self.assertEqual(f'{180}', self.extracted['gantry']) 
+        self.assertEqual(self.extracted['gantry'], 'VMAT File') 
+
+    def test_ssd(self):
+        self.assertEqual(self.extracted['SSD'], f'{87.17}')
+
+    def test_energy(self):
+        self.assertEqual(self.extracted['energy'], 6.0)
+
+    def test_wedge_angles(self):
+        # self.assertEqual(f'{0},{0},{0},{0},{0}',self.extracted['wedge'])
+        pass
 
 class TestEvaluation(unittest.TestCase):
     ''' Tests for verifying that parameters are passed and failed correctly
@@ -136,7 +205,7 @@ class TestEvaluation(unittest.TestCase):
             'prescription dose/#':'2',
             'prescription point':'3',
             'isocentre point':'3',
-            'override':'no override',#TODO get new values for case 3; these are copied from case 2
+            'override':'no override',
             'collimator':'-1',
             'gantry':'90',
             'SSD':'86',
@@ -169,74 +238,6 @@ class TestEvaluation(unittest.TestCase):
 
     #TODO add cases up till 18??? wew
 
-class TestIMRTExtractionValues(unittest.TestCase):
-    ''' Tests for verifying the correct values are extracted
-    The 'correct' answers are derived from the vendor report: Documents/Input/7a.pdf
-    '''
-    @classmethod
-    def setUpClass(self):
-        # We do some set up that is useful across tests in this class 
-        # i.e. running the extraction function once and using the result for each test differently
-        self.extracted, _ = extract_parameters('./Documents/Input/YellowLvlIII_7a.dcm', 6)
-
-    def test_prescription_dose(self):
-        self.assertEqual(self.extracted['prescription dose/#'], f'{50}/{25}')
-
-    def test_collimator(self):
-        self.assertEqual(self.extracted['collimator'], f'{0}')
-
-    def test_gantry_angle(self):
-        self.assertEqual(self.extracted['gantry'], f'{150},{60},{0},{300},{210}')
-
-    def test_ssd(self):
-        #don't agree with this an an extraction output; 
-        # - the pdf has SSDs as 85.19, 89.42, 92.67 89.57, 85.19
-        # - testing against this is no longer in the spirit of using the pdf as a reference
-        self.assertEqual(self.extracted['SSD'], f'?,89,93,89,?')
-
-    def test_energy(self):
-        self.assertEqual(self.extracted['energy'], 6.0)
-
-    def test_wedge_angles(self):
-        # Can't find this in pdf
-        # self.assertEqual(f'{0},{0},{0},{0},{0}',self.extracted['wedge']) 
-        pass
-
-class TestVMATExtractionValues(unittest.TestCase):
-    ''' Tests for verifying the correct values are extracted
-    The 'correct' answers are derived from the vendor report: Documents/Input/7b.pdf
-    '''
-    @classmethod
-    def setUpClass(self):
-        # We do some set up that is useful across tests in this class 
-        # i.e. running the extraction function once and using the result for each test differently
-        temp_case = 6 #TODO is case for this really 6?
-        self.extracted, _ = extract_parameters('./Documents/Input/YellowLvlIII_7b.dcm', temp_case)
-
-    def test_prescription_dose(self):
-        self.assertEqual(self.extracted['prescription dose/#'], f'{50}/{25}')
-
-    def test_collimator(self):
-        self.assertEqual(self.extracted['collimator'], f'{355}')
-
-    def test_gantry_angle(self):
-        #TODO PDF shows 180/360 for a single beam for this one, 
-        # - Naturally this is because of VMAT style of rotating the beam around the patient
-        # - In the dicom, the first ControlPointSequuence item is at 180, 
-        #   does a 360 loop around back to 180, then 360 again back the other way to 180
-        # The only thing is, how are we planning to display this? what value should we show? After we decide I'll update this test case
-        # self.assertEqual(f'{180}', self.extracted['gantry']) 
-        self.assertEqual(self.extracted['gantry'], 'VMAT File') 
-
-    def test_ssd(self):
-        self.assertEqual(self.extracted['SSD'], f'{87.17}')
-
-    def test_energy(self):
-        self.assertEqual(self.extracted['energy'], 6.0)
-
-    def test_wedge_angles(self):
-        # self.assertEqual(f'{0},{0},{0},{0},{0}',self.extracted['wedge'])
-        pass
 
 if __name__ == '__main__':
     unittest.main()
