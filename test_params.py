@@ -98,7 +98,6 @@ class TestEvaluation(unittest.TestCase):
         # If all parameters pass, evaluate_parameters should return this.
         # We'll use this to compare with the actual results in our tests below
         self.pass_evaluation = {
-            'case':'PASS',
             'mode req':'PASS',
             'prescription dose/#':'PASS',
             'prescription point':'PASS',
@@ -121,7 +120,6 @@ class TestEvaluation(unittest.TestCase):
         #  just a single point for each is used
         case = 1
         passing_parameters = {
-            'case':case,
             'mode req':'False',
             'prescription dose/#':'2',
             'prescription point':'1',
@@ -141,7 +139,6 @@ class TestEvaluation(unittest.TestCase):
         
         # failing_parameters is one of a few possible failing sets of parameters
         failing_parameters = {
-            'case':case,
             'mode req':'True',
             'prescription dose/#':'2',
             'prescription point':'1',
@@ -161,7 +158,6 @@ class TestEvaluation(unittest.TestCase):
     def test_case_2(self):
         case = 2
         passing_parameters = {
-            'case':case,
             'mode req':'False',
             'prescription dose/#':'2',
             'prescription point':'5',
@@ -180,7 +176,6 @@ class TestEvaluation(unittest.TestCase):
         self.assertEqual(evaluate_parameters(passing_parameters, case, treatment_type), self.pass_evaluation)
         
         failing_parameters = {
-            'case':case,
             'mode req':'False',
             'prescription dose/#':'2',
             'prescription point':'1',
@@ -200,7 +195,6 @@ class TestEvaluation(unittest.TestCase):
     def test_case_3(self):
         case = 3
         passing_parameters = {
-            'case':case,
             'mode req':'False',
             'prescription dose/#':'2',
             'prescription point':'3',
@@ -219,7 +213,6 @@ class TestEvaluation(unittest.TestCase):
         self.assertEqual(evaluate_parameters(passing_parameters, case, treatment_type), self.pass_evaluation)
         
         failing_parameters = {
-            'case':case,
             'mode req':'True',
             'prescription dose/#':'2',
             'prescription point':'1',
