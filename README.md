@@ -8,6 +8,7 @@ This repository contains code for extracting and evaluating parameters from radi
 
 - **Python 3** or above
 - **pydicom** (can be installed with `pip install pydicom`)
+- **pandas** ((can be installed with `pip install pandas`))
 
 ### Installation and Usage
 
@@ -22,11 +23,18 @@ Usage Examples:
 Test code is in `test_parameter_retrieval.py`.
 
 ### Running Tests
+
 Run the tests with `python -m unittest`
 
-Run tests for a particular class with `python -m unittest test_parameter_retrieval.ClassName` e.g `python -m unittest test_parameter_retrieval.TestIMRTExtractionValues` or `python -m unittest test_parameter_retrieval.TestEvaluation`
+Run tests for a particular class with `python -m unittest test_parameter_retrieval.ClassName` 
 
-Run a particular test (i.e prescription dose) with `python -m unittest test_parameter_retrieval.ClassName.FunctionName` e.g. `python -m unittest test_parameter_retrieval.TestIMRTExtractionValues.test_total_prescription_dose`
+e.g `python -m unittest test_parameter_retrieval.TestIMRTExtractionValues` 
+
+or `python -m unittest test_parameter_retrieval.TestEvaluation`
+
+Run a particular test (i.e prescription dose) with `python -m unittest test_parameter_retrieval.ClassName.FunctionName` 
+
+e.g. `python -m unittest test_parameter_retrieval.TestIMRTExtractionValues.test_total_prescription_dose`
 
 ### Structure
 
