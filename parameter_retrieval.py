@@ -5,7 +5,7 @@ The function to extract parameters from the specified DICOM file.
 # We import the pydicom library to use it's DICOM reading methods
 import pydicom as dicom
 
-# TODO investigate whther it's ok to just look for the first item of the sequences
+# We are mostly using parameters from the first item of Sequences; is this ok?  
 first_sequence_item = 0
 
 # truth_table_dict defines the truth table in the form a dictionary
