@@ -7,7 +7,6 @@ import argparse
 from parameter_retrieval import extract_parameters, evaluate_parameters
 from outputter import output
 from pathlib import Path
-from sys import exit 
 
 def main():
     # Retrieve user inputs from command line arguments
@@ -66,6 +65,7 @@ def main():
     if user_input["outputfile"] is not None:
         output_name = user_input["outputfile"]
     else:
+        # Official python way to stem file extensions
         output_name = Path(user_input["inputfile"]).stem 
         
     # solutions == the truth table values for the given case
@@ -79,7 +79,7 @@ def parse_arguments():
     parser = argparse.ArgumentParser(description="Extract a DICOM file")
     parser.add_argument("-i", "--inputfile", required=True,
                         help="The filepath to the input DICOM file.")
-    parser.add_argument("-o", "--outputfile", 
+    parser.add_argument("-o", "--outputfile",
                         help="The filepath to the output file. Default is same as input file.")
     parser.add_argument("-f", "--format", choices=["csv", "stdout"], default="stdout",
                         help="The format of the output file. For now, only CSV or print to standard output are available.")

@@ -40,7 +40,7 @@ def update_output_csv(data, filepath):
     allValues = []
 
     for item in data[0]:
-        Value = [item] + [col[item] for col in data]
+        Value = [item] + [column[item] for column in data]
         allValues.append(Value)
 
     test_pd = pd.DataFrame(columns=title, data=allValues)
