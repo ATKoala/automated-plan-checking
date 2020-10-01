@@ -64,7 +64,7 @@ formatter = {
 }
 
 
-def output(parameters, filepath, format):
+def output(parameters, evaluations, solutions, filepath, format):
     # for item in parameters:
     # print(item+": "+parameters[item])
     formatter_function = formatter[format]
