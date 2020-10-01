@@ -61,14 +61,9 @@ def extract_parameters(filepath):
     parameters = ['mode req', 'prescription dose/#', 'prescription point', 'isocentre point', 'override', 'collimator',
                   'gantry', 'SSD', 'couch', 'field size', 'wedge', 'meas', 'energy']
     
-    # defines a dictionary of values found for each parameter
-    # The idea is that when you retrieve a parameter its value in this parameter_values dictionary should be the same as the corresponding value in the truth_table_dictionary
-    # This means when these values are changed when parameters are extracted attention needs to be paid to make sure that they are formatted in exact same way as the truth_table_dictionary 
-    parameter_values = {'mode req': '', 'prescription dose/#': '', 'prescription point': '', 'isocentre point': '',
-                        'override': '', 'collimator': '', 'gantry': '', 'SSD': '', 'couch': '', 'field size': '',
-                        'wedge': '', 'meas': '', 'energy': ''}
-
+    
     #run the extraction functions for each parameter and store the values in parameter_values dictionary
+    parameter_values = {}
     for parameter in parameters:
         parameter_values[parameter] = extractor_functions[parameter](dataset)
 
