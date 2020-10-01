@@ -67,8 +67,10 @@ def main():
         output_name = user_input["outputfile"]
     else:
         output_name = Path(user_input["inputfile"]).stem 
-
-    output_file = output(parameters, evaluations, truth_table, output_name, user_input["format"])
+        
+    # solutions == the truth table values for the given case
+    solutions = dict([(key, truth_table[key][case_number-1]) for key in truth_table])
+    output_file = output(parameters, evaluations, solutions, output_name, user_input["format"])
     if output_file:
         print("Extracted to file " + output_file)
 
@@ -81,7 +83,7 @@ def parse_arguments():
                         help="The filepath to the output file. Default is same as input file.")
     parser.add_argument("-f", "--format", choices=["csv", "stdout"], default="stdout",
                         help="The format of the output file. For now, only CSV or print to standard output are available.")
-    parser.add_argument("-c", "--case_number", required=True,
+    parser.add_argument("-c", "--case_number", required=True, type=int,
                         help="case number of input number")
     args = parser.parse_args()
     return vars(args)
