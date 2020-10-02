@@ -1,0 +1,14 @@
+Parameters,Result
+mode req,True
+prescription dose/#,PASS
+prescription point,CShape
+isocentre point,3
+override,lungs
+collimator,PASS
+gantry,PASS
+SSD,PASS
+couch,couch?
+field size,PASS
+wedge,PASS
+meas,"'11','12','13','14','15','16','17','-','-'"
+energy,FAIL
