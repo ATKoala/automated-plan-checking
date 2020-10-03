@@ -55,7 +55,7 @@ def evaluate_parameters(parameter_values, truth_table, case, file_type):
                 # if the parameter_values[param] hasn't been changed it means the param wasn't extracted and we cant determine PASS/FAIL
                 # in these instances we return what the truth table value would need to be for a PASS and return that instead
                 else:
-                    pass_fail_values[param] = truth_table[param][case - 1]
+                    pass_fail_values[param] = "NOT IMPLEMENTED"
     return pass_fail_values
 
 def _extract_file_type(dataset):
@@ -195,7 +195,7 @@ def _extract_energy(dataset):
 
 #just a placeholder function to indicate which parameter extractions have not been implemented
 def to_be_implemented(dataset):
-    return ''
+    return 'NOT IMPLEMENTED'
 
 extractor_functions = {
     'mode req'                : to_be_implemented, 
