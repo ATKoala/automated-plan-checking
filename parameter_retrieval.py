@@ -7,6 +7,7 @@ import pydicom as dicom
 
 # We are mostly using parameters from the first item of Sequences; is this ok?  
 first_sequence_item = 0
+NOT_IMPLEMENTED_STRING = "NOT IMPLEMENTED"
 
 
 def extract_parameters(filepath):
@@ -40,22 +41,24 @@ def evaluate_parameters(parameter_values, truth_table, case, file_type):
         #iterate through each parameter you want to check
         for param in parameter_values:
             #print(param)
+            # if the parameter_values[param] has not been extracted we cant determine PASS/FAIL
+            # in these instances we simply return the message to indicate it has not been implemented
+            if parameter_values[param] == NOT_IMPLEMENTED_STRING or parameter_values[param] is False:
+                 pass_fail_values[param] = NOT_IMPLEMENTED_STRING
+                 
             # This line checks whether the parameter value found is the same as the truth table value (this is why the formating of the two dictionaries is important) and gives a "PASS" value
             # Also there are other instances where a PASS is given such as if the Truth Table is a dash for a given parameter in that case any value will satisfy
             # Or if the file is a VMAT and the parameter is either a gantry or an SSD
             # note case-1 is because the first case is 1 but the index position in the list is 0
-            if truth_table[param][case - 1] == parameter_values[param] or truth_table[param][
-                case - 1] == '-' or (file_type == 'VMAT' and (param == 'gantry' or param == 'SSD')):
+            elif truth_table[param][case - 1] == parameter_values[param] \
+                or truth_table[param][case - 1] == '-' \
+                or (file_type == 'VMAT' and (param == 'gantry' or param == 'SSD')):
                 pass_fail_values[param] = "PASS"
-            else:
-                # this else statement covers situations where we can't determine a PASS Value
-                # if the parameter_values[param]!='' this means that the param has been extracted since this value has been changed which means it was tested and found to FAIL
-                if parameter_values[param] != '':
-                    pass_fail_values[param] = "FAIL"
-                # if the parameter_values[param] hasn't been changed it means the param wasn't extracted and we cant determine PASS/FAIL
-                # in these instances we return what the truth table value would need to be for a PASS and return that instead
-                else:
-                    pass_fail_values[param] = "NOT IMPLEMENTED"
+                
+            # if the param has been extracted, it was tested and found to FAIL
+            else:            
+                pass_fail_values[param] = "FAIL"
+                
     return pass_fail_values
 
 def _extract_file_type(dataset):
@@ -195,7 +198,7 @@ def _extract_energy(dataset):
 
 #just a placeholder function to indicate which parameter extractions have not been implemented
 def to_be_implemented(dataset):
-    return 'NOT IMPLEMENTED'
+    return NOT_IMPLEMENTED_STRING
 
 extractor_functions = {
     'mode req'                : to_be_implemented, 
