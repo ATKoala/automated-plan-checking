@@ -56,7 +56,7 @@ def parse_arguments():
                         help="The locations of one or more DICOMS to be processed, OR the locations of one or more folders containing DICOMS to be processed.")
     parser.add_argument("-o", "--output", metavar="FOLDER",
                         help="The location where the reports for processed DICOMs should be saved (creates folder if doesn't yet exist). If unspecified, each report will be saved next to its DICOM buddy.")
-    parser.add_argument("-c", "--case_number", metavar="NUMBER",
+    parser.add_argument("-c", "--case_number", metavar="NUMBER", type=int,
                         help="The case number of input DICOMS. If specified, assumes all DICOMS in this batch will be this case.")
     parser.add_argument("-f", choices=["csv", "json"], default="stdout", dest="output_format",
                         help="The format of the output file.")
