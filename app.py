@@ -5,6 +5,7 @@ The extractor result is then passed to the outputter.
 """
 import os
 import argparse
+from pathlib import Path
 from parameter_retrieval import extract_parameters, evaluate_parameters
 from outputter import output
 
@@ -45,9 +46,8 @@ def process_dicom(location, destination, output_format, case_number):
     # Extract and evaluate the dicom 
     parameters, file_type = extract_parameters(location)
     evaluations = evaluate_parameters(parameters, case_number, file_type)
-
     # Output the extracted parameters into the format specified by user
-    output(evaluations, os.path.join(destination,location.name), output_format)
+    output(evaluations, os.path.join(destination,Path(location.name).stem), output_format)
 
 def parse_arguments():
     parser = argparse.ArgumentParser(description="Extract and evaluate selected parameters of DICOM files for the purpose of auditing planned radiotherapy treatment.")
