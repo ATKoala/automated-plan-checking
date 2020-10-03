@@ -28,12 +28,13 @@ def main():
         if os.path.isfile(location):
             # Assumes the path leads to a valid DICOM. TODO add error handling?
             process_dicom(location, output, output_format, case_number)
-        # Using 'with' to release directory resources after completion
-        with os.scandir(location) as folder:
-            for item in folder:
-                # Assumes all dcms will be the same format. TODO handle dose vs plan files, non radiotherapy dcms
-                if item.is_file() and item.name.endswith(".dcm"):
-                    process_dicom(item, output, output_format, case_number)
+        else:
+            # Using 'with' to release directory resources after completion
+            with os.scandir(location) as folder:
+                for item in folder:
+                    # Assumes all dcms will be the same format. TODO handle dose vs plan files, non radiotherapy dcms
+                    if item.is_file() and item.name.endswith(".dcm"):
+                        process_dicom(item, output, output_format, case_number)
     
 def process_dicom(location, destination, output_format, case_number):
     # Prompt for case number if not specified (should be when each dicom is different case)
