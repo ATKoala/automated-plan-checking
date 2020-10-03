@@ -34,13 +34,13 @@ def main():
                 for item in folder:
                     # Assumes all dcms will be the same format. TODO handle dose vs plan files, non radiotherapy dcms
                     if item.is_file() and item.name.endswith(".dcm"):
-                        process_dicom(item, output, output_format, case_number)
+                        process_dicom(item.path, output, output_format, case_number)
     
 def process_dicom(location, destination, output_format, case_number):
     # Prompt for case number if not specified (should be when each dicom is different case)
     while not isinstance(case_number, int):
         try:
-            case_number = int(input(f"What is the case number for {location.name}? "))
+            case_number = int(input(f"What is the case number for {location}? "))
         except ValueError:
             print("Case must be an integer!")
 
@@ -48,7 +48,7 @@ def process_dicom(location, destination, output_format, case_number):
     parameters, file_type = extract_parameters(location)
     evaluations = evaluate_parameters(parameters, case_number, file_type)
     # Output the extracted parameters into the format specified by user
-    output(evaluations, os.path.join(destination,Path(location.name).stem), output_format)
+    output(evaluations, os.path.join(destination,Path(location).stem), output_format)
 
 def parse_arguments():
     parser = argparse.ArgumentParser(description="Extract and evaluate selected parameters of DICOM files for the purpose of auditing planned radiotherapy treatment.")
