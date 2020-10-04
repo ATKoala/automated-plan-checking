@@ -33,7 +33,7 @@ truth_table_dict = {
               'couch?', 'couch?', 'couch?'],
     'field size': ['10x10', '10x6,10x12,10x6', '10x12', '10x12', '-', '-', '-', '-', '3x3,2x2,1x1', '-', '-', '-',
                    '3x3', '1.5x1.5', '-', '-', '-'],
-    'wedge': ['0', '30,0,30', '0', '60', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-'],
+    'wedge': ['0', '30,no wedge,30', '0', '60', 'no wedge', 'no wedge', 'no wedge', 'no wedge', 'no wedge', 'no wedge', 'no wedge', 'no wedge', 'no wedge', 'no wedge', 'no wedge', 'no wedge', 'no wedge'],
     'meas': ["'1','3','10','-','-','-','-','-','-'",
              "'5_RLAT','8_RLAT','5_AP','8_AP','5_LLAT','8_LLAT','-','-','-'", "'3','5','-','-','-','-','-','-','-'",
              "'3','5','-','-','-','-','-','-','-'", "'11','12','13','14','15','18','19','20','21'",
@@ -214,7 +214,7 @@ def _extract_wedge(dataset):
     #ignore setup beams
     beams = list(filter(lambda beam: beam.BeamDescription != "SETUP beam", dataset.BeamSequence))
     # if there are wedges, get the wedge angle of the beam. Otherwise, get 0
-    wedge_angles = list(map(lambda beam: str(int(beam.WedgeSequence[0].WedgeAngle)) if int(beam.NumberOfWedges) > 0 else '0', beams))
+    wedge_angles = list(map(lambda beam: str(int(beam.WedgeSequence[0].WedgeAngle)) if int(beam.NumberOfWedges) > 0 else 'no wedge', beams))
     return ','.join(wedge_angles)
     
 def _extract_energy(dataset):
