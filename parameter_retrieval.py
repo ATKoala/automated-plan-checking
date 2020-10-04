@@ -111,13 +111,13 @@ def evaluate_parameters(parameter_values, case, file_type):
                             i=0
                             while i < len(truth_table_ssd_list):
                                 if truth_table_ssd_list != '?':
-                                    if abs(int(truth_table_ssd_list[i])-parameter_values['SSD'][i]) > 1:
+                                    if abs(int(truth_table_ssd_list[i])-float(parameter_values['SSD'][i])) > 1:
                                         pass_fail_values['SSD'] = 'FAIL'
                                 i+=1
                         else:
                             pass_fail_values['SSD'] = 'FAIL'
             elif truth_table_dict[param][case - 1] == parameter_values[param] or truth_table_dict[param][
-                case - 1] == '-' or (file_type == 'VMAT' and (param == 'gantry' or param == 'SSD')):
+                case - 1] == '-':
                 pass_fail_values[param] = "PASS"
             else:
                 # this else statement covers situations where we can't determine a PASS Value
