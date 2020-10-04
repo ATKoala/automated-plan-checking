@@ -28,23 +28,22 @@ def main():
     #       - leave it until after we decide on which input methods to keep 
     for location in inputs:
         # Check if input is [file,case] [file,case] ... format
+        item_case = None
         comma_case = location.split(",")
         if len(comma_case) is 2:
             location = comma_case[0]
-            case_number = int(comma_case[1]) 
-        else:
-            case_number = None
+            item_case = int(comma_case[1])  
         # Handle the case where file is specified
         if os.path.isfile(location):
-            process_dicom(location, output, output_format, case_number)
+            process_dicom(location, output, output_format, case_number if item_case is None else item_case)
         # The case where folder is specified
         else:
             # Using 'with' keyword to release directory resources after processed
             with os.scandir(location) as folder:
                 for item in folder:
                     if item.is_file() and item.name.endswith(".dcm"):
-                        process_dicom(item.path, output, output_format, case_number)
-    
+                        process_dicom(item.path, output, output_format, case_number if item_case is None else item_case)
+
 def process_dicom(location, destination, output_format, case_number):
     # Prompt for case number if not specified (should be when each dicom is different case)
     while not isinstance(case_number, int):
@@ -67,7 +66,7 @@ def parse_arguments():
                         help="The location where the reports for processed DICOMs should be saved (creates folder if doesn't yet exist). If unspecified, each report will be saved next to its DICOM buddy.")
     parser.add_argument("-c", "--case_number", metavar="NUMBER", type=int,
                         help="The case number of input DICOMS. If specified, assumes all DICOMS in this batch will be this case.")
-    parser.add_argument("-f", choices=["csv", "json"], default="stdout", dest="output_format",
+    parser.add_argument("-f", "--format", choices=["csv", "json"], default="stdout", dest="output_format",
                         help="The format of the output file.")
     args = parser.parse_args()
     return vars(args)
