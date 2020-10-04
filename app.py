@@ -24,15 +24,24 @@ def main():
         os.mkdir(output)
 
     # Look for the given file or files or directories (aka folders) and process them
+    # TODO error handling for unexpected inputs for each case 
+    #       - leave it until after we decide on which input methods to keep 
     for location in inputs:
-        if os.path.isfile(location):
-            # Assumes the path leads to a valid DICOM. TODO add error handling?
-            process_dicom(location, output, output_format, case_number)
+        # Check if input is [file,case] [file,case] ... format
+        comma_case = location.split(",")
+        if len(comma_case) is 2:
+            location = comma_case[0]
+            case_number = int(comma_case[1]) 
         else:
-            # Using 'with' to release directory resources after completion
+            case_number = None
+        # Handle the case where file is specified
+        if os.path.isfile(location):
+            process_dicom(location, output, output_format, case_number)
+        # The case where folder is specified
+        else:
+            # Using 'with' keyword to release directory resources after processed
             with os.scandir(location) as folder:
                 for item in folder:
-                    # Assumes all dcms will be the same format. TODO handle dose vs plan files, non radiotherapy dcms
                     if item.is_file() and item.name.endswith(".dcm"):
                         process_dicom(item.path, output, output_format, case_number)
     
