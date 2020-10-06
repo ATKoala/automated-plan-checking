@@ -7,48 +7,8 @@ import pydicom as dicom
 
 # We are mostly using parameters from the first item of Sequences; is this ok?  
 first_sequence_item = 0
+NOT_IMPLEMENTED_STRING = "NOT IMPLEMENTED"
 
-# truth_table_dict defines the truth table in the form a dictionary
-# Each key(i.e. case, mode req, etc) refers to a column of the truth table
-# Each key has an associated list which gives every row value corresponing to that column in order
-truth_table_dict = {
-    "case": ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17'],
-    "mode req": ['False', 'False', 'False', 'False', 'False', 'True', 'True', 'True', 'False', 'True', 'True',
-                 'True', 'True', 'True', 'True', 'True', 'True'],
-    "prescription dose/#": ['2', '2', '2', '2', '50/25', '50/25', '50/25', '50/25', '900/3 MU', '45/3', '24/2',
-                            '48/4', '3', '3', '20', '20', '20'],
-    "prescription point": ['1 or 3', '5', '3', '3', 'chair', 'CShape', 'CShape', 'C8Target', '-', 'SoftTissTarget',
-                           'SpineTarget', 'LungTarget', '1', '1', 'PTV_c14_c15', '-', '-'],
-    "isocentre point": ['surf', '3', '3', '3', '3', '3', '3', '3', 'SoftTiss', 'SoftTiss', 'Spine', 'Lung', '1',
-                        '1', '1', '-', '-'],
-    "override": ['bone', 'no override', 'no override', 'no override', 'no override', 'lungs', 'no override',
-                 'no override', 'lungs', 'lungs', 'no override', 'no override', 'central cube', 'central cube',
-                 'central cube', 'central cube', 'central cube'],
-    "collimator": ['0', '-', '-', '-', '0', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-'],
-    "gantry": ['0', '270,0,90', '90', '90', '0', '150,60,0,300,210', '150,60,0,300,210', '150,60,0,300,210', '-',
-               '-', '-', '-', '-', '-', '-', '-', '-'],
-    "SSD": ['100', '86,93,86', '86', '86', '93', '?,89,93,89,?', '?,89,93,89,?', '?,89,93,89,?', '90', '-', '-',
-            '-', '-', '-', '-', '-', '-'],
-    'couch': ['-', '-', '-', '-', '-', 'couch?', 'couch?', 'couch?', '-', 'couch?', 'couch?', 'couch?', '-', '-',
-              'couch?', 'couch?', 'couch?'],
-    'field size': ['10x10', '10x6,10x12,10x6', '10x12', '10x12', '-', '-', '-', '-', '3x3,2x2,1x1', '-', '-', '-',
-                   '3x3', '1.5x1.5', '-', '-', '-'],
-    'wedge': ['0', '30,0,30', '0', '60', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-'],
-    'meas': ["'1','3','10','-','-','-','-','-','-'",
-             "'5_RLAT','8_RLAT','5_AP','8_AP','5_LLAT','8_LLAT','-','-','-'", "'3','5','-','-','-','-','-','-','-'",
-             "'3','5','-','-','-','-','-','-','-'", "'11','12','13','14','15','18','19','20','21'",
-             "'11','12','13','14','15','16','17','-','-'", "'11','12','13','14','15','16','17','-','-'",
-             "'11','12','13','14','15','17','18','-','-'",
-             "'SoftTiss_3','SoftTiss_2','SoftTiss_1','-','-','-','-','-','-'",
-             "'SoftTiss','-','-','-','-','-','-','-','-'", "'Spine2Inf','Spine1Sup','Cord','-','-','-','-','-','-'",
-             "'Lung','-','-','-','-','-','-','-','-'", "'1_3','4_3','-','-','-','-','-','-','-'",
-             "'1_1.5','4_1.5','-','-','-','-','-','-','-'", "'1','3','-','-','-','-','-','-','-'",
-             "'1','3','-','-','-','-','-','-','-'", "'1','2','3','-','-','-','-','-','-'"],
-    'energy': ["6,6FFF,10,10FFF,18", "6,6FFF,10,10FFF,18", "6,6FFF,10,10FFF,18", "6,6FFF,10,10FFF,18",
-               "6,6FFF,10,10FFF,18", "6,6FFF,10,10FFF,18", "6,6FFF,10,10FFF,18", "6,6FFF,10,10FFF,18",
-               "6,6FFF,10,10FFF,18", "6,6FFF,10,10FFF,18", "6,6FFF,10,10FFF,18", "6,6FFF,10,10FFF,18",
-               "6,6FFF,10,10FFF,18", "6,6FFF,10,10FFF,18", "6,6FFF,10,10FFF,18", "6,6FFF,10,10FFF,18",
-               "6,6FFF,10,10FFF,18"]}
 
 def extract_parameters(filepath):
     dataset = dicom.read_file(filepath, force=True)
@@ -61,21 +21,16 @@ def extract_parameters(filepath):
     parameters = ['mode req', 'prescription dose/#', 'prescription point', 'isocentre point', 'override', 'collimator',
                   'gantry', 'SSD', 'couch', 'field size', 'wedge', 'meas', 'energy']
     
-    # defines a dictionary of values found for each parameter
-    # The idea is that when you retrieve a parameter its value in this parameter_values dictionary should be the same as the corresponding value in the truth_table_dictionary
-    # This means when these values are changed when parameters are extracted attention needs to be paid to make sure that they are formatted in exact same way as the truth_table_dictionary 
-    parameter_values = {'mode req': '', 'prescription dose/#': '', 'prescription point': '', 'isocentre point': '',
-                        'override': '', 'collimator': '', 'gantry': '', 'SSD': '', 'couch': '', 'field size': '',
-                        'wedge': '', 'meas': '', 'energy': ''}
-
+    
     #run the extraction functions for each parameter and store the values in parameter_values dictionary
+    parameter_values = {}
     for parameter in parameters:
         parameter_values[parameter] = extractor_functions[parameter](dataset)
 
     return parameter_values, file_type
 
 
-def evaluate_parameters(parameter_values, case, file_type):
+def evaluate_parameters(parameter_values, truth_table, case, file_type):
     case = int(case)
     # Initialise a dictionary where every key is a parameter and every associated value will either be "PASS","FAIL" or if that can't be determined the truth table value associated with that case will be added
     pass_fail_values = {}
@@ -86,22 +41,24 @@ def evaluate_parameters(parameter_values, case, file_type):
         #iterate through each parameter you want to check
         for param in parameter_values:
             #print(param)
+            # if the parameter_values[param] has not been extracted we cant determine PASS/FAIL
+            # in these instances we simply return the message to indicate it has not been implemented
+            if parameter_values[param] == NOT_IMPLEMENTED_STRING or parameter_values[param] is False:
+                 pass_fail_values[param] = NOT_IMPLEMENTED_STRING
+                 
             # This line checks whether the parameter value found is the same as the truth table value (this is why the formating of the two dictionaries is important) and gives a "PASS" value
             # Also there are other instances where a PASS is given such as if the Truth Table is a dash for a given parameter in that case any value will satisfy
             # Or if the file is a VMAT and the parameter is either a gantry or an SSD
             # note case-1 is because the first case is 1 but the index position in the list is 0
-            if truth_table_dict[param][case - 1] == parameter_values[param] or truth_table_dict[param][
-                case - 1] == '-' or (file_type == 'VMAT' and (param == 'gantry' or param == 'SSD')):
+            elif truth_table[param][case - 1] == parameter_values[param] \
+                or truth_table[param][case - 1] == '-' \
+                or (file_type == 'VMAT' and (param == 'gantry' or param == 'SSD')):
                 pass_fail_values[param] = "PASS"
-            else:
-                # this else statement covers situations where we can't determine a PASS Value
-                # if the parameter_values[param]!='' this means that the param has been extracted since this value has been changed which means it was tested and found to FAIL
-                if parameter_values[param] != '':
-                    pass_fail_values[param] = "FAIL"
-                # if the parameter_values[param] hasn't been changed it means the param wasn't extracted and we cant determine PASS/FAIL
-                # in these instances we return what the truth table value would need to be for a PASS and return that instead
-                else:
-                    pass_fail_values[param] = truth_table_dict[param][case - 1]
+                
+            # if the param has been extracted, it was tested and found to FAIL
+            else:            
+                pass_fail_values[param] = "FAIL"
+                
     return pass_fail_values
 
 def _extract_file_type(dataset):
@@ -241,7 +198,7 @@ def _extract_energy(dataset):
 
 #just a placeholder function to indicate which parameter extractions have not been implemented
 def to_be_implemented(dataset):
-    return ''
+    return NOT_IMPLEMENTED_STRING
 
 extractor_functions = {
     'mode req'                : to_be_implemented, 
