@@ -25,7 +25,7 @@ class TestIMRTExtractionValues(unittest.TestCase):
     @classmethod
     def setUpClass(self):
         # We use the extraction function once here and inspect the results in the tests below
-        self.extracted, _ = extract_parameters('./Documents/Input/YellowLvlIII_7a.dcm')
+        self.extracted, _ = extract_parameters('./Resources/Input/YellowLvlIII_7a.dcm')
 
     def test_prescription_dose(self):
         self.assertEqual(self.extracted['prescription dose/#'], '50/25')
@@ -40,7 +40,7 @@ class TestIMRTExtractionValues(unittest.TestCase):
         # Notes on extraction output for this test
         # - The pdf has SSDs as 85.19, 89.42, 92.67 89.57, 85.19 for the beams
         # - But, currently testing using the string value for compatability with existing code
-        self.assertEqual(self.extracted['SSD'], f'?,89,93,89,?')
+        self.assertEqual(self.extracted['SSD'], [85.19,89.42,92.67,89.57,85.19])
 
     def test_energy(self):
         self.assertEqual(self.extracted['energy'], 6.0)
@@ -57,7 +57,7 @@ class TestVMATExtractionValues(unittest.TestCase):
     @classmethod
     def setUpClass(self):
         # We use the extraction function once here and inspect the results in the tests below
-        self.extracted, _ = extract_parameters('./Documents/Input/YellowLvlIII_7b.dcm')
+        self.extracted, _ = extract_parameters('./Resources/Input/YellowLvlIII_7b.dcm')
 
     def test_prescription_dose(self):
         self.assertEqual(self.extracted['prescription dose/#'], '50/25')
@@ -73,7 +73,7 @@ class TestVMATExtractionValues(unittest.TestCase):
         self.assertEqual(self.extracted['gantry'], 'VMAT File') 
 
     def test_ssd(self):
-        self.assertEqual(self.extracted['SSD'], '87.17')
+        self.assertEqual(self.extracted['SSD'], [87.17])
 
     def test_energy(self):
         self.assertEqual(self.extracted['energy'], 6.0)
@@ -162,7 +162,7 @@ class TestEvaluation(unittest.TestCase):
             'override':'bone',
             'collimator':'0',
             'gantry':'0',
-            'SSD':'100',
+            'SSD':[100],
             'couch':None,
             'field size':'10x10',
             'wedge':'0',
@@ -182,7 +182,7 @@ class TestEvaluation(unittest.TestCase):
             'override':'no override',
             'collimator':None,
             'gantry':'270,0,90',
-            'SSD':'86,93,86',
+            'SSD':[86,93,86],
             'couch':None,
             'field size':'10x6,10x12,10x6',
             'wedge':'30,0,30',
@@ -202,7 +202,7 @@ class TestEvaluation(unittest.TestCase):
             'override':'no override',
             'collimator':None,
             'gantry':'90',
-            'SSD':'86',
+            'SSD':[86],
             'couch':None,
             'field size':'10x12',
             'wedge':'0',
@@ -222,7 +222,7 @@ class TestEvaluation(unittest.TestCase):
             'override':'no override',
             'collimator':None,
             'gantry':'90',
-            'SSD':'86',
+            'SSD':[86],
             'couch':None,
             'field size':'10x12',
             'wedge':'60',
@@ -242,7 +242,7 @@ class TestEvaluation(unittest.TestCase):
             'override':'no override',
             'collimator':'0',
             'gantry':'0',
-            'SSD':'93',
+            'SSD':[93],
             'couch':None,
             'field size':None,
             'wedge':None,
@@ -262,7 +262,7 @@ class TestEvaluation(unittest.TestCase):
             'override':'lungs',
             'collimator':None,
             'gantry':'150,60,0,300,210',
-            'SSD':'?,89,93,89,?',
+            'SSD':[None,89,93,89,None],
             'couch':'couch?',
             'field size':None,
             'wedge':None,
@@ -282,7 +282,7 @@ class TestEvaluation(unittest.TestCase):
             'override':'no override',
             'collimator':None,
             'gantry':'150,60,0,300,210',
-            'SSD':'?,89,93,89,?',
+            'SSD':[None,89,93,89,None],
             'couch':'couch?',
             'field size':None,
             'wedge':None,
@@ -302,7 +302,7 @@ class TestEvaluation(unittest.TestCase):
             'override':'no override',
             'collimator':None,
             'gantry':'150,60,0,300,210',
-            'SSD':'?,89,93,89,?',
+            'SSD':[None,89,93,89,None],
             'couch':'couch?',
             'field size':None,
             'wedge':None,
@@ -322,7 +322,7 @@ class TestEvaluation(unittest.TestCase):
             'override':'lungs',
             'collimator':None,
             'gantry':None,
-            'SSD':'90',
+            'SSD':[90],
             'couch':None,
             'field size':'3x3,2x2,1x1',
             'wedge':None,

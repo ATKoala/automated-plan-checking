@@ -9,7 +9,6 @@ import pydicom as dicom
 first_sequence_item = 0
 NOT_IMPLEMENTED_STRING = "NOT IMPLEMENTED"
 
-
 def extract_parameters(filepath):
     dataset = dicom.read_file(filepath, force=True)
     
@@ -50,9 +49,34 @@ def evaluate_parameters(parameter_values, truth_table, case, file_type):
             # Also there are other instances where a PASS is given such as if the Truth Table is a dash for a given parameter in that case any value will satisfy
             # Or if the file is a VMAT and the parameter is either a gantry or an SSD
             # note case-1 is because the first case is 1 but the index position in the list is 0
-            elif truth_table[param][case - 1] == parameter_values[param] \
-                or truth_table[param][case - 1] == '-' \
-                or (file_type == 'VMAT' and (param == 'gantry' or param == 'SSD')):
+            if param == 'gantry':
+                if file_type =='VMAT':
+                    pass_fail_values['gantry'] = "VMAT unknown"
+                else:
+                    if truth_table['gantry'][case - 1] == parameter_values['gantry'] or truth_table['gantry'][case - 1] == '-':
+                        pass_fail_values['gantry'] = "PASS"
+                    else:
+                        pass_fail_values['gantry'] = "FAIL"
+            elif param == 'SSD':
+                if file_type =='VMAT':
+                    pass_fail_values['SSD'] = "VMAT unknown"
+                else:
+                    if truth_table['SSD'][case-1] == '-':
+                        pass_fail_values['SSD'] = "PASS"
+                    else:
+                        truth_table_ssd_list = truth_table['SSD'][case-1].split(',')
+                        if len(truth_table_ssd_list) == len(parameter_values['SSD']):
+                            pass_fail_values['SSD'] = "PASS"
+                            i=0
+                            while i < len(truth_table_ssd_list):
+                                if truth_table_ssd_list[i] != '?':
+                                    if abs(int(truth_table_ssd_list[i])-float(parameter_values['SSD'][i])) > 1:
+                                        pass_fail_values['SSD'] = 'FAIL'
+                                i+=1
+                        else:
+                            pass_fail_values['SSD'] = 'FAIL'
+            elif truth_table[param][case - 1] == parameter_values[param] or truth_table[param][
+                case - 1] == '-':
                 pass_fail_values[param] = "PASS"
                 
             # if the param has been extracted, it was tested and found to FAIL
@@ -74,7 +98,7 @@ def _extract_prescription_dose(dataset):
     number_of_fractions = str(dataset.FractionGroupSequence[0].NumberOfFractionsPlanned)
     
     #this section deals with the 'prescription dos/#' parameter
-    # You need to make sure that the format of parameter_values['perscription dose/#] is exactly the same as truth_table_dict['perscription dose/#'] in cases where the file passes
+    # You need to make sure that the format of parameter_values['perscription dose/#] is exactly the same as truth_table['perscription dose/#'] in cases where the file passes
     # To begin you assign the total_perscription dose to the parameter value
     prescription_dose = total_prescription_dose
     
@@ -129,41 +153,8 @@ def _extract_ssd(dataset):
     except:
         return '-'
     
-    if len(ssd_list) == 0:
-        return '-'
         
-    # The ssd_list contains SSD values for each beam
-    # This code converts those values into a format that is the same as the truth table
-    # A key assumption is that the SSD value needs to be within one centimetre of the truth_table value for it to pass
-    # checks instances where there is only one ssd value
-    if len(ssd_list) == 1:
-        # 100, 86, 93, or 90 are the only single value SSDs in the truth table
-        if abs(ssd_list[0] - 100) <= 1:
-            return '100'
-        elif abs(ssd_list[0] - 86) <= 1:
-            return '86'
-        elif abs(ssd_list[0] - 93) <= 1:
-            return '93'
-        elif abs(ssd_list[0] - 90) <= 1:
-            return '90'
-        # if the SSD isn't any of the above values we just assign it value it was closest to
-        # Then it will only pass the truth table when the corresponing thruth table value is a '-'
-        else:
-            return str(ssd_list[0])
-    
-    elif len(ssd_list) == 3:
-        # '86,93,86' is the only truth table value of length 3 that needs to be checked
-        if abs(ssd_list[0] - 86) <= 1 and abs(ssd_list[1] - 93) <= 1 and abs(ssd_list[2] - 86) <= 1:
-            return '86,93,86'
-        else:
-            return "non valid ssd"
-    
-    elif len(ssd_list) == 5:
-        # '?,86,93,86,?' is the only truth table value of length 5 that needs to be checked
-        if abs(ssd_list[1] - 89) <= 1 and abs(ssd_list[2] - 93) <= 1 and abs(ssd_list[3] - 89) <= 1:
-            return '?,89,93,89,?'
-        else:
-            return "non valid ssd"
+    return ssd_list
 
 def _extract_wedge(dataset):
     # It may need more work to deal with VMAT files for cases 6,7,8
@@ -171,7 +162,7 @@ def _extract_wedge(dataset):
     #ignore setup beams
     beams = list(filter(lambda beam: beam.BeamDescription != "SETUP beam", dataset.BeamSequence))
     # if there are wedges, get the wedge angle of the beam. Otherwise, get 0
-    wedge_angles = list(map(lambda beam: str(int(beam.WedgeSequence[0].WedgeAngle)) if int(beam.NumberOfWedges) > 0 else '0', beams))
+    wedge_angles = list(map(lambda beam: str(int(beam.WedgeSequence[0].WedgeAngle)) if int(beam.NumberOfWedges) > 0 else 'no wedge', beams))
     return ','.join(wedge_angles)
     
 def _extract_energy(dataset):
