@@ -2,8 +2,8 @@ import pandas as pd
 from pathlib import Path
 
 def read_truth_table(truth_table_file):
-    if Path(truth_table_file).suffix = '.csv':
-        return read_truth_table_csv
+    if Path(truth_table_file).suffix == '.csv':
+        return read_truth_table_csv(truth_table_file)
     # placeholder for other possible truth table input types
     else:
         return False
