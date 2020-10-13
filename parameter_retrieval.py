@@ -127,9 +127,16 @@ def _extract_gantry(dataset):
     try:
         file_type = _extract_file_type(dataset)
         
-        #If the dataset is a VMAT file,the Gantry is then assumed to be irrelevant
+        #If the dataset is a VMAT file it goes through each of the control point sequence and finds each associated gantry angle and returns the lowest value slash the highest value
+        # Also I dont think there is meant to be more than one beam in these cases
         if file_type == 'VMAT':
-            return 'VMAT File'
+            i = 0
+            while i < len(dataset.BeamSequence):
+                if dataset.BeamSequence[i].BeamDescription != "SETUP beam":
+                    min_gantry=str(min([float(control_point.GantryAngle) for control_point in dataset.BeamSequence[i].ControlPointSequence]))
+                    max_gantry=str(max([float(control_point.GantryAngle) for control_point in dataset.BeamSequence[i].ControlPointSequence]))
+                    return min_gantry + '/' + max_gantry
+                i+=1
         # If not, then return the Gantry Angle of all beams, separated by commas
         else:
             #ignore setup beams
