@@ -14,7 +14,7 @@ def extract_parameters(filepath):
     
     # created a variable file_type in circumstances where it is useful to identify whether the file is a VMAT for example
     # at the moment it does this by identifying wheter the control point index has different gantry angles for different control points of the same beam
-    file_type = _extract_file_type(dataset)
+    file_type = _extract_mode(dataset)
     
     # define a list of parameters that need to be found
     parameters = ['mode req', 'prescription dose/#', 'prescription point', 'isocentre point', 'override', 'collimator',
@@ -39,6 +39,10 @@ def evaluate_parameters(parameter_values, truth_table, case, file_type):
         #print(case)
         #iterate through each parameter you want to check
         for param in parameter_values:
+            if param is 'mode req' and case in [6,7,8]:
+                # "If you can determine IMRT or VMAT in cases 6-8 then that would be the most helpful"
+                #   - Andrew , in Jiale's forwarded email 6/10/20
+                pass_fail_values[param] = parameter_values[param]
             #print(param)
             # if the parameter_values[param] has not been extracted we cant determine PASS/FAIL
             # in these instances we simply return the message to indicate it has not been implemented
@@ -85,7 +89,7 @@ def evaluate_parameters(parameter_values, truth_table, case, file_type):
                 
     return pass_fail_values
 
-def _extract_file_type(dataset):
+def _extract_mode(dataset):
     #Test whether the gantry angle changes within a single beam. If so, that indicates it is a VMAT file
     gantry_angle_changed = int(dataset.BeamSequence[0].ControlPointSequence[0].GantryAngle) != \
                             int(dataset.BeamSequence[0].ControlPointSequence[1].GantryAngle)
@@ -125,7 +129,7 @@ def _extract_collimator(dataset):
     
 def _extract_gantry(dataset):
     try:
-        file_type = _extract_file_type(dataset)
+        file_type = _extract_mode(dataset)
         
         #If the dataset is a VMAT file,the Gantry is then assumed to be irrelevant
         if file_type == 'VMAT':
@@ -192,7 +196,7 @@ def to_be_implemented(dataset):
     return NOT_IMPLEMENTED_STRING
 
 extractor_functions = {
-    'mode req'                : to_be_implemented, 
+    'mode req'                    : _extract_mode, 
     'prescription dose/#'     : _extract_prescription_dose, 
     'prescription point'      : to_be_implemented, 
     'isocentre point'         : to_be_implemented,
