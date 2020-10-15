@@ -75,6 +75,8 @@ def evaluate_parameters(parameter_values, truth_table, case, file_type):
                                 i+=1
                         else:
                             pass_fail_values['SSD'] = 'FAIL'
+            elif param == 'energy':
+                pass_fail_values[param] = NOT_IMPLEMENTED_STRING
             elif truth_table[param][case - 1] == parameter_values[param] or truth_table[param][
                 case - 1] == '-':
                 pass_fail_values[param] = "PASS"
