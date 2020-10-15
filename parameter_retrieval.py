@@ -49,7 +49,7 @@ def evaluate_parameters(parameter_values, truth_table, case, file_type):
             # Also there are other instances where a PASS is given such as if the Truth Table is a dash for a given parameter in that case any value will satisfy
             # Or if the file is a VMAT and the parameter is either a gantry or an SSD
             # note case-1 is because the first case is 1 but the index position in the list is 0
-            if param == 'gantry':
+            elif param == 'gantry':
                 if file_type =='VMAT':
                     pass_fail_values['gantry'] = "VMAT unknown"
                 else:
