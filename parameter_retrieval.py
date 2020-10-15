@@ -75,12 +75,30 @@ def evaluate_parameters(parameter_values, truth_table, case, file_type):
                                 i+=1
                         else:
                             pass_fail_values['SSD'] = 'FAIL'
+            elif param =='wedge':
+                if truth_table['wedge'][case - 1] == 'no wedge':
+                    pass_fail_values['wedge'] = "PASS"
+                    for w_angle in parameter_values['wedge'].split(","):
+                        if w_angle != 'no wedge':
+                            pass_fail_values['wedge'] = "FAIL"
+                else:
+                    if truth_table['wedge'][case - 1] == parameter_values['wedge']:
+                        pass_fail_values['wedge'] = "PASS"
+                    else:
+                        pass_fail_values['wedge'] = "FAIL"
+            elif param == 'prescription dose/#':
+                pass_fail_values['prescription dose/#']= "PASS"
+                i=0
+                while i <= 2:
+                    if truth_table['prescription dose/#'][case - 1].split("/")[i] != "-" and truth_table['prescription dose/#'][case - 1].split("/")[i] != parameter_values['prescription dose/#'].split("/")[i]:
+                        pass_fail_values['prescription dose/#']= "FAIL"
+                        break
+                    i+=1
             elif param == 'energy':
                 pass_fail_values[param] = NOT_IMPLEMENTED_STRING
             elif truth_table[param][case - 1] == parameter_values[param] or truth_table[param][
                 case - 1] == '-':
                 pass_fail_values[param] = "PASS"
-                
             # if the param has been extracted, it was tested and found to FAIL
             else:            
                 pass_fail_values[param] = "FAIL"
@@ -106,16 +124,12 @@ def _extract_prescription_dose(dataset):
     
     # Then when perscription dose is 24,48,50, or 900 you also need to check the amount of fractions
     # and when its 900 the primary dosimeter unit needs to be 'MU' as well
-    if total_prescription_dose == '24':
-        prescription_dose = '24/' + number_of_fractions
-    elif total_prescription_dose == '48':
-        prescription_dose = '48/' + number_of_fractions
-    elif total_prescription_dose == '50':
-        prescription_dose = '50/' + number_of_fractions
-    elif total_prescription_dose == '900' and dataset.BeamSequence[0].PrimaryDosimeterUnit == 'MU':
-        prescription_dose = '900/' + number_of_fractions + ' MU'
+    try:
+        prim_dosimeter_unit = dataset.BeamSequence[0].PrimaryDosimeterUnit
+    except:
+        prim_dosimeter_unit = "No primary dosimeter unit"
     
-    return prescription_dose
+    return prescription_dose + "/" + number_of_fractions + "/" + prim_dosimeter_unit
     
 def _extract_collimator(dataset):
     #ignore setup beams
