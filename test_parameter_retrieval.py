@@ -30,6 +30,9 @@ class TestIMRTExtractionValues(unittest.TestCase):
     def test_prescription_dose(self):
         self.assertEqual(self.extracted['prescription dose/#'], '50/25')
 
+    def test_field_size(self):
+        self.assertEqual(self.extracted['field size'], '10x10')
+
     def test_collimator(self):
         self.assertEqual(self.extracted['collimator'], '0')
 
@@ -64,6 +67,10 @@ class TestVMATExtractionValues(unittest.TestCase):
 
     def test_collimator(self):
         self.assertEqual(self.extracted['collimator'], '355')
+
+    def test_field_size(self):
+        self.assertEqual(self.extracted['field size'], '10x10')
+
 
     def test_gantry_angle(self):
         #  Report shows '180/360' for a single beam for this plan
