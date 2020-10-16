@@ -96,12 +96,24 @@ def evaluate_parameters(parameter_values, truth_table, case, file_type):
                     i+=1
             elif param == 'energy':
                 pass_fail_values[param] = NOT_IMPLEMENTED_STRING
-            elif truth_table[param][case - 1] == parameter_values[param] or truth_table[param][
-                case - 1] == '-':
-                pass_fail_values[param] = "PASS"
-            # if the param has been extracted, it was tested and found to FAIL
-            else:            
-                pass_fail_values[param] = "FAIL"
+            elif param == 'collimator':
+                if truth_table[param][case - 1] == parameter_values[param] or truth_table[param][
+                    case - 1] == '-':
+                    pass_fail_values[param] = "PASS"
+                elif truth_table[param][case - 1][0] =='*':
+                    if truth_table[param][case - 1][1:] != parameter_values[param]:
+                        pass_fail_values[param] = "PASS"
+                    else:
+                        pass_fail_values[param] = "FAIL"
+                else:            
+                    pass_fail_values[param] = "FAIL"
+            else:
+                if truth_table[param][case - 1] == parameter_values[param] or truth_table[param][
+                    case - 1] == '-':
+                    pass_fail_values[param] = "PASS"
+                # if the param has been extracted, it was tested and found to FAIL
+                else:            
+                    pass_fail_values[param] = "FAIL"
                 
     return pass_fail_values
 
@@ -186,11 +198,13 @@ def _extract_wedge(dataset):
     beams = list(filter(lambda beam: beam.BeamDescription != "SETUP beam", dataset.BeamSequence))
     # if there are wedges, get the wedge angle of the beam. Otherwise, get 0
     wedge_angles = list(map(lambda beam: str(int(beam.WedgeSequence[0].WedgeAngle)) if int(beam.NumberOfWedges) > 0 else 'no wedge', beams))
+    
     return ','.join(wedge_angles)
     
 def _extract_energy(dataset):
     #energies = []
     energy = ''
+    
     for beam in dataset.BeamSequence:
         #ignore setup beams
         if beam.BeamDescription == "SETUP beam":
@@ -207,6 +221,7 @@ def _extract_energy(dataset):
             energy += beam.PrimaryFluenceModeSequence[first_sequence_item].FluenceModeID
         
         #energies.append(energy)
+    
     return energy
     
 
