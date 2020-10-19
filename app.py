@@ -14,10 +14,9 @@ from truth_table_reader import read_truth_table
 def main():
     # Retrieve user inputs from command line arguments
     user_input = parse_arguments()
-    # In the future, we might read the truth table in from here 
-    # truth_table defines the truth table in the form a dictionary
-    # Each key(i.e. case, mode req, etc) refers to a column of the truth table
-    # Each key has an associated list which gives every row value corresponing to that column in order
+    
+    #Retrieve default settings from properties file
+    properties = read_properties_file()
     
     # Process the supplied arguments
     inputs = user_input["inputs"]
@@ -88,7 +87,25 @@ def parse_arguments():
                     
     args = parser.parse_args()
     return vars(args)
+    
+def read_properties_file():
+    properties = {}
+    with open('properties.txt', 'r') as prop_file:
+        for line in prop_file:
+            line = line.strip()
+            
+            #skip  if line is a comment or wrong syntax
+            if line.startswith("#"): continue
+            if '=' not in line: continue
+            
+            [key, value] = line.split('=', 1)
+            properties[key] = value
+            
+    return properties
 
+# truth_table defines the truth table in the form a dictionary
+# Each key(i.e. case, mode req, etc) refers to a column of the truth table
+# Each key has an associated list which gives every row value corresponing to that column in order
 default_truth_table = {
     "case": ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17'],
     "mode req": ['False', 'False', 'False', 'False', 'False', 'True', 'True', 'True', 'False', 'True', 'True',
