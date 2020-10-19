@@ -188,7 +188,7 @@ def _extract_energy(dataset):
         #  -STANDARD     -> not FFF
         #  -NON_STANDARD -> check Fluence Mode ID for a short description of the fluence mode (could be FFF)
         if beam.PrimaryFluenceModeSequence[first_sequence_item].FluenceMode != strings.STANDARD_FLUENCE:
-            energy += beam.PrimaryFluenceModeSequence[first_sequence_item].FluenceModeID
+            energy += str(beam.PrimaryFluenceModeSequence[first_sequence_item].FluenceModeID)
         
         #energies.append(energy)
     return energy
