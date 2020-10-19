@@ -61,27 +61,6 @@ def evaluate_parameters(parameter_values, truth_table, case, file_type):
 			 
 			 
 			 
-		elif param == strings.prescription_dose_slash_fractions:
-			pass_fail_values[strings.prescription_dose_slash_fractions]= strings.PASS
-			i=0
-			while i <= 2:
-				if truth_table[strings.prescription_dose_slash_fractions][case - 1].split("/")[i] != strings.ANY_VALUE and truth_table[strings.prescription_dose_slash_fractions][case - 1].split("/")[i] != parameter_values[strings.prescription_dose_slash_fractions].split("/")[i]:
-					pass_fail_values[strings.prescription_dose_slash_fractions]= strings.FAIL
-					break
-				i+=1
-		elif param == strings.energy:
-			pass_fail_values[param] = strings.NOT_IMPLEMENTED
-		elif param == strings.collimator:
-			if truth_table[param][case - 1] == parameter_values[param] or truth_table[param][
-				case - 1] == strings.ANY_VALUE:
-				pass_fail_values[param] = strings.PASS
-			elif truth_table[param][case - 1][0] =='*':
-				if truth_table[param][case - 1][1:] != parameter_values[param]:
-					pass_fail_values[param] = strings.PASS
-				else:
-					pass_fail_values[param] = strings.FAIL
-			else:            
-				pass_fail_values[param] = strings.FAIL
 		else:
 			if truth_table[param][case - 1] == parameter_values[param] or truth_table[param][
 				case - 1] == strings.ANY_VALUE:
@@ -305,6 +284,26 @@ def _evaluate_wedge(param_value, table_value, file_type, **kwargs):
 		return strings.PASS if all_no_wedge else strings.FAIL
 	else:
 		return strings.PASS if table_value == param_value else strings.FAIL
+
+def _evaluate_prescription_dose(param_value, table_value, file_type):
+	for i in range(0, 3):
+		if table_value.split("/")[i] != strings.ANY_VALUE and table_value.split("/")[i] != param_value.split("/")[i]:
+			return strings.FAIL
+	return strings.PASS
+	
+def _evaluate_collimator(param_value, table_value, file_type):
+	if table_value == strings.ANY_VALUE: 
+		return strings.PASS
+		
+	result = table_value == param_value if table_value[0] != '*' else
+			 table_value[1:] != param_value				
+	return strings.PASS if result else strings.FAIL
+	
+def _evaluate_energy(param_value, table_value, file_type):
+	return strings.NOT_IMPLEMENTED
+	
+def _evaluate_default(param_value, table_value, file_type):
+	return "PASS" if param_value == table_value or table_value == '-' else "FAIL"
     
 evaluator_functions = {
     strings.mode_req               : to_be_implemented, 
