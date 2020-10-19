@@ -6,7 +6,7 @@ The extractor result is then passed to the outputter.
 import os
 import argparse
 from pathlib import Path
-from parameter_retrieval import extract_parameters, evaluate_parameters
+from parameter_retrieval.parameter_retrieval import extract_parameters, evaluate_parameters
 from outputter import output
 from pathlib import Path
 from truth_table_reader import read_truth_table

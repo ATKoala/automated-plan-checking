@@ -5,8 +5,8 @@ The function to extract parameters from the specified DICOM file.
 # We import the pydicom library to use it's DICOM reading methods
 import pydicom as dicom
 import strings 
-from extractor_functions import extractor_functions
-#from evaluator_functions import evaluator_functions
+from .extractor_functions import extractor_functions
+from .evaluator_functions import evaluator_functions
 
 # We are mostly using parameters from the first item of Sequences; is this ok?  
 first_sequence_item = 0
@@ -52,8 +52,8 @@ def evaluate_parameters(parameter_values, truth_table, case, file_type):
 		#print(param)
 		# if the parameter_values[param] has not been extracted we cant determine PASS/FAIL
 		# in these instances we simply return the message to indicate it has not been implemented
-		if parameter_values[param] == NOT_IMPLEMENTED_STRING or parameter_values[param] is False:
-			pass_fail_values[param] = NOT_IMPLEMENTED_STRING
+		if parameter_values[param] == strings.NOT_IMPLEMENTED or parameter_values[param] is False:
+			pass_fail_values[param] = strings.NOT_IMPLEMENTED
 		else:
 			param_value = parameter_values[param]
 			table_value = truth_table[param][case-1] # note case-1 is because the first case is 1 but the index position in the list is 0
