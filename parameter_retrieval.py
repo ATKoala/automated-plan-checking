@@ -75,13 +75,45 @@ def evaluate_parameters(parameter_values, truth_table, case, file_type):
                                 i+=1
                         else:
                             pass_fail_values['SSD'] = 'FAIL'
-            elif truth_table[param][case - 1] == parameter_values[param] or truth_table[param][
-                case - 1] == '-':
-                pass_fail_values[param] = "PASS"
-                
-            # if the param has been extracted, it was tested and found to FAIL
-            else:            
-                pass_fail_values[param] = "FAIL"
+            elif param =='wedge':
+                if truth_table['wedge'][case - 1] == 'no wedge':
+                    pass_fail_values['wedge'] = "PASS"
+                    for w_angle in parameter_values['wedge'].split(","):
+                        if w_angle != 'no wedge':
+                            pass_fail_values['wedge'] = "FAIL"
+                else:
+                    if truth_table['wedge'][case - 1] == parameter_values['wedge']:
+                        pass_fail_values['wedge'] = "PASS"
+                    else:
+                        pass_fail_values['wedge'] = "FAIL"
+            elif param == 'prescription dose/#':
+                pass_fail_values['prescription dose/#']= "PASS"
+                i=0
+                while i <= 2:
+                    if truth_table['prescription dose/#'][case - 1].split("/")[i] != "-" and truth_table['prescription dose/#'][case - 1].split("/")[i] != parameter_values['prescription dose/#'].split("/")[i]:
+                        pass_fail_values['prescription dose/#']= "FAIL"
+                        break
+                    i+=1
+            elif param == 'energy':
+                pass_fail_values[param] = NOT_IMPLEMENTED_STRING
+            elif param == 'collimator':
+                if truth_table[param][case - 1] == parameter_values[param] or truth_table[param][
+                    case - 1] == '-':
+                    pass_fail_values[param] = "PASS"
+                elif truth_table[param][case - 1][0] =='*':
+                    if truth_table[param][case - 1][1:] != parameter_values[param]:
+                        pass_fail_values[param] = "PASS"
+                    else:
+                        pass_fail_values[param] = "FAIL"
+                else:            
+                    pass_fail_values[param] = "FAIL"
+            else:
+                if truth_table[param][case - 1] == parameter_values[param] or truth_table[param][
+                    case - 1] == '-':
+                    pass_fail_values[param] = "PASS"
+                # if the param has been extracted, it was tested and found to FAIL
+                else:            
+                    pass_fail_values[param] = "FAIL"
                 
     return pass_fail_values
 
@@ -89,7 +121,7 @@ def _extract_file_type(dataset):
     #Test whether the gantry angle changes within a single beam. If so, that indicates it is a VMAT file
     gantry_angle_changed = int(dataset.BeamSequence[0].ControlPointSequence[0].GantryAngle) != \
                             int(dataset.BeamSequence[0].ControlPointSequence[1].GantryAngle)
-    return 'VMAT' if gantry_angle_changed else 'IMRT'
+    return 'VMAT' if gantry_angle_changed else 'not VMAT'
  
 def _extract_prescription_dose(dataset):
     # Total Prescription Dose
@@ -104,16 +136,12 @@ def _extract_prescription_dose(dataset):
     
     # Then when perscription dose is 24,48,50, or 900 you also need to check the amount of fractions
     # and when its 900 the primary dosimeter unit needs to be 'MU' as well
-    if total_prescription_dose == '24':
-        prescription_dose = '24/' + number_of_fractions
-    elif total_prescription_dose == '48':
-        prescription_dose = '48/' + number_of_fractions
-    elif total_prescription_dose == '50':
-        prescription_dose = '50/' + number_of_fractions
-    elif total_prescription_dose == '900' and dataset.BeamSequence[0].PrimaryDosimeterUnit == 'MU':
-        prescription_dose = '900/' + number_of_fractions + ' MU'
+    try:
+        prim_dosimeter_unit = dataset.BeamSequence[0].PrimaryDosimeterUnit
+    except:
+        prim_dosimeter_unit = "No primary dosimeter unit"
     
-    return prescription_dose
+    return prescription_dose + "/" + number_of_fractions + "/" + prim_dosimeter_unit
     
 def _extract_collimator(dataset):
     #ignore setup beams
@@ -170,11 +198,13 @@ def _extract_wedge(dataset):
     beams = list(filter(lambda beam: beam.BeamDescription != "SETUP beam", dataset.BeamSequence))
     # if there are wedges, get the wedge angle of the beam. Otherwise, get 0
     wedge_angles = list(map(lambda beam: str(int(beam.WedgeSequence[0].WedgeAngle)) if int(beam.NumberOfWedges) > 0 else 'no wedge', beams))
+    
     return ','.join(wedge_angles)
     
 def _extract_energy(dataset):
     #energies = []
     energy = ''
+    
     for beam in dataset.BeamSequence:
         #ignore setup beams
         if beam.BeamDescription == "SETUP beam":
@@ -191,6 +221,7 @@ def _extract_energy(dataset):
             energy += beam.PrimaryFluenceModeSequence[first_sequence_item].FluenceModeID
         
         #energies.append(energy)
+    
     return energy
     
 
