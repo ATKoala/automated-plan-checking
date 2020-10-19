@@ -7,7 +7,7 @@ Purpose:
 
 What kind of strings go in here:
 - Strings that are used in equality comparisons
-- Strings that are used more than 
+- Strings that are used more than once
 
 Including:
     - Strings from truth table values
@@ -24,18 +24,20 @@ override = "override"
 collimator = "collimator"
 gantry = "gantry"
 SSD = "SSD"
+ANY_SSD = "?" # In truth table, SSD sometimes in the format "?,89,93,89,?" with "?" accepting any value
 couch = "couch"
-field_size = "field_size"
+field_size = "field size"
 wedge = "wedge"
 meas = "meas"
 energy = "energy"
 VMAT = "VMAT"
 IMRT = "IMRT"
 VMAT_unknown = "VMAT unknown"
-hyphen = "-"
 FAIL = "FAIL"
 PASS = "PASS"
 SETUP_beam = "SETUP beam"
 no_wedge = "no wedge"
-STANDARD = "STANDARD"
+STANDARD_FLUENCE = "STANDARD" # When fluence mode is listed as "STANDARD" in dicom, it is not FFF
 FFF = "FFF"
+ANY_VALUE = "-" # Truth table uses hyphen to denote any value is acceptable
+
