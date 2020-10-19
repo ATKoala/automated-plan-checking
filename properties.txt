@@ -1,0 +1,2 @@
+default_input_folder = ./Resources/Inputs
+default_output_folder = ./Reports
