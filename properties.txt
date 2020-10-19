@@ -1,2 +1,3 @@
 default_input_folder = ./Resources/Inputs
 default_output_folder = ./Reports
+truth_table_file = truth_table_example.csv
