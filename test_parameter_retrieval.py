@@ -8,7 +8,7 @@ See https://docs.python.org/3/library/unittest.html for more information about u
 - TestEvaluation is a collection of tests on the parameter evaluation: given a set of parameters, 
    it verifies that the pass/fail results are as expected
 
-The 2 DICOM files tested are included in the Documents subdirectory.
+The 2 DICOM files tested are included in the Resources subdirectory.
 The correct values for each test are derived from the corresponding pdf reports in each of IMRT and VMAT directories (7a.pdf, 7b.pdf).
 
 Basic method to run all tests: `python -m unittest`

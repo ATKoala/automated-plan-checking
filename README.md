@@ -40,11 +40,3 @@ e.g `python -m unittest test_parameter_retrieval.TestIMRTExtractionValues`
 Run a particular test (i.e prescription dose) with `python -m unittest test_parameter_retrieval.ClassName.FunctionName`
 
 e.g. `python -m unittest test_parameter_retrieval.TestIMRTExtractionValues.test_total_prescription_dose`
-
-### Structure
-
-There are 3 classes (aka test suites aka groupings of tests) in the file;
-
-- *TestEvaluation* is a collection of tests of the parameter evaluation: given a set of parameters, it verifies that the pass/fail results are as expected.
-- *TestIMRTExtractionValues* is a collection of tests verifying that the correct values are extracted from IMRT file (YellowLvlIII_7a.dcm)
-- *TestVMATExtractionValues* is a collection of tests verifying that the correct values are extracted from VMAT file (YellowLvlIII_7b.dcm)
