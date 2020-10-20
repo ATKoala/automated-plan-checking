@@ -10,10 +10,6 @@ What kind of strings go in here:
 - Strings that are used in equality comparisons
 - Strings that are used more than once
 
-Including:
-    - Strings from truth table values
-    - Error message strings
-    - Other strings
 '''
 case = "case"
 NOT_IMPLEMENTED= "NOT IMPLEMENTED"
