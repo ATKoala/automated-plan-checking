@@ -51,7 +51,7 @@ def evaluate_parameters(parameter_values, truth_table, case, file_type):
             # note case-1 is because the first case is 1 but the index position in the list is 0
             elif param == 'gantry':
                 if file_type =='VMAT':
-                    pass_fail_values['gantry'] = "VMAT unknown"
+                    pass_fail_values['gantry'] = "PASS"
                 else:
                     if truth_table['gantry'][case - 1] == parameter_values['gantry'] or truth_table['gantry'][case - 1] == '-':
                         pass_fail_values['gantry'] = "PASS"
@@ -59,7 +59,32 @@ def evaluate_parameters(parameter_values, truth_table, case, file_type):
                         pass_fail_values['gantry'] = "FAIL"
             elif param == 'SSD':
                 if file_type =='VMAT':
-                    pass_fail_values['SSD'] = "VMAT unknown"
+                    if truth_table['SSD'][case-1] == '-':
+                        pass_fail_values['SSD'] = "PASS"
+                    else:
+                        if truth_table['gantry'][case-1] != "-" and truth_table['gantry'][case-1] != "error retrieving gantry":
+                            truth_table_gantry_list = truth_table['gantry'][case-1].split(',')
+                            truth_table_ssd_list = truth_table['SSD'][case-1].split(',')
+                            if len(truth_table_gantry_list) == len(truth_table_ssd_list):
+                                pass_fail_values['SSD'] = "PASS"
+                                i=0
+                                while i < len(truth_table_gantry_list):
+                                    gantry_value = float(truth_table_gantry_list[i])
+                                    ssd_value = truth_table_ssd_list[i]
+                                    if ssd_value != '?':
+                                        ssd_value=float(ssd_value)
+                                        if len(parameter_values['gantry'])!=len(parameter_values['SSD']):
+                                               pass_fail_values['SSD'] = "FAIL"
+                                        else:
+                                            j = 0
+                                            while j < len(parameter_values['gantry']):
+                                                if abs(parameter_values['gantry'][j] - gantry_value) < 0.3:
+                                                    if abs(parameter_values['SSD'][j] - ssd_value) > 1:
+                                                        pass_fail_values['SSD'] = "FAIL"
+                                                j+=1
+                                    i+=1
+                            else:
+                                pass_fail_values['SSD'] = "FAIL"
                 else:
                     if truth_table['SSD'][case-1] == '-':
                         pass_fail_values['SSD'] = "PASS"
@@ -159,12 +184,14 @@ def _extract_gantry(dataset):
         # Also I dont think there is meant to be more than one beam in these cases
         if file_type == 'VMAT':
             i = 0
+            vmat_gantry_angles = []
             while i < len(dataset.BeamSequence):
                 if dataset.BeamSequence[i].BeamDescription != "SETUP beam":
-                    min_gantry=str(min([float(control_point.GantryAngle) for control_point in dataset.BeamSequence[i].ControlPointSequence]))
-                    max_gantry=str(max([float(control_point.GantryAngle) for control_point in dataset.BeamSequence[i].ControlPointSequence]))
-                    return min_gantry + '/' + max_gantry
+                    for control_point in dataset.BeamSequence[i].ControlPointSequence:
+                        vmat_gantry_angles.append(float(control_point.GantryAngle))
+                    return vmat_gantry_angles
                 i+=1
+            return "error retrieving gantry"
         # If not, then return the Gantry Angle of all beams, separated by commas
         else:
             #ignore setup beams
@@ -178,18 +205,29 @@ def _extract_gantry(dataset):
         
 def _extract_ssd(dataset):
 #find SSD in centimeters    
+    file_type = _extract_file_type(dataset)
+    
     ssd_list = []
     try:
-        #ignore setup beams
-        beams = list(filter(lambda beam: beam.BeamDescription != "SETUP beam", dataset.BeamSequence))
-        #obtain the ssd of all beams
-        #in the DICOM file the SSD is given in millimetres so its divided by 10 so its in centimetres
-        ssd_list = list(map(lambda beam: beam.ControlPointSequence[0].SourceToSurfaceDistance / 10, beams))
+        if file_type == 'VMAT':
+            i = 0
+            vmat_ssd_list = []
+            while i < len(dataset.BeamSequence):
+                if dataset.BeamSequence[i].BeamDescription != "SETUP beam":
+                    for control_point in dataset.BeamSequence[i].ControlPointSequence:
+                        vmat_ssd_list.append(float(control_point.ReferencedDoseReferenceSequence[1].BeamDosePointSSD)/10)
+                    return vmat_ssd_list
+                i+=1
+            return "error retrieving SSD"
+        else:
+            #ignore setup beams
+            beams = list(filter(lambda beam: beam.BeamDescription != "SETUP beam", dataset.BeamSequence))
+            #obtain the ssd of all beams
+            #in the DICOM file the SSD is given in millimetres so its divided by 10 so its in centimetres
+            ssd_list = list(map(lambda beam: beam.ControlPointSequence[0].SourceToSurfaceDistance / 10, beams))
+            return ssd_list
     except:
-        return '-'
-    
-        
-    return ssd_list
+        return 'SSD not retrieved'
 
 def _extract_wedge(dataset):
     # It may need more work to deal with VMAT files for cases 6,7,8
