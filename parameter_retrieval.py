@@ -90,7 +90,7 @@ def evaluate_parameters(parameter_values, truth_table, case, file_type):
                 pass_fail_values[strings.prescription_dose_slash_fractions]= strings.PASS
                 i=0
                 while i <= 2:
-                    if truth_table[strings.prescription_dose_slash_fractions][case - 1].split("/")[i] != "-" and truth_table[strings.prescription_dose_slash_fractions][case - 1].split("/")[i] != parameter_values[strings.prescription_dose_slash_fractions].split("/")[i]:
+                    if truth_table[strings.prescription_dose_slash_fractions][case - 1].split("/")[i] != strings.ANY_VALUE and truth_table[strings.prescription_dose_slash_fractions][case - 1].split("/")[i] != parameter_values[strings.prescription_dose_slash_fractions].split("/")[i]:
                         pass_fail_values[strings.prescription_dose_slash_fractions]= strings.FAIL
                         break
                     i+=1
