@@ -3,6 +3,6 @@
 # property_name must be string
 # property_value can only be string for now
 
-default_input_folder = ./Resources/Inputs
-default_output_folder = ./Reports
+default_input_folder = Resources/Input
+default_output_folder = Reports
 truth_table_file = truth_table_example.csv

@@ -19,7 +19,7 @@ def main():
     properties = read_properties_file("properties.txt")
     
     # Process the supplied arguments
-    inputs = user_input["inputs"] if user_input["inputs"] else properties["default_input_folder"]
+    inputs = user_input["inputs"] if user_input["inputs"] else [properties["default_input_folder"]]
     case_number = user_input["case_number"]
     output_format = user_input["output_format"]
     truth_table_file = user_input["truth_table_file"] if user_input["truth_table_file"] else properties["truth_table_file"]
