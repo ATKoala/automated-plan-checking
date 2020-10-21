@@ -14,19 +14,19 @@ from truth_table_reader import read_truth_table
 def main():
     # Retrieve user inputs from command line arguments
     user_input = parse_arguments()
-    # In the future, we might read the truth table in from here 
-    # truth_table defines the truth table in the form a dictionary
-    # Each key(i.e. case, mode req, etc) refers to a column of the truth table
-    # Each key has an associated list which gives every row value corresponing to that column in order
+    
+    #Retrieve default settings from properties file
+    properties = read_properties_file("properties.txt")
     
     # Process the supplied arguments
-    inputs = user_input["inputs"]
+    inputs = user_input["inputs"] if user_input["inputs"] else [properties["default_input_folder"]]
     case_number = user_input["case_number"]
     output_format = user_input["output_format"]
-    truth_table = read_truth_table(user_input["truth_table_file"]) if user_input["truth_table_file"] else default_truth_table
+    truth_table_file = user_input["truth_table_file"] if user_input["truth_table_file"] else properties["truth_table_file"]
+    truth_table = read_truth_table(truth_table_file) if truth_table_file else default_truth_table
     
     # Output location is Reports folder by default (if command is run without the output argument)
-    output = "./Reports" if user_input["output"] is None else user_input["output"]
+    output = user_input["output"] if user_input["output"] else properties["default_output_folder"]
     if not os.path.isdir(output):
         os.mkdir(output)
 
@@ -88,7 +88,25 @@ def parse_arguments():
                     
     args = parser.parse_args()
     return vars(args)
+    
+def read_properties_file(properties_file):
+    properties = {}
+    with open(properties_file, 'r') as prop_file:
+        for line in prop_file:
+            line = line.strip()
+            
+            #skip  if line is a comment or wrong syntax
+            if line.startswith("#"): continue
+            if '=' not in line: continue
+            
+            [key, value] = line.split('=', 1)
+            properties[key.strip()] = value.strip()
+            
+    return properties
 
+# truth_table defines the truth table in the form a dictionary
+# Each key(i.e. case, mode req, etc) refers to a column of the truth table
+# Each key has an associated list which gives every row value corresponing to that column in order
 default_truth_table = {
     "case": ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17'],
     "mode req": ['False', 'False', 'False', 'False', 'False', 'True', 'True', 'True', 'False', 'True', 'True',
