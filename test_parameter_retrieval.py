@@ -28,8 +28,9 @@ class TestIMRTExtractionValues(unittest.TestCase):
         # We use the extraction function once here and inspect the results in the tests below
         self.extracted, _ = extract_parameters('./Resources/Input/YellowLvlIII_7a.dcm')
 
+
     def test_prescription_dose(self): 
-        self.assertEqual(self.extracted[strings.prescription_dose_slash_fractions], '50/25')
+        self.assertEqual(self.extracted[strings.prescription_dose_slash_fractions], '50/25/-')
 
     def test_collimator(self): 
         self.assertEqual(self.extracted[strings.collimator], '0')
@@ -61,7 +62,7 @@ class TestVMATExtractionValues(unittest.TestCase):
         self.extracted, _ = extract_parameters('./Resources/Input/YellowLvlIII_7b.dcm')
 
     def test_prescription_dose(self): 
-        self.assertEqual(self.extracted[strings.prescription_dose_slash_fractions], '50/25')
+        self.assertEqual(self.extracted[strings.prescription_dose_slash_fractions], '50/25/-')
 
     def test_collimator(self): 
         self.assertEqual(self.extracted[strings.collimator], '355')
@@ -88,8 +89,8 @@ truth_table = {
     strings.case :  ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17'],
     strings.mode_req :  ['False', 'False', 'False', 'False', 'False', 'True', 'True', 'True', 'False', 'True', 'True',
                 'True', 'True', 'True', 'True', 'True', 'True'],
-    strings.prescription_dose_slash_fractions : ['2', '2', '2', '2', '50/25', '50/25', '50/25', '50/25', '900/3 MU', '45/3', '24/2',
-                            '48/4', '3', '3', '20', '20', '20'],
+    strings.prescription_dose_slash_fractions : ['2/-/-', '2/-/-', '2/-/-', '2/-/-', '50/25/-', '50/25/-', '50/25/-', '50/25/-', '900/3/MU', '45/3/-', '24/2/-',
+                            '48/4/-', '3/-/-', '3/-/-', '20/-/-', '20/-/-', '20/-/-'],
     strings.prescription_point : ['1 or 3', '5', '3', '3', 'chair', 'CShape', 'CShape', 'C8Target', '-', 'SoftTissTarget',
                         'SpineTarget', 'LungTarget', '1', '1', 'PTV_c14_c15', '-', '-'],
     strings.isocenter_point : ['surf', '3', '3', '3', '3', '3', '3', '3', 'SoftTiss', 'SoftTiss', 'Spine', 'Lung', '1',
@@ -97,8 +98,8 @@ truth_table = {
     strings.override : ['bone', 'no override', 'no override', 'no override', 'no override', 'lungs', 'no override',
                 'no override', 'lungs', 'lungs', 'no override', 'no override', 'central cube', 'central cube',
                 'central cube', 'central cube', 'central cube'],
-    strings.collimator : ['0', '-', '-', '-', '0', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-'],
-    strings.gantry : ['0', '270,0,90', '90', '90', '0', '150,60,0,300,210', '150,60,0,300,210', '150,60,0,300,210', '-',
+    strings.collimator : ['0', '-', '-', '-', '0', '*0', '*0', '*0', '-', '-', '-', '-', '-', '-', '-', '-', '-'],
+    strings.gantry: ['0', '270,0,90', '90', '90', '0', '150,60,0,300,210', '150,60,0,300,210', '150,60,0,300,210', '-',
             '-', '-', '-', '-', '-', '-', '-', '-'],
     strings.SSD : ['100', '86,93,86', '86', '86', '93', '?,89,93,89,?', '?,89,93,89,?', '?,89,93,89,?', '90', '-', '-',
             '-', '-', '-', '-', '-', '-'],
@@ -106,7 +107,7 @@ truth_table = {
             'couch?', 'couch?', 'couch?'],
     strings.field_size : ['10x10', '10x6,10x12,10x6', '10x12', '10x12', '-', '-', '-', '-', '3x3,2x2,1x1', '-', '-', '-',
                 '3x3', '1.5x1.5', '-', '-', '-'],
-    strings.wedge : ['0', '30,0,30', '0', '60', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-'],
+    strings.wedge : ['no wedge', '30,no wedge,30', 'no wedge', '60', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-'],
     strings.meas : ["'1','3','10','-','-','-','-','-','-'",
             "'5_RLAT','8_RLAT','5_AP','8_AP','5_LLAT','8_LLAT','-','-','-'", "'3','5','-','-','-','-','-','-','-'",
             "'3','5','-','-','-','-','-','-','-'", "'11','12','13','14','15','18','19','20','21'",
@@ -156,7 +157,7 @@ class TestEvaluation(unittest.TestCase):
         case = 1
         passing_parameters = {
             strings.mode_req : 'False',
-            strings.prescription_dose_slash_fractions : '2',
+            strings.prescription_dose_slash_fractions : '2/-/-',
             strings.prescription_point : '1 or 3',
                 #TODO Think this should work for either 1 or 3, not the string "1 or 3"? 
             strings.isocenter_point : 'surf',
@@ -166,18 +167,19 @@ class TestEvaluation(unittest.TestCase):
             strings.SSD : [100],
             strings.couch : None,
             strings.field_size : '10x10',
-            strings.wedge : '0',
+            strings.wedge : 'no wedge',
             strings.meas : "'1','3','10','-','-','-','-','-','-'",
             strings.energy : "6,6FFF,10,10FFF,18"
         }
-        treatment_type = strings.IMRT
+        treatment_type = 'not VMAT'
+
         self.assertEqual(evaluate_parameters(passing_parameters, truth_table, case, treatment_type), self.pass_evaluation)
 
     def test_case_2(self): 
         case = 2
         passing_parameters = {
             strings.mode_req : 'False',
-            strings.prescription_dose_slash_fractions : '2',
+            strings.prescription_dose_slash_fractions : '2/-/-',
             strings.prescription_point : '5',
             strings.isocenter_point : '3',
             strings.override : 'no override',
@@ -186,18 +188,18 @@ class TestEvaluation(unittest.TestCase):
             strings.SSD : [86,93,86],
             strings.couch : None,
             strings.field_size : '10x6,10x12,10x6',
-            strings.wedge : '30,0,30',
+            strings.wedge : '30,no wedge,30',
             strings.meas : "'5_RLAT','8_RLAT','5_AP','8_AP','5_LLAT','8_LLAT','-','-','-'",
             strings.energy : "6,6FFF,10,10FFF,18"
         }
-        treatment_type = strings.IMRT
+        treatment_type = 'not VMAT'
         self.assertEqual(evaluate_parameters(passing_parameters, truth_table, case, treatment_type), self.pass_evaluation)
 
     def test_case_3(self): 
         case = 3
         passing_parameters = {
             strings.mode_req : 'False',
-            strings.prescription_dose_slash_fractions : '2',
+            strings.prescription_dose_slash_fractions : '2/-/-',
             strings.prescription_point : '3',
             strings.isocenter_point : '3',
             strings.override : 'no override',
@@ -206,18 +208,18 @@ class TestEvaluation(unittest.TestCase):
             strings.SSD : [86],
             strings.couch : None,
             strings.field_size : '10x12',
-            strings.wedge : '0',
+            strings.wedge : 'no wedge',
             strings.meas : "'3','5','-','-','-','-','-','-','-'",
             strings.energy : "6,6FFF,10,10FFF,18"
         }
-        treatment_type = strings.IMRT
+        treatment_type = 'not VMAT'
         self.assertEqual(evaluate_parameters(passing_parameters, truth_table, case, treatment_type), self.pass_evaluation)
 
     def test_case_4(self): 
         case = 4
         passing_parameters = {
             strings.mode_req : 'False',
-            strings.prescription_dose_slash_fractions : '2',
+            strings.prescription_dose_slash_fractions : '2/-/-',
             strings.prescription_point : '3',
             strings.isocenter_point : '3',
             strings.override : 'no override',
@@ -230,14 +232,14 @@ class TestEvaluation(unittest.TestCase):
             strings.meas : "'3','5','-','-','-','-','-','-','-'",
             strings.energy : "6,6FFF,10,10FFF,18"
         }
-        treatment_type = strings.IMRT
+        treatment_type = 'not VMAT'
         self.assertEqual(evaluate_parameters(passing_parameters, truth_table, case, treatment_type), self.pass_evaluation)
         
     def test_case_5(self): 
         case = 5
         passing_parameters = {
             strings.mode_req : 'False',
-            strings.prescription_dose_slash_fractions : '50/25',
+            strings.prescription_dose_slash_fractions : '50/25/-',
             strings.prescription_point : 'chair',
             strings.isocenter_point : '3',
             strings.override : 'no override',
@@ -250,18 +252,18 @@ class TestEvaluation(unittest.TestCase):
             strings.meas : "'11','12','13','14','15','18','19','20','21'",
             strings.energy : "6,6FFF,10,10FFF,18"
         }
-        treatment_type = strings.IMRT
+        treatment_type = 'not VMAT'
         self.assertEqual(evaluate_parameters(passing_parameters, truth_table, case, treatment_type), self.pass_evaluation)
 
     def test_case_6(self): 
         case = 6
         passing_parameters = {
             strings.mode_req : 'True',
-            strings.prescription_dose_slash_fractions : '50/25',
+            strings.prescription_dose_slash_fractions : '50/25/-',
             strings.prescription_point : 'CShape',
             strings.isocenter_point : '3',
             strings.override : 'lungs',
-            strings.collimator : None,
+            strings.collimator : '1',
             strings.gantry : '150,60,0,300,210',
             strings.SSD : [None,89,93,89,None],
             strings.couch : 'couch?',
@@ -270,18 +272,18 @@ class TestEvaluation(unittest.TestCase):
             strings.meas : "'11','12','13','14','15','16','17','-','-'",
             strings.energy : "6,6FFF,10,10FFF,18"
         }
-        treatment_type = strings.IMRT
+        treatment_type = 'not VMAT'
         self.assertEqual(evaluate_parameters(passing_parameters, truth_table, case, treatment_type), self.pass_evaluation)
 
     def test_case_7(self): 
         case = 7
         passing_parameters = {
             strings.mode_req : 'True',
-            strings.prescription_dose_slash_fractions : '50/25',
+            strings.prescription_dose_slash_fractions : '50/25/-',
             strings.prescription_point : 'CShape',
             strings.isocenter_point : '3',
             strings.override : 'no override',
-            strings.collimator : None,
+            strings.collimator : '1',
             strings.gantry : '150,60,0,300,210',
             strings.SSD : [None,89,93,89,None],
             strings.couch : 'couch?',
@@ -290,18 +292,18 @@ class TestEvaluation(unittest.TestCase):
             strings.meas : "'11','12','13','14','15','16','17','-','-'",
             strings.energy : "6,6FFF,10,10FFF,18"
         }
-        treatment_type = strings.IMRT
+        treatment_type = 'not VMAT'
         self.assertEqual(evaluate_parameters(passing_parameters, truth_table, case, treatment_type), self.pass_evaluation)
 
     def test_case_8(self): 
         case = 8
         passing_parameters = {
             strings.mode_req : 'True',
-            strings.prescription_dose_slash_fractions : '50/25',
+            strings.prescription_dose_slash_fractions : '50/25/-',
             strings.prescription_point : 'C8Target',
             strings.isocenter_point : '3',
             strings.override : 'no override',
-            strings.collimator : None,
+            strings.collimator : '1',
             strings.gantry : '150,60,0,300,210',
             strings.SSD : [None,89,93,89,None],
             strings.couch : 'couch?',
@@ -310,14 +312,14 @@ class TestEvaluation(unittest.TestCase):
             strings.meas : "'11','12','13','14','15','17','18','-','-'",
             strings.energy : "6,6FFF,10,10FFF,18"
         }
-        treatment_type = strings.IMRT
+        treatment_type = 'not VMAT'
         self.assertEqual(evaluate_parameters(passing_parameters, truth_table, case, treatment_type), self.pass_evaluation)
 
     def test_case_9(self): 
         case = 9
         passing_parameters = {
             strings.mode_req : 'False',
-            strings.prescription_dose_slash_fractions : '900/3 MU',
+            strings.prescription_dose_slash_fractions : '900/3/MU',
             strings.prescription_point : 'C8Target',
             strings.isocenter_point : 'SoftTiss',
             strings.override : 'lungs',
@@ -330,14 +332,14 @@ class TestEvaluation(unittest.TestCase):
             strings.meas : "'SoftTiss_3','SoftTiss_2','SoftTiss_1','-','-','-','-','-','-'",
             strings.energy : "6,6FFF,10,10FFF,18"
         }
-        treatment_type = strings.IMRT
+        treatment_type = 'not VMAT'
         self.assertEqual(evaluate_parameters(passing_parameters, truth_table, case, treatment_type), self.pass_evaluation)
 
     def test_case_10(self): 
         case = 10
         passing_parameters = {
             strings.mode_req : 'True',
-            strings.prescription_dose_slash_fractions : '45/3',
+            strings.prescription_dose_slash_fractions : '45/3/-',
             strings.prescription_point : 'SoftTissTarget',
             strings.isocenter_point : 'SoftTiss',
             strings.override : 'lungs',
@@ -350,7 +352,7 @@ class TestEvaluation(unittest.TestCase):
             strings.meas : "'SoftTiss','-','-','-','-','-','-','-','-'",
             strings.energy : "6,6FFF,10,10FFF,18"
         }
-        treatment_type = strings.IMRT
+        treatment_type = 'not VMAT'
         self.assertEqual(evaluate_parameters(passing_parameters, truth_table, case, treatment_type), self.pass_evaluation)
 
 
@@ -358,7 +360,7 @@ class TestEvaluation(unittest.TestCase):
         case = 11
         passing_parameters = {
             strings.mode_req : 'True',
-            strings.prescription_dose_slash_fractions : '24/2',
+            strings.prescription_dose_slash_fractions : '24/2/-',
             strings.prescription_point : 'SpineTarget',
             strings.isocenter_point : 'Spine',
             strings.override : 'no override',
@@ -371,14 +373,14 @@ class TestEvaluation(unittest.TestCase):
             strings.meas : "'Spine2Inf','Spine1Sup','Cord','-','-','-','-','-','-'",
             strings.energy : "6,6FFF,10,10FFF,18"
         }
-        treatment_type = strings.IMRT
+        treatment_type = 'not VMAT'
         self.assertEqual(evaluate_parameters(passing_parameters, truth_table, case, treatment_type), self.pass_evaluation)
 
     def test_case_12(self): 
         case = 12
         passing_parameters = {
             strings.mode_req : 'True',
-            strings.prescription_dose_slash_fractions : '48/4',
+            strings.prescription_dose_slash_fractions : '48/4/-',
             strings.prescription_point : 'LungTarget',
             strings.isocenter_point : 'Lung',
             strings.override : 'no override',
@@ -391,14 +393,14 @@ class TestEvaluation(unittest.TestCase):
             strings.meas : "'Lung','-','-','-','-','-','-','-','-'",
             strings.energy : "6,6FFF,10,10FFF,18"
         }
-        treatment_type = strings.IMRT
+        treatment_type = 'not VMAT'
         self.assertEqual(evaluate_parameters(passing_parameters, truth_table, case, treatment_type), self.pass_evaluation)
 
     def test_case_13(self): 
         case = 13
         passing_parameters = {
             strings.mode_req : 'True',
-            strings.prescription_dose_slash_fractions : '3',
+            strings.prescription_dose_slash_fractions : '3/-/-',
             strings.prescription_point : '1',
             strings.isocenter_point : '1',
             strings.override : 'central cube',
@@ -411,7 +413,7 @@ class TestEvaluation(unittest.TestCase):
             strings.meas : "'1_3','4_3','-','-','-','-','-','-','-'",
             strings.energy : "6,6FFF,10,10FFF,18"
         }
-        treatment_type = strings.IMRT
+        treatment_type = 'not VMAT'
         self.assertEqual(evaluate_parameters(passing_parameters, truth_table, case, treatment_type), self.pass_evaluation)
 
 
@@ -419,7 +421,7 @@ class TestEvaluation(unittest.TestCase):
         case = 14
         passing_parameters = {
             strings.mode_req : 'True',
-            strings.prescription_dose_slash_fractions : '3',
+            strings.prescription_dose_slash_fractions : '3/-/-',
             strings.prescription_point : '1',
             strings.isocenter_point : '1',
             strings.override : 'central cube',
@@ -432,7 +434,7 @@ class TestEvaluation(unittest.TestCase):
             strings.meas : "'1_1.5','4_1.5','-','-','-','-','-','-','-'",
             strings.energy : "6,6FFF,10,10FFF,18"
         }
-        treatment_type = strings.IMRT
+        treatment_type = 'not VMAT'
         self.assertEqual(evaluate_parameters(passing_parameters, truth_table, case, treatment_type), self.pass_evaluation)
 
 
@@ -440,7 +442,7 @@ class TestEvaluation(unittest.TestCase):
         case = 15
         passing_parameters = {
             strings.mode_req : 'True',
-            strings.prescription_dose_slash_fractions : '20',
+            strings.prescription_dose_slash_fractions : '20/-/-',
             strings.prescription_point : 'PTV_c14_c15',
             strings.isocenter_point : '1',
             strings.override : 'central cube',
@@ -453,14 +455,14 @@ class TestEvaluation(unittest.TestCase):
             strings.meas : "'1','3','-','-','-','-','-','-','-'",
             strings.energy : "6,6FFF,10,10FFF,18"
         }
-        treatment_type = strings.IMRT
+        treatment_type = 'not VMAT'
         self.assertEqual(evaluate_parameters(passing_parameters, truth_table, case, treatment_type), self.pass_evaluation)
 
     def test_case_16(self): 
         case = 16
         passing_parameters = {
             strings.mode_req : 'True',
-            strings.prescription_dose_slash_fractions : '20',
+            strings.prescription_dose_slash_fractions : '20/-/-',
             strings.prescription_point : None,
             strings.isocenter_point : None,
             strings.override : 'central cube',
@@ -473,14 +475,14 @@ class TestEvaluation(unittest.TestCase):
             strings.meas : "'1','3','-','-','-','-','-','-','-'",
             strings.energy : "6,6FFF,10,10FFF,18"
         }
-        treatment_type = strings.IMRT
+        treatment_type = 'not VMAT'
         self.assertEqual(evaluate_parameters(passing_parameters, truth_table, case, treatment_type), self.pass_evaluation)
 
     def test_case_17(self): 
         case = 17
         passing_parameters = {
             strings.mode_req : 'True',
-            strings.prescription_dose_slash_fractions : '20',
+            strings.prescription_dose_slash_fractions : '20/-/-',
             strings.prescription_point : None,
             strings.isocenter_point : None,
             strings.override : 'central cube',
@@ -493,7 +495,7 @@ class TestEvaluation(unittest.TestCase):
             strings.meas : "'1','2','3','-','-','-','-','-','-'",
             strings.energy : "6,6FFF,10,10FFF,18"
         }
-        treatment_type = strings.IMRT
+        treatment_type = 'not VMAT'
         self.assertEqual(evaluate_parameters(passing_parameters, truth_table, case, treatment_type), self.pass_evaluation)
 
 if __name__ == '__main__' : 
