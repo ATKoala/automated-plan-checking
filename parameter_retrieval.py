@@ -129,15 +129,43 @@ def _extract_field_size(dataset):
     # record collimator value in the parameter_values dictionary as a string to be consistant with truth_table format
     # According to the truth table the collimator only needs to be recorded for cases 1&5 where only 1 beam occurs
     beam_type_number = len(beams[len(beams) - 1].ControlPointSequence[0].BeamLimitingDevicePositionSequence)
-    print("\n"+str(beam_type_number) + " types of device in total:")
+    print("\n" + str(beam_type_number) + " types of device in total:")
+
+    length_x = -1
+    length_y = -1
+
     for i in range(beam_type_number):
         device_type = beams[len(beams) - 1].ControlPointSequence[0].BeamLimitingDevicePositionSequence[
             i].RTBeamLimitingDeviceType
         jaw_position = beams[len(beams) - 1].ControlPointSequence[0].BeamLimitingDevicePositionSequence[
             i].LeafJawPositions
-        # print(dataset)python app.py --inputs Resources/Input/YellowLvlIII_3a.dcm --format csv --case_number 6
-        print(jaw_position)
-        print(device_type)
+        # print(dataset)python app.py --inputs Resources/Input/YellowLvlIII_4a.dcm --format csv --case_number 6
+
+        if device_type != "MLCX" and device_type != "MLCY":
+
+            if device_type == "X":
+                length_x = int((-jaw_position[0] + jaw_position[1]) / 10)
+            elif device_type == "Y":
+                length_y = int((-jaw_position[0] + jaw_position[1]) / 10)
+            elif device_type == "ASYMX":
+                if length_x != -1:
+                    print("Two Beam Limiting Device on X axis!")
+                    length_x = int((-jaw_position[0] + jaw_position[1]) / 10)
+            elif device_type == "ASYMY":
+                if length_y != -1:
+                    print("Two Beam Limiting Device on Y axis!")
+                length_y = int((-jaw_position[0] + jaw_position[1]) / 10)
+        else:
+            print("Sorry, cannot extract field size with MLCX/MLCY")
+    if length_x == -1:
+        print("No Beam Limiting Device on X axis!")
+    elif length_y == -1:
+        print("No Beam Limiting Device on Y axis!")
+    else:
+        #print(str(length_y) + "x" + str(length_x))
+        return str(length_y) + "x" + str(length_x)
+
+    # return str("("+length_x+","+length_y+")")
 
 
 def _extract_collimator(dataset):

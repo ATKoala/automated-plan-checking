@@ -72,9 +72,9 @@ def main():
         # Check if input is [file,case] [file,case] ... format
         comma_case = None
         input_item = location.split(",")
-        if len(input_item) is 2:
+        if len(input_item) == 2:
             location = input_item[0]
-            comma_case = int(input_item[1])  
+            comma_case = int(input_item[1])
         final_case = case_number if comma_case is None else comma_case
 
         # Handle the case where file is specified
