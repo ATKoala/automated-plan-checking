@@ -123,15 +123,15 @@ def to_be_implemented(dataset):
 extractor_functions = {
     strings.mode_req                : to_be_implemented, 
     strings.prescription_dose_slash_fractions     : _extract_prescription_dose, 
-    strings.prescription_point     : to_be_implemented, 
-    strings.isocenter_point        : to_be_implemented,
+    strings.prescription_point      : to_be_implemented, 
+    strings.isocenter_point         : to_be_implemented,
         # Isocenter Position TODO:Figuring out what does "SoftTiss" etc means
         # parameter_values["Isocenter Position"] = dataset.BeamSequence[i].ControlPointSequence[0].IsocenterPosition
     strings.override                : to_be_implemented, 
         #I suspect override is at (3008, 0066) tag in the DICOM file but I'm not sure
-    strings.collimator             : _extract_collimator, 
+    strings.collimator              : _extract_collimator, 
     strings.gantry                  : _extract_gantry, 
-    strings.SSD                    : _extract_ssd, 
+    strings.SSD                     : _extract_ssd, 
     strings.couch                   : to_be_implemented, 
     strings.field_size              : to_be_implemented,
     strings.wedge                   : _extract_wedge, 
