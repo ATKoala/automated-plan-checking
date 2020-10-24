@@ -17,7 +17,7 @@ Detailed instructions for running tests are in the README.
 import unittest
 import pydicom
 import strings
-from parameter_retrieval import extract_parameters, evaluate_parameters
+from parameter_retrieval.parameter_retrieval import extract_parameters, evaluate_parameters
 
 class TestIMRTExtractionValues(unittest.TestCase): 
     ''' Tests for verifying the correct values are extracted for IMRT file
@@ -107,7 +107,7 @@ truth_table = {
             'couch?', 'couch?', 'couch?'],
     strings.field_size : ['10x10', '10x6,10x12,10x6', '10x12', '10x12', '-', '-', '-', '-', '3x3,2x2,1x1', '-', '-', '-',
                 '3x3', '1.5x1.5', '-', '-', '-'],
-    strings.wedge : ['no wedge', '30,no wedge,30', 'no wedge', '60', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-'],
+    strings.wedge : ['no wedge', '30,no wedge,30', 'no wedge', '60', 'no wedge', 'no wedge', 'no wedge', 'no wedge', 'no wedge', 'no wedge', 'no wedge', 'no wedge', 'no wedge', 'no wedge', 'no wedge', 'no wedge', 'no wedge'],
     strings.meas : ["'1','3','10','-','-','-','-','-','-'",
             "'5_RLAT','8_RLAT','5_AP','8_AP','5_LLAT','8_LLAT','-','-','-'", "'3','5','-','-','-','-','-','-','-'",
             "'3','5','-','-','-','-','-','-','-'", "'11','12','13','14','15','18','19','20','21'",
