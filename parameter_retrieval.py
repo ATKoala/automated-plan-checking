@@ -85,6 +85,11 @@ def evaluate_parameters(parameter_values, truth_table, case, file_type):
                                     i+=1
                             else:
                                 pass_fail_values[strings.SSD] = strings.FAIL
+                        else:
+                            if truth_table[strings.gantry][case-1] != "-" :
+                                pass_fail_values[strings.SSD] = strings.PASS
+                            else:
+                                pass_fail_values[strings.SSD] = strings.FAIL
                 else:
                     if truth_table[strings.SSD][case-1] == strings.ANY_VALUE:
                         pass_fail_values[strings.SSD] = strings.PASS
