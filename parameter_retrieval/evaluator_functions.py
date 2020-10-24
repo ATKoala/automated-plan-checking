@@ -1,3 +1,5 @@
+import strings
+
 def _evaluate_gantry(param_value, table_value, **kwargs):
     # This line checks whether the parameter value found is the same as the truth table value (this is why the formating of the two dictionaries is important) and gives a "PASS" value
     # Also there are other instances where a PASS is given such as if the Truth Table is a dash for a given parameter in that case any value will satisfy
@@ -55,7 +57,7 @@ def _evaluate_ssd(param_value, table_value, **kwargs):
         i=0
         while i < len(truth_table_ssd_list):
             if truth_table_ssd_list[i] != '?':
-                if abs(int(truth_table_ssd_list[i])-float(parameter_values[strings.SSD][i])) > 1:
+                if abs(int(truth_table_ssd_list[i])-float(param_value[i])) > 1:
                     return strings.FAIL
             i+=1
         return strings.PASS
@@ -68,38 +70,38 @@ def _evaluate_wedge(param_value, table_value, file_type, **kwargs):
     else:
         return strings.PASS if table_value == param_value else strings.FAIL
 
-def _evaluate_prescription_dose(param_value, table_value, file_type):
+def _evaluate_prescription_dose(param_value, table_value, file_type, **kwargs):
     for i in range(0, 3):
         if table_value.split("/")[i] != strings.ANY_VALUE and table_value.split("/")[i] != param_value.split("/")[i]:
             return strings.FAIL
     return strings.PASS
     
-def _evaluate_collimator(param_value, table_value, file_type):
+def _evaluate_collimator(param_value, table_value, file_type, **kwargs):
     if table_value == strings.ANY_VALUE: 
         return strings.PASS
         
-    result = table_value == param_value if table_value[0] != '*' else
+    result = table_value == param_value if table_value[0] != '*' else    \
              table_value[1:] != param_value                
     return strings.PASS if result else strings.FAIL
     
-def _evaluate_energy(param_value, table_value, file_type):
+def _evaluate_energy(param_value, table_value, file_type, **kwargs):
     return strings.NOT_IMPLEMENTED
     
-def _evaluate_default(param_value, table_value, file_type):
+def _evaluate_default(param_value, table_value, file_type, **kwargs):
     return strings.PASS if param_value == table_value or table_value == '-' else strings.FAIL
     
 evaluator_functions = {
     strings.mode_req                : _evaluate_default, 
-    strings.prescription_dose_slash_fractions    : _extract_prescription_dose, 
+    strings.prescription_dose_slash_fractions    : _evaluate_prescription_dose, 
     strings.prescription_point      : _evaluate_default, 
     strings.isocenter_point         : _evaluate_default,
     strings.override                : _evaluate_default, 
-    strings.collimator              : _extract_collimator, 
+    strings.collimator              : _evaluate_collimator, 
     strings.gantry                  : _evaluate_gantry, 
     strings.SSD                     : _evaluate_ssd, 
     strings.couch                   : _evaluate_default, 
     strings.field_size              : _evaluate_default,
     strings.wedge                   : _evaluate_wedge, 
     strings.meas                    : _evaluate_default, 
-    strings.energy                  : _extract_energy,
+    strings.energy                  : _evaluate_energy,
 }

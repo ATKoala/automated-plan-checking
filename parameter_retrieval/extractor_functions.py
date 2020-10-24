@@ -1,5 +1,12 @@
 # We are mostly using parameters from the first item of Sequences; is this ok?  
+import strings
 first_sequence_item = 0
+
+def _extract_file_type(dataset):
+    #Test whether the gantry angle changes within a single beam. If so, that indicates it is a VMAT file
+    gantry_angle_changed = int(dataset.BeamSequence[0].ControlPointSequence[0].GantryAngle) != \
+                            int(dataset.BeamSequence[0].ControlPointSequence[1].GantryAngle)
+    return strings.VMAT if gantry_angle_changed else strings.not_VMAT
 
 def _extract_prescription_dose(dataset):
     # Total Prescription Dose

@@ -5,7 +5,7 @@ The function to extract parameters from the specified DICOM file.
 # We import the pydicom library to use it's DICOM reading methods
 import pydicom as dicom
 import strings 
-from .extractor_functions import extractor_functions
+from .extractor_functions import extractor_functions, _extract_file_type
 from .evaluator_functions import evaluator_functions
 
 # We are mostly using parameters from the first item of Sequences; is this ok?  
@@ -40,12 +40,12 @@ def evaluate_parameters(parameter_values, truth_table, case, file_type):
     if case not in range(1, 18):
         raise Exception("Invalid case number! Must be between 1 and 18.")
         #print(case)
-        
+
     context = {
-        parameter_values: parameter_values,
-        truth_table: truth_table,
-        case: case,
-        file_type: file_type
+        "parameter_values": parameter_values,
+        "truth_table": truth_table,
+        "case": case,
+        "file_type": file_type
     }
     #iterate through each parameter you want to check
     for param in parameter_values:
@@ -61,11 +61,5 @@ def evaluate_parameters(parameter_values, truth_table, case, file_type):
             pass_fail_values[param] = evaluator_functions[param](param_value, table_value, **context)
              
     return pass_fail_values
-
-def _extract_file_type(dataset):
-    #Test whether the gantry angle changes within a single beam. If so, that indicates it is a VMAT file
-    gantry_angle_changed = int(dataset.BeamSequence[0].ControlPointSequence[0].GantryAngle) != \
-                            int(dataset.BeamSequence[0].ControlPointSequence[1].GantryAngle)
-    return strings.VMAT if gantry_angle_changed else strings.not_VMAT
  
         
