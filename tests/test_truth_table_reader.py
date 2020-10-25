@@ -27,7 +27,7 @@ class TestTruthTableReader(unittest.TestCase):
                     'couch?', 'couch?', 'couch?'],
             'field size': ['10x10', '10x6,10x12,10x6', '10x12', '10x12', '-', '-', '-', '-', '3x3,2x2,1x1', '-', '-', '-',
                         '3x3', '1.5x1.5', '-', '-', '-'],
-            'wedge': ['0', '30,no wedge,30', '0', '60', 'no wedge', 'no wedge', 'no wedge', 'no wedge', 'no wedge', 'no wedge', 'no wedge', 'no wedge', 'no wedge', 'no wedge', 'no wedge', 'no wedge', 'no wedge'],
+            'wedge': ['no wedge', '30,no wedge,30', 'no wedge', '60', 'no wedge', 'no wedge', 'no wedge', 'no wedge', 'no wedge', 'no wedge', 'no wedge', 'no wedge', 'no wedge', 'no wedge', 'no wedge', 'no wedge', 'no wedge'],
             'meas': ["'1','3','10','-','-','-','-','-','-'",
                     "'5_RLAT','8_RLAT','5_AP','8_AP','5_LLAT','8_LLAT','-','-','-'", "'3','5','-','-','-','-','-','-','-'",
                     "'3','5','-','-','-','-','-','-','-'", "'11','12','13','14','15','18','19','20','21'",
@@ -42,10 +42,11 @@ class TestTruthTableReader(unittest.TestCase):
                     "6,6FFF,10,10FFF,18", "6,6FFF,10,10FFF,18", "6,6FFF,10,10FFF,18", "6,6FFF,10,10FFF,18",
                     "6,6FFF,10,10FFF,18", "6,6FFF,10,10FFF,18", "6,6FFF,10,10FFF,18", "6,6FFF,10,10FFF,18",
                     "6,6FFF,10,10FFF,18", "6,6FFF,10,10FFF,18", "6,6FFF,10,10FFF,18", "6,6FFF,10,10FFF,18",
-                    "6,6FFF,10,10FFF,18"]}
+                    "6,6FFF,10,10FFF,18"]
+        }
                     
     def test_read_tt_csv(self):
-        tt = read_truth_table('truth_table_example.csv')
+        tt = read_truth_table('tests/res/truth_table_test.csv')
         for parameter in self.truth_table:
             for i in range(0, len(self.truth_table['case'])):
-                self.assertEqual(tt[parameter][i], self.truth_table[parameter][i])
+                self.assertEqual(tt[parameter][i].upper(), self.truth_table[parameter][i].upper())

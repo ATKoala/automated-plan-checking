@@ -6,7 +6,7 @@ The extractor result is then passed to the outputter.
 import os
 import argparse
 from pathlib import Path
-from parameter_retrieval import extract_parameters, evaluate_parameters
+from parameter_retrieval.parameter_retrieval import extract_parameters, evaluate_parameters
 from outputter import output
 from pathlib import Path
 from truth_table_reader import read_truth_table
@@ -69,6 +69,7 @@ def process_dicom(location, destination, output_format, case_number, truth_table
     # solutions == the truth table values for the given case
     solutions = dict([(key, truth_table[key][case_number-1]) for key in truth_table])
     # Output the extracted parameters into the format specified by user
+    
     output_file = output(parameters, evaluations, solutions, os.path.join(destination,Path(location).stem), output_format)
     if output_file:
         print("Extracted to file " + output_file)
@@ -129,7 +130,7 @@ default_truth_table = {
             'couch?', 'couch?', 'couch?'],
     'field size': ['10x10', '10x6,10x12,10x6', '10x12', '10x12', '-', '-', '-', '-', '3x3,2x2,1x1', '-', '-', '-',
                 '3x3', '1.5x1.5', '-', '-', '-'],
-    'wedge': ['0', '30,no wedge,30', '0', '60', 'no wedge', 'no wedge', 'no wedge', 'no wedge', 'no wedge', 'no wedge', 'no wedge', 'no wedge', 'no wedge', 'no wedge', 'no wedge', 'no wedge', 'no wedge'],
+    'wedge': ['no wedge', '30,no wedge,30', 'no wedge', '60', 'no wedge', 'no wedge', 'no wedge', 'no wedge', 'no wedge', 'no wedge', 'no wedge', 'no wedge', 'no wedge', 'no wedge', 'no wedge', 'no wedge', 'no wedge'],
     'meas': ["'1','3','10','-','-','-','-','-','-'",
             "'5_RLAT','8_RLAT','5_AP','8_AP','5_LLAT','8_LLAT','-','-','-'", "'3','5','-','-','-','-','-','-','-'",
             "'3','5','-','-','-','-','-','-','-'", "'11','12','13','14','15','18','19','20','21'",

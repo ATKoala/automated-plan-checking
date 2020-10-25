@@ -17,7 +17,7 @@ Detailed instructions for running tests are in the README.
 import unittest
 import pydicom
 import strings
-from parameter_retrieval import extract_parameters, evaluate_parameters
+from parameter_retrieval.parameter_retrieval import extract_parameters, evaluate_parameters
 
 class TestIMRTExtractionValues(unittest.TestCase): 
     ''' Tests for verifying the correct values are extracted for IMRT file
@@ -112,7 +112,7 @@ truth_table = {
             'couch?', 'couch?', 'couch?'],
     strings.field_size : ['10x10', '10x6,10x12,10x6', '10x12', '10x12', '-', '-', '-', '-', '3x3,2x2,1x1', '-', '-', '-',
                 '3x3', '1.5x1.5', '-', '-', '-'],
-    strings.wedge : ['no wedge', '30,no wedge,30', 'no wedge', '60', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-'],
+    strings.wedge : ['no wedge', '30,no wedge,30', 'no wedge', '60', 'no wedge', 'no wedge', 'no wedge', 'no wedge', 'no wedge', 'no wedge', 'no wedge', 'no wedge', 'no wedge', 'no wedge', 'no wedge', 'no wedge', 'no wedge'],
     strings.meas : ["'1','3','10','-','-','-','-','-','-'",
             "'5_RLAT','8_RLAT','5_AP','8_AP','5_LLAT','8_LLAT','-','-','-'", "'3','5','-','-','-','-','-','-','-'",
             "'3','5','-','-','-','-','-','-','-'", "'11','12','13','14','15','18','19','20','21'",
@@ -135,7 +135,7 @@ class TestEvaluation(unittest.TestCase):
     It's currently infeasible to test every possible combination of pass/failure values, this is just a basic check. 
     Also, the correct answers are derived from the truth table. 
 
-    Note that values of None are used for parameters where any value should be accepted.
+    Note that values of '-' are used for parameters where any value should be accepted.
     Note that modalities are IMRT for all cases; TODO check if that's ok.
     '''
     @classmethod
@@ -170,11 +170,11 @@ class TestEvaluation(unittest.TestCase):
             strings.collimator : '0',
             strings.gantry : '0',
             strings.SSD : [100],
-            strings.couch : None,
+            strings.couch : '-',
             strings.field_size : '10x10',
             strings.wedge : 'no wedge',
             strings.meas : "'1','3','10','-','-','-','-','-','-'",
-            strings.energy : "6,6FFF,10,10FFF,18"
+            strings.energy : "6"
         }
         treatment_type = 'not VMAT'
 
@@ -188,14 +188,14 @@ class TestEvaluation(unittest.TestCase):
             strings.prescription_point : '5',
             strings.isocenter_point : '3',
             strings.override : 'no override',
-            strings.collimator : None,
+            strings.collimator : '-',
             strings.gantry : '270,0,90',
             strings.SSD : [86,93,86],
-            strings.couch : None,
+            strings.couch : '-',
             strings.field_size : '10x6,10x12,10x6',
             strings.wedge : '30,no wedge,30',
             strings.meas : "'5_RLAT','8_RLAT','5_AP','8_AP','5_LLAT','8_LLAT','-','-','-'",
-            strings.energy : "6,6FFF,10,10FFF,18"
+            strings.energy : "6"
         }
         treatment_type = 'not VMAT'
         self.assertEqual(evaluate_parameters(passing_parameters, truth_table, case, treatment_type), self.pass_evaluation)
@@ -208,14 +208,14 @@ class TestEvaluation(unittest.TestCase):
             strings.prescription_point : '3',
             strings.isocenter_point : '3',
             strings.override : 'no override',
-            strings.collimator : None,
+            strings.collimator : '-',
             strings.gantry : '90',
             strings.SSD : [86],
-            strings.couch : None,
+            strings.couch : '-',
             strings.field_size : '10x12',
             strings.wedge : 'no wedge',
             strings.meas : "'3','5','-','-','-','-','-','-','-'",
-            strings.energy : "6,6FFF,10,10FFF,18"
+            strings.energy : "6"
         }
         treatment_type = 'not VMAT'
         self.assertEqual(evaluate_parameters(passing_parameters, truth_table, case, treatment_type), self.pass_evaluation)
@@ -228,14 +228,14 @@ class TestEvaluation(unittest.TestCase):
             strings.prescription_point : '3',
             strings.isocenter_point : '3',
             strings.override : 'no override',
-            strings.collimator : None,
+            strings.collimator : '-',
             strings.gantry : '90',
             strings.SSD : [86],
-            strings.couch : None,
+            strings.couch : '-',
             strings.field_size : '10x12',
             strings.wedge : '60',
             strings.meas : "'3','5','-','-','-','-','-','-','-'",
-            strings.energy : "6,6FFF,10,10FFF,18"
+            strings.energy : "6"
         }
         treatment_type = 'not VMAT'
         self.assertEqual(evaluate_parameters(passing_parameters, truth_table, case, treatment_type), self.pass_evaluation)
@@ -251,11 +251,11 @@ class TestEvaluation(unittest.TestCase):
             strings.collimator : '0',
             strings.gantry : '0',
             strings.SSD : [93],
-            strings.couch : None,
-            strings.field_size : None,
-            strings.wedge : None,
+            strings.couch : '-',
+            strings.field_size : '-',
+            strings.wedge : '-',
             strings.meas : "'11','12','13','14','15','18','19','20','21'",
-            strings.energy : "6,6FFF,10,10FFF,18"
+            strings.energy : "6"
         }
         treatment_type = 'not VMAT'
         self.assertEqual(evaluate_parameters(passing_parameters, truth_table, case, treatment_type), self.pass_evaluation)
@@ -270,12 +270,12 @@ class TestEvaluation(unittest.TestCase):
             strings.override : 'lungs',
             strings.collimator : '1',
             strings.gantry : '150,60,0,300,210',
-            strings.SSD : [None,89,93,89,None],
+            strings.SSD : ['-',89,93,89,'-'],
             strings.couch : 'couch?',
-            strings.field_size : None,
-            strings.wedge : None,
+            strings.field_size : '-',
+            strings.wedge : '-',
             strings.meas : "'11','12','13','14','15','16','17','-','-'",
-            strings.energy : "6,6FFF,10,10FFF,18"
+            strings.energy : "6"
         }
         treatment_type = 'not VMAT'
         self.assertEqual(evaluate_parameters(passing_parameters, truth_table, case, treatment_type), self.pass_evaluation)
@@ -290,12 +290,12 @@ class TestEvaluation(unittest.TestCase):
             strings.override : 'no override',
             strings.collimator : '1',
             strings.gantry : '150,60,0,300,210',
-            strings.SSD : [None,89,93,89,None],
+            strings.SSD : ['-',89,93,89,'-'],
             strings.couch : 'couch?',
-            strings.field_size : None,
-            strings.wedge : None,
+            strings.field_size : '-',
+            strings.wedge : '-',
             strings.meas : "'11','12','13','14','15','16','17','-','-'",
-            strings.energy : "6,6FFF,10,10FFF,18"
+            strings.energy : "6"
         }
         treatment_type = 'not VMAT'
         self.assertEqual(evaluate_parameters(passing_parameters, truth_table, case, treatment_type), self.pass_evaluation)
@@ -310,12 +310,12 @@ class TestEvaluation(unittest.TestCase):
             strings.override : 'no override',
             strings.collimator : '1',
             strings.gantry : '150,60,0,300,210',
-            strings.SSD : [None,89,93,89,None],
+            strings.SSD : ['-',89,93,89,'-'],
             strings.couch : 'couch?',
-            strings.field_size : None,
-            strings.wedge : None,
+            strings.field_size : '-',
+            strings.wedge : '-',
             strings.meas : "'11','12','13','14','15','17','18','-','-'",
-            strings.energy : "6,6FFF,10,10FFF,18"
+            strings.energy : "6"
         }
         treatment_type = 'not VMAT'
         self.assertEqual(evaluate_parameters(passing_parameters, truth_table, case, treatment_type), self.pass_evaluation)
@@ -328,14 +328,14 @@ class TestEvaluation(unittest.TestCase):
             strings.prescription_point : 'C8Target',
             strings.isocenter_point : 'SoftTiss',
             strings.override : 'lungs',
-            strings.collimator : None,
-            strings.gantry : None,
+            strings.collimator : '-',
+            strings.gantry : '-',
             strings.SSD : [90],
-            strings.couch : None,
+            strings.couch : '-',
             strings.field_size : '3x3,2x2,1x1',
-            strings.wedge : None,
+            strings.wedge : '-',
             strings.meas : "'SoftTiss_3','SoftTiss_2','SoftTiss_1','-','-','-','-','-','-'",
-            strings.energy : "6,6FFF,10,10FFF,18"
+            strings.energy : "6"
         }
         treatment_type = 'not VMAT'
         self.assertEqual(evaluate_parameters(passing_parameters, truth_table, case, treatment_type), self.pass_evaluation)
@@ -348,14 +348,14 @@ class TestEvaluation(unittest.TestCase):
             strings.prescription_point : 'SoftTissTarget',
             strings.isocenter_point : 'SoftTiss',
             strings.override : 'lungs',
-            strings.collimator : None,
-            strings.gantry : None,
-            strings.SSD : None,
+            strings.collimator : '-',
+            strings.gantry : '-',
+            strings.SSD : '-',
             strings.couch : 'couch?',
-            strings.field_size : None,
-            strings.wedge : None,
+            strings.field_size : '-',
+            strings.wedge : '-',
             strings.meas : "'SoftTiss','-','-','-','-','-','-','-','-'",
-            strings.energy : "6,6FFF,10,10FFF,18"
+            strings.energy : "6"
         }
         treatment_type = 'not VMAT'
         self.assertEqual(evaluate_parameters(passing_parameters, truth_table, case, treatment_type), self.pass_evaluation)
@@ -369,14 +369,14 @@ class TestEvaluation(unittest.TestCase):
             strings.prescription_point : 'SpineTarget',
             strings.isocenter_point : 'Spine',
             strings.override : 'no override',
-            strings.collimator : None,
-            strings.gantry : None,
-            strings.SSD : None,
+            strings.collimator : '-',
+            strings.gantry : '-',
+            strings.SSD : '-',
             strings.couch : 'couch?',
-            strings.field_size : None,
-            strings.wedge : None,
+            strings.field_size : '-',
+            strings.wedge : '-',
             strings.meas : "'Spine2Inf','Spine1Sup','Cord','-','-','-','-','-','-'",
-            strings.energy : "6,6FFF,10,10FFF,18"
+            strings.energy : "6"
         }
         treatment_type = 'not VMAT'
         self.assertEqual(evaluate_parameters(passing_parameters, truth_table, case, treatment_type), self.pass_evaluation)
@@ -389,14 +389,14 @@ class TestEvaluation(unittest.TestCase):
             strings.prescription_point : 'LungTarget',
             strings.isocenter_point : 'Lung',
             strings.override : 'no override',
-            strings.collimator : None,
-            strings.gantry : None,
-            strings.SSD : None,
+            strings.collimator : '-',
+            strings.gantry : '-',
+            strings.SSD : '-',
             strings.couch : 'couch?',
-            strings.field_size : None,
-            strings.wedge : None,
+            strings.field_size : '-',
+            strings.wedge : '-',
             strings.meas : "'Lung','-','-','-','-','-','-','-','-'",
-            strings.energy : "6,6FFF,10,10FFF,18"
+            strings.energy : "6"
         }
         treatment_type = 'not VMAT'
         self.assertEqual(evaluate_parameters(passing_parameters, truth_table, case, treatment_type), self.pass_evaluation)
@@ -409,14 +409,14 @@ class TestEvaluation(unittest.TestCase):
             strings.prescription_point : '1',
             strings.isocenter_point : '1',
             strings.override : 'central cube',
-            strings.collimator : None,
-            strings.gantry : None,
-            strings.SSD : None,
-            strings.couch : None,
+            strings.collimator : '-',
+            strings.gantry : '-',
+            strings.SSD : '-',
+            strings.couch : '-',
             strings.field_size : '3x3',
-            strings.wedge : None,
+            strings.wedge : '-',
             strings.meas : "'1_3','4_3','-','-','-','-','-','-','-'",
-            strings.energy : "6,6FFF,10,10FFF,18"
+            strings.energy : "6"
         }
         treatment_type = 'not VMAT'
         self.assertEqual(evaluate_parameters(passing_parameters, truth_table, case, treatment_type), self.pass_evaluation)
@@ -430,14 +430,14 @@ class TestEvaluation(unittest.TestCase):
             strings.prescription_point : '1',
             strings.isocenter_point : '1',
             strings.override : 'central cube',
-            strings.collimator : None,
-            strings.gantry : None,
-            strings.SSD : None,
-            strings.couch : None,
+            strings.collimator : '-',
+            strings.gantry : '-',
+            strings.SSD : '-',
+            strings.couch : '-',
             strings.field_size : '1.5x1.5',
-            strings.wedge : None,
+            strings.wedge : '-',
             strings.meas : "'1_1.5','4_1.5','-','-','-','-','-','-','-'",
-            strings.energy : "6,6FFF,10,10FFF,18"
+            strings.energy : "6"
         }
         treatment_type = 'not VMAT'
         self.assertEqual(evaluate_parameters(passing_parameters, truth_table, case, treatment_type), self.pass_evaluation)
@@ -451,14 +451,14 @@ class TestEvaluation(unittest.TestCase):
             strings.prescription_point : 'PTV_c14_c15',
             strings.isocenter_point : '1',
             strings.override : 'central cube',
-            strings.collimator : None,
-            strings.gantry : None,
-            strings.SSD : None,
+            strings.collimator : '-',
+            strings.gantry : '-',
+            strings.SSD : '-',
             strings.couch : 'couch?',
-            strings.field_size : None,
-            strings.wedge : None,
+            strings.field_size : '-',
+            strings.wedge : '-',
             strings.meas : "'1','3','-','-','-','-','-','-','-'",
-            strings.energy : "6,6FFF,10,10FFF,18"
+            strings.energy : "6"
         }
         treatment_type = 'not VMAT'
         self.assertEqual(evaluate_parameters(passing_parameters, truth_table, case, treatment_type), self.pass_evaluation)
@@ -468,17 +468,17 @@ class TestEvaluation(unittest.TestCase):
         passing_parameters = {
             strings.mode_req : 'True',
             strings.prescription_dose_slash_fractions : '20/-/-',
-            strings.prescription_point : None,
-            strings.isocenter_point : None,
+            strings.prescription_point : '-',
+            strings.isocenter_point : '-',
             strings.override : 'central cube',
-            strings.collimator : None,
-            strings.gantry : None,
-            strings.SSD : None,
+            strings.collimator : '-',
+            strings.gantry : '-',
+            strings.SSD : '-',
             strings.couch : 'couch?',
-            strings.field_size : None,
-            strings.wedge : None,
+            strings.field_size : '-',
+            strings.wedge : '-',
             strings.meas : "'1','3','-','-','-','-','-','-','-'",
-            strings.energy : "6,6FFF,10,10FFF,18"
+            strings.energy : "6"
         }
         treatment_type = 'not VMAT'
         self.assertEqual(evaluate_parameters(passing_parameters, truth_table, case, treatment_type), self.pass_evaluation)
@@ -488,17 +488,17 @@ class TestEvaluation(unittest.TestCase):
         passing_parameters = {
             strings.mode_req : 'True',
             strings.prescription_dose_slash_fractions : '20/-/-',
-            strings.prescription_point : None,
-            strings.isocenter_point : None,
+            strings.prescription_point : '-',
+            strings.isocenter_point : '-',
             strings.override : 'central cube',
-            strings.collimator : None,
-            strings.gantry : None,
-            strings.SSD : None,
+            strings.collimator : '-',
+            strings.gantry : '-',
+            strings.SSD : '-',
             strings.couch : 'couch?',
-            strings.field_size : None,
-            strings.wedge : None,
+            strings.field_size : '-',
+            strings.wedge : '-',
             strings.meas : "'1','2','3','-','-','-','-','-','-'",
-            strings.energy : "6,6FFF,10,10FFF,18"
+            strings.energy : "6"
         }
         treatment_type = 'not VMAT'
         self.assertEqual(evaluate_parameters(passing_parameters, truth_table, case, treatment_type), self.pass_evaluation)
