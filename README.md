@@ -23,6 +23,7 @@ Usage Examples:
 - `python app.py --inputs Resources/Input/YellowLvlIII_7a.dcm Resources/Input/YellowLvlIII_7b.dcm --format csv` <- Process any number of separate dicoms, with case number prompts for each
 - `python app.py --inputs Resources/Input/YellowLvlIII_7a.dcm,1 Resources/Input/YellowLvlIII_7b.dcm,2 --format csv` <- Process any number of separate dicoms, giving case numbers for each (format: dicom,case, dicom2,case ... etc).
 - `python app.py --inputs Resources/Input,1 OTHER_DICOM_FOLDER,2 --format csv` <- Process any number of folders, giving case numbers for each (format: folder,case, folder2,case ... etc).
+- `python app.py --inputs Resources/Input --format csv --truth_table truth_table_example.csv` <- Use the file ``truth_table_example.csv`` as input for the truth table that will be used to evaluate extracted parameters
 
 ## Testing
 
@@ -39,11 +40,3 @@ e.g `python -m unittest test_parameter_retrieval.TestIMRTExtractionValues`
 Run a particular test (i.e prescription dose) with `python -m unittest test_parameter_retrieval.ClassName.FunctionName`
 
 e.g. `python -m unittest test_parameter_retrieval.TestIMRTExtractionValues.test_total_prescription_dose`
-
-### Structure
-
-There are 3 classes (aka test suites aka groupings of tests) in the file;
-
-- *TestEvaluation* is a collection of tests of the parameter evaluation: given a set of parameters, it verifies that the pass/fail results are as expected.
-- *TestIMRTExtractionValues* is a collection of tests verifying that the correct values are extracted from IMRT file (YellowLvlIII_7a.dcm)
-- *TestVMATExtractionValues* is a collection of tests verifying that the correct values are extracted from VMAT file (YellowLvlIII_7b.dcm)
