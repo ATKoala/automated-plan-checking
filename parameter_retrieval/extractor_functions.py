@@ -2,11 +2,11 @@
 import strings
 first_sequence_item = 0
 
-def _extract_file_type(dataset):
+def _extract_mode(dataset):
     #Test whether the gantry angle changes within a single beam. If so, that indicates it is a VMAT file
     gantry_angle_changed = int(dataset.BeamSequence[0].ControlPointSequence[0].GantryAngle) != \
                             int(dataset.BeamSequence[0].ControlPointSequence[1].GantryAngle)
-    return strings.VMAT if gantry_angle_changed else strings.not_VMAT
+    return strings.VMAT if gantry_angle_changed else strings.IMRT
 
 def _extract_prescription_dose(dataset):
     # Total Prescription Dose
@@ -38,7 +38,7 @@ def _extract_collimator(dataset):
     
 def _extract_gantry(dataset):
     try:
-        file_type = _extract_file_type(dataset)
+        file_type = _extract_mode(dataset)
         
         #If the dataset is a VMAT file it goes through each of the control point sequence and finds each associated gantry angle and returns the lowest value slash the highest value
         # Also I dont think there is meant to be more than one beam in these cases
@@ -65,7 +65,7 @@ def _extract_gantry(dataset):
         
 def _extract_ssd(dataset):
 #find SSD in centimeters    
-    file_type = _extract_file_type(dataset)
+    file_type = _extract_mode(dataset)
     
     ssd_list = []
     try:
@@ -108,27 +108,61 @@ def _extract_energy(dataset):
         if beam.BeamDescription == strings.SETUP_beam:
             continue
         
-        #TODO extra LVL3 files given by client are still showing all STANDARD; need to confirm that one of them really 
-        #      is meant to be FFF so we can say this parameter is a bust or some other method is required.
-        # Nominal Beam Energy (MV) + Fluence Mode(STANDARD/NONSTANDARD)
-        energy = beam.ControlPointSequence[first_sequence_item].NominalBeamEnergy
-        # Fluence Mode, which may indicate if dose is Flattening Filter Free (but might not! DICOM standard defines it as optional)
-        #  -STANDARD     -> not FFF
-        #  -NON_STANDARD -> check Fluence Mode ID for a short description of the fluence mode (could be FFF)
+        energy = int(beam.ControlPointSequence[first_sequence_item].NominalBeamEnergy)
         if beam.PrimaryFluenceModeSequence[first_sequence_item].FluenceMode != strings.STANDARD_FLUENCE:
             energy += str(beam.PrimaryFluenceModeSequence[first_sequence_item].FluenceModeID)
-        
-        #energies.append(energy)
-    
     return energy
     
+def _extract_field_size(dataset):
+    # ignore setup beams
+    beams = list(filter(lambda beam: beam.BeamDescription != "SETUP beam", dataset.BeamSequence))
+    # record collimator value in the parameter_values dictionary as a string to be consistant with truth_table format
+    # According to the truth table the collimator only needs to be recorded for cases 1&5 where only 1 beam occurs
+    beam_type_number = len(beams[len(beams) - 1].ControlPointSequence[0].BeamLimitingDevicePositionSequence)
+    print("\n" + str(beam_type_number) + " types of device in total:")
+
+    length_x = -1
+    length_y = -1
+
+    for i in range(beam_type_number):
+        device_type = beams[len(beams) - 1].ControlPointSequence[0].BeamLimitingDevicePositionSequence[
+            i].RTBeamLimitingDeviceType
+        jaw_position = beams[len(beams) - 1].ControlPointSequence[0].BeamLimitingDevicePositionSequence[
+            i].LeafJawPositions
+        # print(dataset)python app.py --inputs Resources/Input/YellowLvlIII_4a.dcm --format csv --case_number 6
+
+        if device_type != "MLCX" and device_type != "MLCY":
+
+            if device_type == "X":
+                length_x = int((-jaw_position[0] + jaw_position[1]) / 10)
+            elif device_type == "Y":
+                length_y = int((-jaw_position[0] + jaw_position[1]) / 10)
+            elif device_type == "ASYMX":
+                if length_x != -1:
+                    print("Two Beam Limiting Device on X axis!")
+                    length_x = int((-jaw_position[0] + jaw_position[1]) / 10)
+            elif device_type == "ASYMY":
+                if length_y != -1:
+                    print("Two Beam Limiting Device on Y axis!")
+                length_y = int((-jaw_position[0] + jaw_position[1]) / 10)
+        else:
+            print("Sorry, cannot extract field size with MLCX/MLCY")
+    if length_x == -1:
+        print("No Beam Limiting Device on X axis!")
+    elif length_y == -1:
+        print("No Beam Limiting Device on Y axis!")
+    else:
+        #print(str(length_y) + "x" + str(length_x))
+        return str(length_y) + "x" + str(length_x)
+
+    # return str("("+length_x+","+length_y+")")
 
 #just a placeholder function to indicate which parameter extractions have not been implemented
 def to_be_implemented(dataset):
     return strings.NOT_IMPLEMENTED
 
 extractor_functions = {
-    strings.mode_req                : to_be_implemented, 
+    strings.mode_req                : _extract_mode, 
     strings.prescription_dose_slash_fractions     : _extract_prescription_dose, 
     strings.prescription_point      : to_be_implemented, 
     strings.isocenter_point         : to_be_implemented,
@@ -140,7 +174,7 @@ extractor_functions = {
     strings.gantry                  : _extract_gantry, 
     strings.SSD                     : _extract_ssd, 
     strings.couch                   : to_be_implemented, 
-    strings.field_size              : to_be_implemented,
+    strings.field_size              : _extract_field_size,
     strings.wedge                   : _extract_wedge, 
     strings.meas                    : to_be_implemented, 
     strings.energy                  : _extract_energy,

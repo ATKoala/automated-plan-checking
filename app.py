@@ -37,9 +37,9 @@ def main():
         # Check if input is [file,case] [file,case] ... format
         comma_case = None
         input_item = location.split(",")
-        if len(input_item) is 2:
+        if len(input_item) == 2:
             location = input_item[0]
-            comma_case = int(input_item[1])  
+            comma_case = int(input_item[1])
         final_case = case_number if comma_case is None else comma_case
 
         # Handle the case where file is specified
@@ -69,6 +69,7 @@ def process_dicom(location, destination, output_format, case_number, truth_table
     # solutions == the truth table values for the given case
     solutions = dict([(key, truth_table[key][case_number-1]) for key in truth_table])
     # Output the extracted parameters into the format specified by user
+    
     output_file = output(parameters, evaluations, solutions, os.path.join(destination,Path(location).stem), output_format)
     if output_file:
         print("Extracted to file " + output_file)

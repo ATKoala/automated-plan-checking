@@ -5,7 +5,7 @@ The function to extract parameters from the specified DICOM file.
 # We import the pydicom library to use it's DICOM reading methods
 import pydicom as dicom
 import strings 
-from .extractor_functions import extractor_functions, _extract_file_type
+from .extractor_functions import extractor_functions, _extract_mode
 from .evaluator_functions import evaluator_functions
 
 # We are mostly using parameters from the first item of Sequences; is this ok?  
@@ -16,7 +16,7 @@ def extract_parameters(filepath):
     
     # created a variable file_type in circumstances where it is useful to identify whether the file is a VMAT for example
     # at the moment it does this by identifying wheter the control point index has different gantry angles for different control points of the same beam
-    file_type = _extract_file_type(dataset)
+    file_type = _extract_mode(dataset)
     
     # define a list of parameters that need to be found
     parameters = [strings.mode_req, strings.prescription_dose_slash_fractions, strings.prescription_point, strings.isocenter_point, strings.override, strings.collimator,
@@ -59,7 +59,6 @@ def evaluate_parameters(parameter_values, truth_table, case, file_type):
             table_value = truth_table[param][case-1] # note case-1 is because the first case is 1 but the index position in the list is 0
             #call the appropriate evaluator function for each parameter
             pass_fail_values[param] = evaluator_functions[param](param_value, table_value, **context)
-             
     return pass_fail_values
  
         

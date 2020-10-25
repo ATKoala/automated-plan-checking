@@ -21,9 +21,9 @@ def _evaluate_ssd(param_value, table_value, **kwargs):
         
         if truth_table[strings.gantry][case-1] == strings.ANY_VALUE or parameter_values[strings.gantry] == "error retrieving gantry":
             if truth_table[strings.gantry][case-1] != strings.ANY_VALUE:
-                pass_fail_values[strings.SSD] = strings.PASS
+                return strings.PASS
             else:
-                pass_fail_values[strings.SSD] = strings.FAIL
+                return strings.FAIL
             
         if len(parameter_values[strings.gantry])!=len(parameter_values[strings.SSD]):
             return strings.FAIL
@@ -33,8 +33,7 @@ def _evaluate_ssd(param_value, table_value, **kwargs):
         if len(truth_table_gantry_list) != len(truth_table_ssd_list):
             return strings.FAIL
         
-        i=0
-        while i < len(truth_table_gantry_list):
+        for i in range(len(truth_table_gantry_list)):
             gantry_value = float(truth_table_gantry_list[i])
             ssd_value = truth_table_ssd_list[i]
             if ssd_value == '?':
@@ -47,7 +46,6 @@ def _evaluate_ssd(param_value, table_value, **kwargs):
                     if abs(parameter_values[strings.SSD][j] - ssd_value) > 1:
                         return strings.FAIL
                 j+=1
-            i+=1
         return strings.PASS
     else:
         truth_table_ssd_list = table_value.split(',')
@@ -85,7 +83,10 @@ def _evaluate_collimator(param_value, table_value, file_type, **kwargs):
     return strings.PASS if result else strings.FAIL
     
 def _evaluate_energy(param_value, table_value, file_type, **kwargs):
-    return strings.NOT_IMPLEMENTED
+    if param_value in ["6","6FFF","10","10FFF","18"]:
+        return strings.PASS
+    else:
+        return strings.FAIL
     
 def _evaluate_default(param_value, table_value, file_type, **kwargs):
     return strings.PASS if param_value == table_value or table_value == '-' else strings.FAIL
