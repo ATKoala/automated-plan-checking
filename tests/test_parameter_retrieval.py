@@ -63,21 +63,20 @@ class TestVMATExtractionValues(unittest.TestCase):
         # We use the extraction function once here and inspect the results in the tests below
         self.extracted, _ = extract_parameters('./Resources/Input/YellowLvlIII_7b.dcm')
 
-    def test_prescription_dose(self): 
+    def test_prescription_dose(self):
+        # test return 50/25/MU
         self.assertEqual(self.extracted[strings.prescription_dose_slash_fractions], '50/25/-')
 
     def test_collimator(self): 
         self.assertEqual(self.extracted[strings.collimator], '355')
 
-    def test_field_size(self):
-        self.assertEqual(self.extracted['field size'], '10x10')
+    # can't confirm this in report
+    # def test_field_size(self):
+    #     self.assertEqual(self.extracted['field size'], '10x10')
 
     def test_gantry_angle(self):
-        #  Report shows '180/360' for a single beam for this plan
-        # - Naturally this is because of VMAT style of rotating the beam around the patient
-        # - In the dicom, the initial position is at 180, turns 360deg one way, then 360 again back the other way
-        # Testing against the string 'VMAT File' for compatibility with existing code
-        self.assertEqual(self.extracted[strings.gantry], 'VMAT File') 
+        # test return big array 180->360->180->0->180
+        self.assertEqual(self.extracted[strings.gantry], '180/360') 
 
     def test_ssd(self): 
         self.assertEqual(self.extracted[strings.SSD], [87.17])
