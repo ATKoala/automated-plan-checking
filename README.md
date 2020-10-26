@@ -25,6 +25,8 @@ The aim is to create a program that can perform an automated check of data and p
 Currently, the only way to verify planning parameters is to manually check pdf print outs. The information required is contained in the planning DICOM files created for each treatment plan. Clients need a program that can extract the information from the DICOM file and then compare this data to a standard data set to verify it is within specifications.
 
 The goal of this project and our clients want our team to achieve is to create a program that can replace the manual process outlined in the previous paragraph; which will read data points directly from the DICOM files generated and perform an automated check of the parameters extracted.
+## Documentation
+
 ## User stories
 01	As an Auditor,	I want parameter values to be output when running the program, as a csv
 
@@ -57,7 +59,7 @@ The goal of this project and our clients want our team to achieve is to create a
 15	As an Auditor,	(Parameter) I want to know the field size of the radiation beam
 
 16	As an Auditor,  (Parameter) I want to know the modality of treatment [imrt, vmat, 3dcrt, dcat, tomo, f-cone, hyp-arc, g-knife]
-## Documentation
+
 ## Architecture
 
 ## Test cases
