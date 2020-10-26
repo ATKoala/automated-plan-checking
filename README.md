@@ -11,7 +11,7 @@
 [**System requirements**](#system-requirements)
 
 [**Installation and Usage**](#installation-and-usage)
-  * [**Testing**](testing)
+  * [**Testing**](#testing)
   
 [**Changelog**](#changelog)
 
@@ -64,8 +64,6 @@ The goal of this project and our clients want our team to achieve is to create a
 [Test cases](https://github.com/SuryadiTjandra/automated-plan-checking/blob/master/tests/atkoala-Test-271020-0054-2114.pdf) of the project ,exported from Confluence.
 
 ## System requirements
-
-### Dependencies
 - **Python 3** or above
 - **pydicom** (can be installed with `pip install pydicom`)
 - **pandas** ((can be installed with `pip install pandas`))
