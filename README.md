@@ -27,22 +27,18 @@ To install with git: `git clone https://github.com/SuryadiTjandra/automated-plan
 
 Usage:
 
-- Single dicom
-    - `python app.py --inputs Resources/Input/YellowLvlIII_7a.dcm`
-- Folder of dicoms
-    - `python app.py --inputs Resources/Input`
-- Process all dicoms across 2 folders
-    - `python app.py --inputs Resources/Input OTHER_DICOM_FOLDER`
-- Process all dicoms in folder assuming all are the same case
-    - `python app.py --inputs Resources/Input  --case_number 6`
-- Process any number of individual dicoms
-    - `python app.py --inputs Resources/Input/YellowLvlIII_7a.dcm Resources/Input/YellowLvlIII_7b.dcm`
-- Process any number of separate dicoms, giving case numbers for each (format: dicom,case, dicom2,case ... etc).
-    - `python app.py --inputs Resources/Input/YellowLvlIII_7a.dcm,1 Resources/Input/YellowLvlIII_7b.dcm,2`
-- Process any number of folders, giving case numbers for each (format: folder,case, folder2,case ... etc).
-    - `python app.py --inputs Resources/Input,1 OTHER_DICOM_FOLDER,2`
-- Use the file `truth_table_example.csv` as input for the truth table that will be used to evaluate extracted parameters
-    - `python app.py --inputs Resources/Input --truth_table truth_table_example.csv`
+- Process single dicom
+  - `python app.py --inputs Resources/Input/YellowLvlIII_7a.dcm`
+- Process a folder of dicoms
+  - `python app.py --inputs Resources/Input`
+- Multiple dicoms or folders in any order
+  - `python app.py --inputs FOLDER1 FOLDER2 FILE1 FILE2 FOLDER3 (etc...)`
+- Specify case number for each input item
+  - `python app.py --inputs INPUT1,CASE1 INPUT2,CASE2`
+- Specify case for all inputs
+  - `python app.py --inputs INPUTS --case_number 6`
+- Specify a custom truth table (default uses level 3 table)
+  - `python app.py --inputs INPUTS --truth_table truth_table_example.csv`
 
 ## Running Tests
 
