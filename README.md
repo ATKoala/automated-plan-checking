@@ -61,7 +61,7 @@ The goal of this project and our clients want our team to achieve is to create a
 ## Architecture
 
 ## Test cases
-
+[Test cases](https://github.com/SuryadiTjandra/automated-plan-checking/blob/master/tests/atkoala-Test-271020-0054-2114.pdf) of the project ,exported from Confluence.
 
 ## System requirements
 
