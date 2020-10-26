@@ -5,6 +5,11 @@ def _evaluate_gantry(param_value, table_value, **kwargs):
     # Also there are other instances where a PASS is given such as if the Truth Table is a dash for a given parameter in that case any value will satisfy
     # Or if the file is a VMAT and the parameter is either a gantry or an SSD
     file_type = kwargs["file_type"]
+    
+    for value in table_value.split(","):
+        if not value.isdigit() and value!=strings.ANY_VALUE:
+            return strings.TRUTH_TABLE_ERROR
+
     if file_type == strings.VMAT:
         return strings.PASS
     else:
@@ -13,6 +18,10 @@ def _evaluate_gantry(param_value, table_value, **kwargs):
 def _evaluate_ssd(param_value, table_value, **kwargs):
     if table_value == strings.ANY_VALUE:
         return strings.PASS
+    
+    for value in table_value.split(","):
+        if not value.isdigit() and value!=strings.ANY_VALUE and value!="?":
+            return strings.TRUTH_TABLE_ERROR
 
     if kwargs["file_type"] == strings.VMAT:
         truth_table = kwargs["truth_table"]
@@ -62,6 +71,11 @@ def _evaluate_ssd(param_value, table_value, **kwargs):
     
 
 def _evaluate_wedge(param_value, table_value, file_type, **kwargs):
+    
+    for value in table_value.split(","):
+        if not value.isdigit() and value!=strings.ANY_VALUE and value!="no wedge":
+            return strings.TRUTH_TABLE_ERROR
+
     if table_value == 'no wedge':
         all_no_wedge = all(map(lambda w_angle: w_angle == 'no wedge', param_value.split(',')))
         return strings.PASS if all_no_wedge else strings.FAIL
@@ -75,6 +89,12 @@ def _evaluate_prescription_dose(param_value, table_value, file_type, **kwargs):
     return strings.PASS
     
 def _evaluate_collimator(param_value, table_value, file_type, **kwargs):
+    
+    for value in table_value.split(","):
+        if not value.isdigit() and value!=strings.ANY_VALUE:
+            if not value[0] == "*" or len(value)<2 or not value[1:].isdigit():
+                return strings.TRUTH_TABLE_ERROR
+
     if table_value == strings.ANY_VALUE: 
         return strings.PASS
         
