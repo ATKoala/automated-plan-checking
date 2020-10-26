@@ -12,7 +12,6 @@ The 2 DICOM files tested are included in the Resources subdirectory.
 The correct values for each test are derived from the corresponding pdf reports in each of IMRT and VMAT directories (7a.pdf, 7b.pdf).
 
 Basic method to run all tests: `python -m unittest`
-Detailed instructions for running tests are in the README. 
 '''
 import unittest
 import pydicom
@@ -56,7 +55,7 @@ class TestIMRTExtractionValues(unittest.TestCase):
 
 class TestVMATExtractionValues(unittest.TestCase): 
     ''' Tests for verifying the correct values are extracted
-    The 'correct' answers are derived from the vendor report :  Documents/Input/7b.pdf
+    The 'correct' answers are derived from the vendor report in Documents/Input/7b.pdf
     '''
     @classmethod
     def setUpClass(self): 
@@ -252,7 +251,7 @@ class TestEvaluation(unittest.TestCase):
             strings.SSD : [93],
             strings.couch : '-',
             strings.field_size : '-',
-            strings.wedge : '-',
+            strings.wedge : 'no wedge',
             strings.meas : "'11','12','13','14','15','18','19','20','21'",
             strings.energy : "6"
         }
@@ -272,7 +271,7 @@ class TestEvaluation(unittest.TestCase):
             strings.SSD : ['-',89,93,89,'-'],
             strings.couch : 'couch?',
             strings.field_size : '-',
-            strings.wedge : '-',
+            strings.wedge : 'no wedge',
             strings.meas : "'11','12','13','14','15','16','17','-','-'",
             strings.energy : "6"
         }
@@ -292,7 +291,7 @@ class TestEvaluation(unittest.TestCase):
             strings.SSD : ['-',89,93,89,'-'],
             strings.couch : 'couch?',
             strings.field_size : '-',
-            strings.wedge : '-',
+            strings.wedge : 'no wedge',
             strings.meas : "'11','12','13','14','15','16','17','-','-'",
             strings.energy : "6"
         }
@@ -312,7 +311,7 @@ class TestEvaluation(unittest.TestCase):
             strings.SSD : ['-',89,93,89,'-'],
             strings.couch : 'couch?',
             strings.field_size : '-',
-            strings.wedge : '-',
+            strings.wedge : 'no wedge',
             strings.meas : "'11','12','13','14','15','17','18','-','-'",
             strings.energy : "6"
         }
@@ -332,7 +331,7 @@ class TestEvaluation(unittest.TestCase):
             strings.SSD : [90],
             strings.couch : '-',
             strings.field_size : '3x3,2x2,1x1',
-            strings.wedge : '-',
+            strings.wedge : 'no wedge',
             strings.meas : "'SoftTiss_3','SoftTiss_2','SoftTiss_1','-','-','-','-','-','-'",
             strings.energy : "6"
         }
@@ -352,7 +351,7 @@ class TestEvaluation(unittest.TestCase):
             strings.SSD : '-',
             strings.couch : 'couch?',
             strings.field_size : '-',
-            strings.wedge : '-',
+            strings.wedge : 'no wedge',
             strings.meas : "'SoftTiss','-','-','-','-','-','-','-','-'",
             strings.energy : "6"
         }
@@ -373,7 +372,7 @@ class TestEvaluation(unittest.TestCase):
             strings.SSD : '-',
             strings.couch : 'couch?',
             strings.field_size : '-',
-            strings.wedge : '-',
+            strings.wedge : 'no wedge',
             strings.meas : "'Spine2Inf','Spine1Sup','Cord','-','-','-','-','-','-'",
             strings.energy : "6"
         }
@@ -393,7 +392,7 @@ class TestEvaluation(unittest.TestCase):
             strings.SSD : '-',
             strings.couch : 'couch?',
             strings.field_size : '-',
-            strings.wedge : '-',
+            strings.wedge : 'no wedge',
             strings.meas : "'Lung','-','-','-','-','-','-','-','-'",
             strings.energy : "6"
         }
@@ -413,7 +412,7 @@ class TestEvaluation(unittest.TestCase):
             strings.SSD : '-',
             strings.couch : '-',
             strings.field_size : '3x3',
-            strings.wedge : '-',
+            strings.wedge : 'no wedge',
             strings.meas : "'1_3','4_3','-','-','-','-','-','-','-'",
             strings.energy : "6"
         }
@@ -434,7 +433,7 @@ class TestEvaluation(unittest.TestCase):
             strings.SSD : '-',
             strings.couch : '-',
             strings.field_size : '1.5x1.5',
-            strings.wedge : '-',
+            strings.wedge : 'no wedge',
             strings.meas : "'1_1.5','4_1.5','-','-','-','-','-','-','-'",
             strings.energy : "6"
         }
@@ -455,7 +454,7 @@ class TestEvaluation(unittest.TestCase):
             strings.SSD : '-',
             strings.couch : 'couch?',
             strings.field_size : '-',
-            strings.wedge : '-',
+            strings.wedge : 'no wedge',
             strings.meas : "'1','3','-','-','-','-','-','-','-'",
             strings.energy : "6"
         }
@@ -475,7 +474,7 @@ class TestEvaluation(unittest.TestCase):
             strings.SSD : '-',
             strings.couch : 'couch?',
             strings.field_size : '-',
-            strings.wedge : '-',
+            strings.wedge : 'no wedge',
             strings.meas : "'1','3','-','-','-','-','-','-','-'",
             strings.energy : "6"
         }
@@ -495,7 +494,7 @@ class TestEvaluation(unittest.TestCase):
             strings.SSD : '-',
             strings.couch : 'couch?',
             strings.field_size : '-',
-            strings.wedge : '-',
+            strings.wedge : 'no wedge',
             strings.meas : "'1','2','3','-','-','-','-','-','-'",
             strings.energy : "6"
         }
