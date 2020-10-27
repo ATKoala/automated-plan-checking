@@ -2,11 +2,11 @@
 import strings
 first_sequence_item = 0
 
-def _extract_mode(dataset):
-    #Test whether the gantry angle changes within a single beam. If so, that indicates it is a VMAT file
+def _extract_mode(dataset, case):
+    # For now, we are only producing IMRT vs VMAT modes for cases 6, 7, and 8
+    if case not in [6, 7, 8]:
+        return strings.NOT_IMPLEMENTED
 
-    # For case 6,7,8, the possibilities are IMRT, VMAT and TOMO
-    # Introduction of https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5665865/ shows tomo moves 
     moving_gantry = int(dataset.BeamSequence[0].ControlPointSequence[0].GantryAngle) != \
                             int(dataset.BeamSequence[0].ControlPointSequence[1].GantryAngle)
 
@@ -20,11 +20,13 @@ def _extract_mode(dataset):
     #  - Andrew Alvez, 2020
     if moving_gantry:
         mode = strings.VMAT
-    if not moving_gantry and number_of_beams is 5:
+    elif not moving_gantry and number_of_beams is 5:
         mode = strings.IMRT
+    else:
+        mode = "UNKNOWN"
     return mode
 
-def _extract_prescription_dose(dataset):
+def _extract_prescription_dose(dataset, case):
     # Total Prescription Dose
     total_prescription_dose = str(int(dataset.DoseReferenceSequence[0].TargetPrescriptionDose))
     # number of fractions
@@ -44,7 +46,7 @@ def _extract_prescription_dose(dataset):
 
     return prescription_dose + "/" + number_of_fractions + "/" + prim_dosimeter_unit
 
-def _extract_collimator(dataset):
+def _extract_collimator(dataset, case):
     #ignore setup beams
     beams = list(filter(lambda beam: beam.BeamDescription != strings.SETUP_beam, dataset.BeamSequence))
     # record collimator value in the parameter_values dictionary as a string to be consistant with truth_table format 
@@ -52,9 +54,9 @@ def _extract_collimator(dataset):
     collimator_value = beams[len(beams)-1].ControlPointSequence[0].BeamLimitingDeviceAngle
     return str(int(collimator_value))
 
-def _extract_gantry(dataset):
+def _extract_gantry(dataset, case):
     try:
-        file_type = _extract_mode(dataset)
+        file_type = _extract_mode(dataset, case)
 
         #If the dataset is a VMAT file it goes through each of the control point sequence and finds each associated gantry angle and returns the lowest value slash the highest value
         # Also I dont think there is meant to be more than one beam in these cases
@@ -79,9 +81,9 @@ def _extract_gantry(dataset):
     except:
         return strings.ANY_VALUE
 
-def _extract_ssd(dataset):
+def _extract_ssd(dataset, case):
 #find SSD in centimeters
-    file_type = _extract_mode(dataset)
+    file_type = _extract_mode(dataset, case)
 
     ssd_list = []
     try:
@@ -105,7 +107,7 @@ def _extract_ssd(dataset):
     except:
         return "error retrieving SSD"
 
-def _extract_wedge(dataset):
+def _extract_wedge(dataset, case):
     # It may need more work to deal with VMAT files for cases 6,7,8
 
     #ignore setup beams
@@ -115,7 +117,7 @@ def _extract_wedge(dataset):
 
     return ','.join(wedge_angles)
 
-def _extract_energy(dataset):
+def _extract_energy(dataset, case):
     #energies = []
     energy = ''
 
@@ -129,7 +131,7 @@ def _extract_energy(dataset):
             energy += str(beam.PrimaryFluenceModeSequence[first_sequence_item].FluenceModeID)
     return energy
 
-def _extract_field_size(dataset):
+def _extract_field_size(dataset, case):
     # ignore setup beams
     beams = list(filter(lambda beam: beam.BeamDescription != "SETUP beam", dataset.BeamSequence))
     # record collimator value in the parameter_values dictionary as a string to be consistant with truth_table format
@@ -147,7 +149,7 @@ def _extract_field_size(dataset):
             i].LeafJawPositions
         #print(device_type)
         #print(jaw_position)
-        # print(dataset)python app.py --inputs Resources/Input/YellowLvlIII_4a.dcm --format csv --case_number 6
+        # print(dataset, case)python app.py --inputs Resources/Input/YellowLvlIII_4a.dcm --format csv --case_number 6
 
         if device_type != "MLCX" and device_type != "MLCY":
 
@@ -173,7 +175,7 @@ def _extract_field_size(dataset):
     # return str("("+length_x+","+length_y+")")
 
 #just a placeholder function to indicate which parameter extractions have not been implemented
-def to_be_implemented(dataset):
+def to_be_implemented(dataset, case):
     return strings.NOT_IMPLEMENTED
 
 extractor_functions = {

@@ -11,7 +11,7 @@ from .evaluator_functions import evaluator_functions
 # We are mostly using parameters from the first item of Sequences; is this ok?  
 first_sequence_item = 0
 
-def extract_parameters(filepath):
+def extract_parameters(filepath, case):
     dataset = dicom.read_file(filepath, force=True)
     
     # created a variable file_type in circumstances where it is useful to identify whether the file is a VMAT for example

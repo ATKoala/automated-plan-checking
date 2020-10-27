@@ -64,7 +64,7 @@ def process_dicom(location, destination, output_format, case_number, truth_table
             print("Case must be an integer!")
 
     # Extract and evaluate the dicom 
-    parameters, file_type = extract_parameters(location)
+    parameters, file_type = extract_parameters(location, case_number)
     evaluations = evaluate_parameters(parameters, truth_table, case_number, file_type)
 
     # solutions == the truth table values for the given case
