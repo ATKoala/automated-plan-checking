@@ -55,18 +55,18 @@ def main():
                         process_dicom(item.path, output, output_format, final_case, truth_table)
 
 def process_dicom(location, destination, output_format, case_number, truth_table):
+
+    dataset = dicom.read_file(location, force=True)
+    # Ensure the dicom that we want to process is a plan file
+    if str(dataset.Modality) != "RTPLAN":
+        return
+
     # Prompt for case number if not specified (should be when each dicom is different case)
     while not isinstance(case_number, int):
         try:
             case_number = int(input(f"What is the case number for {location}? "))
         except ValueError:
             print("Case must be an integer!")
-
-    dataset = dicom.read_file(location, force=True)
-
-    # Ensure the dicom that we want to process is a plan file
-    if dataset.Modality is not "RTPLAN":
-        return
 
     # Extract and evaluate the dicom 
     parameters = extract_parameters(dataset, case_number)

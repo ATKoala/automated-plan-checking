@@ -25,7 +25,8 @@ class TestIMRTExtractionValues(unittest.TestCase):
     @classmethod
     def setUpClass(self): 
         # We use the extraction function once here and inspect the results in the tests below
-        self.extracted = extract_parameters('./data/Input/YellowLvlIII_7a.dcm', 7)
+        dataset = pydicom.dcmread('./data/Input/YellowLvlIII_7a.dcm', force=True)
+        self.extracted = extract_parameters(dataset, 7)
 
     def test_field_size(self):
         self.assertEqual(self.extracted['field size'], '10x10')
@@ -60,7 +61,8 @@ class TestVMATExtractionValues(unittest.TestCase):
     @classmethod
     def setUpClass(self): 
         # We use the extraction function once here and inspect the results in the tests below
-        self.extracted = extract_parameters('./data/Input/YellowLvlIII_7b.dcm', 7)
+        dataset = pydicom.dcmread('./data/Input/YellowLvlIII_7b.dcm', force=True)
+        self.extracted = extract_parameters(dataset, 7)
 
     def test_prescription_dose(self):
         # test return 50/25/MU
