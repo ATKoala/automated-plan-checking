@@ -81,13 +81,24 @@ To download as zip: <https://github.com/SuryadiTjandra/automated-plan-checking/a
 
 Usage Examples:
 
-- `python app.py --inputs Resources/Input --format csv` <- Process all dicoms in folder, with case number prompt for each dicom found
-- `python app.py --inputs Resources/Input --format csv --case_number 6` <- Process all dicoms in folder, treating each as a case 6
-- `python app.py --inputs Resources/Input OTHER_DICOM_FOLDER --format csv --case_number 6` <- Process all dicoms in both folders, treating all dicoms found as case 6
-- `python app.py --inputs Resources/Input/YellowLvlIII_7a.dcm Resources/Input/YellowLvlIII_7b.dcm --format csv` <- Process any number of separate dicoms, with case number prompts for each
-- `python app.py --inputs Resources/Input/YellowLvlIII_7a.dcm,1 Resources/Input/YellowLvlIII_7b.dcm,2 --format csv` <- Process any number of separate dicoms, giving case numbers for each (format: dicom,case, dicom2,case ... etc).
-- `python app.py --inputs Resources/Input,1 OTHER_DICOM_FOLDER,2 --format csv` <- Process any number of folders, giving case numbers for each (format: folder,case, folder2,case ... etc).
-- `python app.py --inputs Resources/Input --format csv --truth_table truth_table_example.csv` <- Use the file ``truth_table_example.csv`` as input for the truth table that will be used to evaluate extracted parameters
+- Process single dicom
+  - `python app.py --inputs Resources/Input/YellowLvlIII_7a.dcm`
+- Process a folder of dicoms
+  - `python app.py --inputs Resources/Input`
+- Multiple dicoms or folders in any order
+  - `python app.py --inputs FOLDER1 FOLDER2 FILE1 FILE2 FOLDER3 (etc...)`
+  - Example: - `python app.py --inputs Resources/Input OTHER_DICOM_FOLDER --format csv --case_number 6`
+- Specify case number for each input item
+  - `python app.py --inputs INPUT1,CASE1 INPUT2,CASE2`
+ - Example: - `python app.py --inputs Resources/Input/YellowLvlIII_7a.dcm,1 Resources/Input/YellowLvlIII_7b.dcm,2 --format csv`
+- Specify case for all inputs
+  - `python app.py --inputs INPUTS --case_number 6`
+ - Example: - `python app.py --inputs Resources/Input --format csv --case_number 6`
+- Specify a custom truth table (default uses level 3 table)
+  - `python app.py --inputs INPUTS --truth_table truth_table_example.csv`
+ - Example: - `python app.py --inputs Resources/Input --format csv --truth_table truth_table_example.csv`
+
+"--format csv" can be added in any command as the argument, generating csv output file. More details can be found in the [User guide](https://github.com/SuryadiTjandra/automated-plan-checking/blob/master/docs/atkoala-UserGuide-271020-1338-2126.pdf).
 
 ### Testing
 
