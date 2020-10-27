@@ -129,8 +129,8 @@ def _extract_field_size(dataset):
             i].RTBeamLimitingDeviceType
         jaw_position = beams[len(beams) - 1].ControlPointSequence[0].BeamLimitingDevicePositionSequence[
             i].LeafJawPositions
-        print(device_type)
-        print(jaw_position)
+        #print(device_type)
+        #print(jaw_position)
         # print(dataset)python app.py --inputs Resources/Input/YellowLvlIII_4a.dcm --format csv --case_number 6
 
         if device_type != "MLCX" and device_type != "MLCY":
@@ -140,17 +140,17 @@ def _extract_field_size(dataset):
             elif device_type == "Y":
                 length_y = int((-jaw_position[0] + jaw_position[1]) / 10)
             elif device_type == "ASYMX":
-                if length_x != 0:
-                    print("Two Beam Limiting Device on X axis!")  # TODO:need to figure out how to deal with two X jaws.
-                    length_x = int((-jaw_position[0] + jaw_position[1]) / 10)
+                #if length_x != 0:
+                    #print("Two Beam Limiting Device on X axis!")  # TODO:need to figure out how to deal with two X jaws.
+                length_x = int((-jaw_position[0] + jaw_position[1]) / 10)
             elif device_type == "ASYMY":
-                if length_y != 0:
-                    print("Two Beam Limiting Device on Y axis!")
+                #if length_y != 0:
+                    #print("Two Beam Limiting Device on Y axis!")
                 length_y = int((-jaw_position[0] + jaw_position[1]) / 10)
             if length_x != 0 and length_y != 0:
                 return str(length_y) + "x" + str(length_x)
         else:
-            return "Sorry, cannot extract field size with MLCX/MLCY"
+            return "Not Extracted"
 
 
 

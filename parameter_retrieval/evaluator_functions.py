@@ -109,10 +109,20 @@ def _evaluate_energy(param_value, table_value, **kwargs):
         return "N/A"
 
 def _evaluate_field_size(param_value, table_value, **kwargs):
-    if param_value =="Sorry, cannot extract field size with MLCX/MLCY":
+    if param_value =="Not Extracted":
         return "NOT IMPLEMENTED FOR MLCX/MLCY"
     else:
-        return strings.PASS if param_value == table_value or table_value == '-' else strings.FAIL
+        if table_value == '-':
+            return strings.PASS
+        else:
+            truth_table_ssd_list = table_value.split(',')
+            i = 0
+            for i in range(len(truth_table_ssd_list)):
+                if truth_table_ssd_list[i] != '?':
+                    if param_value == truth_table_ssd_list[i]:
+                        return strings.PASS
+            return strings.FAIL
+
 
 def _evaluate_default(param_value, table_value, **kwargs):
     return strings.PASS if param_value == table_value or table_value == '-' else strings.FAIL
