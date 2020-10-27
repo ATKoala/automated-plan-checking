@@ -45,7 +45,6 @@ def evaluate_parameters(parameter_values, truth_table, case):
     }
     #iterate through each parameter you want to check
     for param in parameter_values:
-        #print(param)
         # if the parameter_values[param] has not been extracted we cant determine PASS/FAIL
         # in these instances we simply return the message to indicate it has not been implemented
         if parameter_values[param] == strings.NOT_IMPLEMENTED or parameter_values[param] is False:

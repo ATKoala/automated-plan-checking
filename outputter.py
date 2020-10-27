@@ -27,13 +27,6 @@ def output_csv(Result, filepath):
 def output_stdout(parameters, filepath):
     for item in parameters:
         print(item + ": " + parameters[item])
-    '''print("The number of beams: " + str(parameters["Number of Beams"]))
-    for beam in parameters["Beams"]:
-        for p in beam:
-            print(p + " : " + str(beam[p]))
-        print("\n")
-    '''
-
 
 def update_output_csv(data, filepath):
     title = ["Parameter Name", "Parameter Value", "Parameter Evaluation", "Parameter Solution"]
@@ -58,13 +51,9 @@ def update_output_stdout(data, filepath):
 formatter = {
     'csv': update_output_csv,
     'stdout': update_output_stdout
-    # 'csv': output_csv,
-    # 'stdout': output_stdout
 }
 
 
 def output(parameters, evaluations, solutions, filepath, format):
-    # for item in parameters:
-    # print(item+": "+parameters[item])
     formatter_function = formatter[format]
     return formatter_function((parameters, evaluations, solutions), filepath)

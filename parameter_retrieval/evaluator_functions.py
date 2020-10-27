@@ -112,8 +112,6 @@ def _evaluate_field_size(param_value, table_value, **kwargs):
         return strings.PASS
     truth_table_ssd_list = table_value.split(',')
     param_value=param_value.split(',')
-    #print(len(truth_table_ssd_list))
-    #print(param_value)
 
     if len(truth_table_ssd_list) == 1:
         for i in range(len(param_value)):

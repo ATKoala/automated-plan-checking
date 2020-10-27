@@ -1,4 +1,3 @@
-# We are mostly using parameters from the first item of Sequences; is this ok?  
 import strings
 first_sequence_item = 0
 
@@ -17,7 +16,6 @@ def _extract_mode(dataset, case):
     # beam is modulated by moving the multi leaf collimator (MLC) to different control points within each 
     # gantry angle. If VMAT the gantry and the MLCs all move at the same time so each control point has 
     # both gantry moves and MLC moves.
-    #  - Andrew Alvez, 2020
     if moving_gantry:
         mode = strings.VMAT
     elif not moving_gantry and number_of_beams is 5:
@@ -27,12 +25,10 @@ def _extract_mode(dataset, case):
     return mode
 
 def _extract_prescription_dose(dataset, case):
-    # Total Prescription Dose
     total_prescription_dose = str(int(dataset.DoseReferenceSequence[0].TargetPrescriptionDose))
-    # number of fractions
     number_of_fractions = str(dataset.FractionGroupSequence[0].NumberOfFractionsPlanned)
 
-    #this section deals with the 'prescription dos/#' parameter
+    # This section deals with the 'prescription dose/#' parameter
     # You need to make sure that the format of parameter_values['perscription dose/#] is exactly the same as truth_table['perscription dose/#'] in cases where the file passes
     # To begin you assign the total_perscription dose to the parameter value
     prescription_dose = total_prescription_dose
@@ -59,7 +55,6 @@ def _extract_gantry(dataset, case):
         file_type = _extract_mode(dataset, case)
 
         #If the dataset is a VMAT file it goes through each of the control point sequence and finds each associated gantry angle and returns the lowest value slash the highest value
-        # Also I dont think there is meant to be more than one beam in these cases
         if file_type == strings.VMAT:
             i = 0
             vmat_gantry_angles = []
@@ -82,7 +77,7 @@ def _extract_gantry(dataset, case):
         return strings.ANY_VALUE
 
 def _extract_ssd(dataset, case):
-#find SSD in centimeters
+    #find SSD in centimeters
     file_type = _extract_mode(dataset, case)
 
     ssd_list = []
@@ -118,7 +113,6 @@ def _extract_wedge(dataset, case):
     return ','.join(wedge_angles)
 
 def _extract_energy(dataset, case):
-    #energies = []
     energy = ''
 
     for beam in dataset.BeamSequence:
@@ -140,10 +134,7 @@ def _extract_field_size(dataset, case):
     field_size_list=[]
 
     for beam in beams:
-        #print(beam)
-        #print("\n\n")
         beam_type_number = len(beam.ControlPointSequence[0].BeamLimitingDevicePositionSequence)
-        # print("\n" + str(beam_type_number) + " types of device in total:")
 
         length_x = 0
         length_y = 0
@@ -154,8 +145,6 @@ def _extract_field_size(dataset, case):
             jaw_position = beam.ControlPointSequence[0].BeamLimitingDevicePositionSequence[
                 i].LeafJawPositions
 
-            # print(dataset)python app.py --inputs Resources/Input/YellowLvlIII_4a.dcm --format csv --case_number 6
-
             if device_type != "MLCX" and device_type != "MLCY":
 
                 if device_type == "X":
@@ -163,12 +152,8 @@ def _extract_field_size(dataset, case):
                 elif device_type == "Y":
                     length_y = int((-jaw_position[0] + jaw_position[1]) / 10)
                 elif device_type == "ASYMX":
-                    #if length_x != 0:
-                        #print("Two Beam Limiting Device on X axis!")  # TODO:need to figure out how to deal with two X jaws.
                     length_x = int((-jaw_position[0] + jaw_position[1]) / 10)
                 elif device_type == "ASYMY":
-                    #if length_y != 0:
-                        #print("Two Beam Limiting Device on Y axis!")
                     length_y = int((-jaw_position[0] + jaw_position[1]) / 10)
                 if length_x != 0 and length_y != 0:
 
@@ -177,12 +162,7 @@ def _extract_field_size(dataset, case):
                 if length_x==0 or length_y==0:
                     field_size_list.append("Not Extracted")
 
-    #print(field_size_list)
     return ','.join(field_size_list)
-
-
-
-    # return str("("+length_x+","+length_y+")")
 
 #just a placeholder function to indicate which parameter extractions have not been implemented
 def to_be_implemented(dataset, case):
@@ -193,10 +173,7 @@ extractor_functions = {
     strings.prescription_dose_slash_fractions     : _extract_prescription_dose,
     strings.prescription_point      : to_be_implemented,
     strings.isocenter_point         : to_be_implemented,
-        # Isocenter Position TODO:Figuring out what does "SoftTiss" etc means
-        # parameter_values["Isocenter Position"] = dataset.BeamSequence[i].ControlPointSequence[0].IsocenterPosition
     strings.override                : to_be_implemented,
-        #I suspect override is at (3008, 0066) tag in the DICOM file but I'm not sure
     strings.collimator              : _extract_collimator,
     strings.gantry                  : _extract_gantry,
     strings.SSD                     : _extract_ssd,
@@ -205,5 +182,4 @@ extractor_functions = {
     strings.wedge                   : _extract_wedge,
     strings.meas                    : to_be_implemented,
     strings.energy                  : _extract_energy,
-#   'monitor unit'            : # dataset.FractionGroupSequence[0].ReferencedBeamSequence[i].BeamMeterset
 }
