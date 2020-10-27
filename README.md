@@ -104,24 +104,40 @@ Run a particular test (i.e prescription dose) with `python -m unittest test_para
 ## Changelog
 
 ### Sprint 2
-More error handling[#21](#21)
-Field size parameter implemented[#20](#20)
-Refactor[#19](#19)
-Strings Module[#18](#18)
-Properties File[#17](#17)
-Truth table standardization[#14](#14)
-Input truth table[#13](#13)
-Add batch processing[#11](#11)
-More informative output[#10](#10)
+More error handling ([#21)](https://github.com/SuryadiTjandra/automated-plan-checking/pull/21))
+
+Field size parameter implemented ([#20)](https://github.com/SuryadiTjandra/automated-plan-checking/pull/20))
+
+Refactor ([#19](https://github.com/SuryadiTjandra/automated-plan-checking/pull/19))
+
+Strings Module ([#18](https://github.com/SuryadiTjandra/automated-plan-checking/pull/18))
+
+Properties File ([#17](https://github.com/SuryadiTjandra/automated-plan-checking/pull/17))
+
+Truth table standardization ([#14](https://github.com/SuryadiTjandra/automated-plan-checking/pull/14))
+
+Input truth table ([#13](https://github.com/SuryadiTjandra/automated-plan-checking/pull/13))
+
+Add batch processing ([#11](https://github.com/SuryadiTjandra/automated-plan-checking/pull/11))
+
+More informative output ([#10](https://github.com/SuryadiTjandra/automated-plan-checking/pull/10))
 
 ### Sprint 1
 
-Modularize parameter extraction[#9](#9)
-Unit Tests[#8](#8)
-Nominal Beam Energy[#4](#7)
-Command line args[#3](#3)
-Total Prescription Dose[#2](#2)
+Modularize parameter extraction ([#9](https://github.com/SuryadiTjandra/automated-plan-checking/pull/9))
+
+Unit Tests ([#8](https://github.com/SuryadiTjandra/automated-plan-checking/pull/8))
+
+Nominal Beam Energy ([#4](https://github.com/SuryadiTjandra/automated-plan-checking/pull/7))
+
+Command line args ([#3](https://github.com/SuryadiTjandra/automated-plan-checking/pull/3))
+
+Total Prescription Dose ([#2](https://github.com/SuryadiTjandra/automated-plan-checking/pull/2))
+
 SSD (initial commit)
+
 Number of fractions (initial commit)
+
 Gantry Angle (initial commit)
+
 Collimator angle (initial commit)
