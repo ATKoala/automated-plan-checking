@@ -108,6 +108,8 @@ More error handling ([#21)](https://github.com/SuryadiTjandra/automated-plan-che
 
 Field size parameter implemented ([#20)](https://github.com/SuryadiTjandra/automated-plan-checking/pull/20))
 
+Mode parameter ([#20)](https://github.com/SuryadiTjandra/automated-plan-checking/pull/20))
+
 Refactor ([#19](https://github.com/SuryadiTjandra/automated-plan-checking/pull/19))
 
 Strings Module ([#18](https://github.com/SuryadiTjandra/automated-plan-checking/pull/18))
