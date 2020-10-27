@@ -75,7 +75,7 @@ def _extract_ssd(dataset):
             while i < len(dataset.BeamSequence):
                 if dataset.BeamSequence[i].BeamDescription != strings.SETUP_beam:
                     for control_point in dataset.BeamSequence[i].ControlPointSequence:
-                        vmat_ssd_list.append(float(control_point.ReferencedDoseReferenceSequence[1].BeamDosePointSSD)/10)
+                        vmat_ssd_list.append(round(float(control_point.ReferencedDoseReferenceSequence[1].BeamDosePointSSD)/10,2))
                     return vmat_ssd_list
                 i+=1
             return "error retrieving SSD"
@@ -84,7 +84,7 @@ def _extract_ssd(dataset):
             beams = list(filter(lambda beam: beam.BeamDescription != strings.SETUP_beam, dataset.BeamSequence))
             #obtain the ssd of all beams
             #in the DICOM file the SSD is given in millimetres so its divided by 10 so its in centimetres
-            ssd_list = list(map(lambda beam: beam.ControlPointSequence[0].SourceToSurfaceDistance / 10, beams))
+            ssd_list = list(map(lambda beam: round(beam.ControlPointSequence[0].SourceToSurfaceDistance / 10, 2), beams))
             return ssd_list
     except:
         return "error retrieving SSD"

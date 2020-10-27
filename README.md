@@ -16,8 +16,6 @@
   
 [**Changelog**](#changelog)
 
-
-
 ## Project background
 This project is with the Australian Radiation Protection and Nuclear Safety Agency.
 
@@ -71,15 +69,15 @@ The goal of this project and our clients want our team to achieve is to create a
 ## System requirements
 - **Python 3** or above
 - **pydicom** (can be installed with `pip install pydicom`)
-- **pandas** ((can be installed with `pip install pandas`))
-
+- **pandas** (can be installed with `pip install pandas`)
 
 ## Installation and Usage
 
-To install with git: `git clone https://github.com/SuryadiTjandra/automated-plan-checking.git`
 To download as zip: <https://github.com/SuryadiTjandra/automated-plan-checking/archive/master.zip>
 
-Usage Examples:
+To install with git: `git clone https://github.com/SuryadiTjandra/automated-plan-checking.git`
+
+Usage:
 
 - Process single dicom
   - `python app.py --inputs Resources/Input/YellowLvlIII_7a.dcm`
@@ -87,34 +85,28 @@ Usage Examples:
   - `python app.py --inputs Resources/Input`
 - Multiple dicoms or folders in any order
   - `python app.py --inputs FOLDER1 FOLDER2 FILE1 FILE2 FOLDER3 (etc...)`
-  - Example: - `python app.py --inputs Resources/Input OTHER_DICOM_FOLDER --format csv --case_number 6`
 - Specify case number for each input item
   - `python app.py --inputs INPUT1,CASE1 INPUT2,CASE2`
-  - Example: - `python app.py --inputs Resources/Input/YellowLvlIII_7a.dcm,1 Resources/Input/YellowLvlIII_7b.dcm,2 --format csv`
 - Specify case for all inputs
   - `python app.py --inputs INPUTS --case_number 6`
-  - Example: - `python app.py --inputs Resources/Input --format csv --case_number 6`
 - Specify a custom truth table (default uses level 3 table)
   - `python app.py --inputs INPUTS --truth_table truth_table_example.csv`
-  - Example: - `python app.py --inputs Resources/Input --format csv --truth_table truth_table_example.csv`
+More details can be found in the [User guide](https://github.com/SuryadiTjandra/automated-plan-checking/blob/master/docs/atkoala-UserGuide-271020-1338-2126.pdf).
 
-"--format csv" can be added in any command as the argument, generating csv output file. More details can be found in the [User guide](https://github.com/SuryadiTjandra/automated-plan-checking/blob/master/docs/atkoala-UserGuide-271020-1338-2126.pdf).
+## Testing
 
-### Testing
+Run all tests with `python -m unittest`
 
-Test code is in `test_parameter_retrieval.py`.
+Run tests for a particular class with `python -m unittest test_parameter_retrieval.<ClassName>`, where `<ClassName>` could be replaced by `TestIMRTExtractionValues`.
 
-### Running Tests
+Run a particular test (i.e prescription dose) with `python -m unittest test_parameter_retrieval.<ClassName>.<FunctionName>` where `<ClassName>` and `<FunctionName>` could be `TestIMRTExtractionValues` and `test_total_prescription_dose`, respectively.
 
-Run the tests with `python -m unittest`
+## Documentation Overview
 
-Run tests for a particular class with `python -m unittest test_parameter_retrieval.ClassName`, where `<ClassName>` could be replaced by `TestIMRTExtractionValues`.
+Full project documentation generated from a Confluence space can be found in [docs](docs) folder
 
-e.g `python -m unittest test_parameter_retrieval.TestIMRTExtractionValues`
-
-Run a particular test (i.e prescription dose) with `python -m unittest test_parameter_retrieval.ClassName.FunctionName`, where `<ClassName>` and `<FunctionName>` could be `TestIMRTExtractionValues` and `test_total_prescription_dose`, respectively.
-
-e.g. `python -m unittest test_parameter_retrieval.TestIMRTExtractionValues.test_total_prescription_dose`
-
+It contains the project background in more depth as well as architecture, full user guide, requirements list, ...
 
 ## Changelog
+
+...

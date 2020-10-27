@@ -12,7 +12,6 @@ The 2 DICOM files tested are included in the Resources subdirectory.
 The correct values for each test are derived from the corresponding pdf reports in each of IMRT and VMAT directories (7a.pdf, 7b.pdf).
 
 Basic method to run all tests: `python -m unittest`
-Detailed instructions for running tests are in the README. 
 '''
 import unittest
 import pydicom
@@ -56,28 +55,27 @@ class TestIMRTExtractionValues(unittest.TestCase):
 
 class TestVMATExtractionValues(unittest.TestCase): 
     ''' Tests for verifying the correct values are extracted
-    The 'correct' answers are derived from the vendor report :  Documents/Input/7b.pdf
+    The 'correct' answers are derived from the vendor report in Documents/Input/7b.pdf
     '''
     @classmethod
     def setUpClass(self): 
         # We use the extraction function once here and inspect the results in the tests below
         self.extracted, _ = extract_parameters('./Resources/Input/YellowLvlIII_7b.dcm')
 
-    def test_prescription_dose(self): 
+    def test_prescription_dose(self):
+        # test return 50/25/MU
         self.assertEqual(self.extracted[strings.prescription_dose_slash_fractions], '50/25/-')
 
     def test_collimator(self): 
         self.assertEqual(self.extracted[strings.collimator], '355')
 
-    def test_field_size(self):
-        self.assertEqual(self.extracted['field size'], '10x10')
+    # can't confirm this in report
+    # def test_field_size(self):
+    #     self.assertEqual(self.extracted['field size'], '10x10')
 
     def test_gantry_angle(self):
-        #  Report shows '180/360' for a single beam for this plan
-        # - Naturally this is because of VMAT style of rotating the beam around the patient
-        # - In the dicom, the initial position is at 180, turns 360deg one way, then 360 again back the other way
-        # Testing against the string 'VMAT File' for compatibility with existing code
-        self.assertEqual(self.extracted[strings.gantry], 'VMAT File') 
+        # test return big array 180->360->180->0->180
+        self.assertEqual(self.extracted[strings.gantry], '180/360') 
 
     def test_ssd(self): 
         self.assertEqual(self.extracted[strings.SSD], [87.17])
@@ -253,7 +251,7 @@ class TestEvaluation(unittest.TestCase):
             strings.SSD : [93],
             strings.couch : '-',
             strings.field_size : '-',
-            strings.wedge : '-',
+            strings.wedge : 'no wedge',
             strings.meas : "'11','12','13','14','15','18','19','20','21'",
             strings.energy : "6"
         }
@@ -273,7 +271,7 @@ class TestEvaluation(unittest.TestCase):
             strings.SSD : ['-',89,93,89,'-'],
             strings.couch : 'couch?',
             strings.field_size : '-',
-            strings.wedge : '-',
+            strings.wedge : 'no wedge',
             strings.meas : "'11','12','13','14','15','16','17','-','-'",
             strings.energy : "6"
         }
@@ -293,7 +291,7 @@ class TestEvaluation(unittest.TestCase):
             strings.SSD : ['-',89,93,89,'-'],
             strings.couch : 'couch?',
             strings.field_size : '-',
-            strings.wedge : '-',
+            strings.wedge : 'no wedge',
             strings.meas : "'11','12','13','14','15','16','17','-','-'",
             strings.energy : "6"
         }
@@ -313,7 +311,7 @@ class TestEvaluation(unittest.TestCase):
             strings.SSD : ['-',89,93,89,'-'],
             strings.couch : 'couch?',
             strings.field_size : '-',
-            strings.wedge : '-',
+            strings.wedge : 'no wedge',
             strings.meas : "'11','12','13','14','15','17','18','-','-'",
             strings.energy : "6"
         }
@@ -333,7 +331,7 @@ class TestEvaluation(unittest.TestCase):
             strings.SSD : [90],
             strings.couch : '-',
             strings.field_size : '3x3,2x2,1x1',
-            strings.wedge : '-',
+            strings.wedge : 'no wedge',
             strings.meas : "'SoftTiss_3','SoftTiss_2','SoftTiss_1','-','-','-','-','-','-'",
             strings.energy : "6"
         }
@@ -353,7 +351,7 @@ class TestEvaluation(unittest.TestCase):
             strings.SSD : '-',
             strings.couch : 'couch?',
             strings.field_size : '-',
-            strings.wedge : '-',
+            strings.wedge : 'no wedge',
             strings.meas : "'SoftTiss','-','-','-','-','-','-','-','-'",
             strings.energy : "6"
         }
@@ -374,7 +372,7 @@ class TestEvaluation(unittest.TestCase):
             strings.SSD : '-',
             strings.couch : 'couch?',
             strings.field_size : '-',
-            strings.wedge : '-',
+            strings.wedge : 'no wedge',
             strings.meas : "'Spine2Inf','Spine1Sup','Cord','-','-','-','-','-','-'",
             strings.energy : "6"
         }
@@ -394,7 +392,7 @@ class TestEvaluation(unittest.TestCase):
             strings.SSD : '-',
             strings.couch : 'couch?',
             strings.field_size : '-',
-            strings.wedge : '-',
+            strings.wedge : 'no wedge',
             strings.meas : "'Lung','-','-','-','-','-','-','-','-'",
             strings.energy : "6"
         }
@@ -414,7 +412,7 @@ class TestEvaluation(unittest.TestCase):
             strings.SSD : '-',
             strings.couch : '-',
             strings.field_size : '3x3',
-            strings.wedge : '-',
+            strings.wedge : 'no wedge',
             strings.meas : "'1_3','4_3','-','-','-','-','-','-','-'",
             strings.energy : "6"
         }
@@ -435,7 +433,7 @@ class TestEvaluation(unittest.TestCase):
             strings.SSD : '-',
             strings.couch : '-',
             strings.field_size : '1.5x1.5',
-            strings.wedge : '-',
+            strings.wedge : 'no wedge',
             strings.meas : "'1_1.5','4_1.5','-','-','-','-','-','-','-'",
             strings.energy : "6"
         }
@@ -456,7 +454,7 @@ class TestEvaluation(unittest.TestCase):
             strings.SSD : '-',
             strings.couch : 'couch?',
             strings.field_size : '-',
-            strings.wedge : '-',
+            strings.wedge : 'no wedge',
             strings.meas : "'1','3','-','-','-','-','-','-','-'",
             strings.energy : "6"
         }
@@ -476,7 +474,7 @@ class TestEvaluation(unittest.TestCase):
             strings.SSD : '-',
             strings.couch : 'couch?',
             strings.field_size : '-',
-            strings.wedge : '-',
+            strings.wedge : 'no wedge',
             strings.meas : "'1','3','-','-','-','-','-','-','-'",
             strings.energy : "6"
         }
@@ -496,7 +494,7 @@ class TestEvaluation(unittest.TestCase):
             strings.SSD : '-',
             strings.couch : 'couch?',
             strings.field_size : '-',
-            strings.wedge : '-',
+            strings.wedge : 'no wedge',
             strings.meas : "'1','2','3','-','-','-','-','-','-'",
             strings.energy : "6"
         }
