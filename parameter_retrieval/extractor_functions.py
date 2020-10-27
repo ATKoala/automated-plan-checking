@@ -118,39 +118,48 @@ def _extract_field_size(dataset):
     beams = list(filter(lambda beam: beam.BeamDescription != "SETUP beam", dataset.BeamSequence))
     # record collimator value in the parameter_values dictionary as a string to be consistant with truth_table format
     # According to the truth table the collimator only needs to be recorded for cases 1&5 where only 1 beam occurs
-    beam_type_number = len(beams[len(beams) - 1].ControlPointSequence[0].BeamLimitingDevicePositionSequence)
-    # print("\n" + str(beam_type_number) + " types of device in total:")
+    field_size_list=[]
 
-    length_x = 0
-    length_y = 0
+    for beam in beams:
+        #print(beam)
+        #print("/n/n/n/n/n/")
+        beam_type_number = len(beam.ControlPointSequence[0].BeamLimitingDevicePositionSequence)
+        # print("\n" + str(beam_type_number) + " types of device in total:")
 
-    for i in range(beam_type_number):
-        device_type = beams[len(beams) - 1].ControlPointSequence[0].BeamLimitingDevicePositionSequence[
-            i].RTBeamLimitingDeviceType
-        jaw_position = beams[len(beams) - 1].ControlPointSequence[0].BeamLimitingDevicePositionSequence[
-            i].LeafJawPositions
-        #print(device_type)
-        #print(jaw_position)
-        # print(dataset)python app.py --inputs Resources/Input/YellowLvlIII_4a.dcm --format csv --case_number 6
+        length_x = 0
+        length_y = 0
 
-        if device_type != "MLCX" and device_type != "MLCY":
+        for i in range(beam_type_number):
+            device_type = beam.ControlPointSequence[0].BeamLimitingDevicePositionSequence[
+                i].RTBeamLimitingDeviceType
+            jaw_position = beam.ControlPointSequence[0].BeamLimitingDevicePositionSequence[
+                i].LeafJawPositions
 
-            if device_type == "X":
-                length_x = int((-jaw_position[0] + jaw_position[1]) / 10)
-            elif device_type == "Y":
-                length_y = int((-jaw_position[0] + jaw_position[1]) / 10)
-            elif device_type == "ASYMX":
-                #if length_x != 0:
-                    #print("Two Beam Limiting Device on X axis!")  # TODO:need to figure out how to deal with two X jaws.
-                length_x = int((-jaw_position[0] + jaw_position[1]) / 10)
-            elif device_type == "ASYMY":
-                #if length_y != 0:
-                    #print("Two Beam Limiting Device on Y axis!")
-                length_y = int((-jaw_position[0] + jaw_position[1]) / 10)
-            if length_x != 0 and length_y != 0:
-                return str(length_y) + "x" + str(length_x)
-        else:
-            return "Not Extracted"
+            # print(dataset)python app.py --inputs Resources/Input/YellowLvlIII_4a.dcm --format csv --case_number 6
+
+            if device_type != "MLCX" and device_type != "MLCY":
+
+                if device_type == "X":
+                    length_x = int((-jaw_position[0] + jaw_position[1]) / 10)
+                elif device_type == "Y":
+                    length_y = int((-jaw_position[0] + jaw_position[1]) / 10)
+                elif device_type == "ASYMX":
+                    #if length_x != 0:
+                        #print("Two Beam Limiting Device on X axis!")  # TODO:need to figure out how to deal with two X jaws.
+                    length_x = int((-jaw_position[0] + jaw_position[1]) / 10)
+                elif device_type == "ASYMY":
+                    #if length_y != 0:
+                        #print("Two Beam Limiting Device on Y axis!")
+                    length_y = int((-jaw_position[0] + jaw_position[1]) / 10)
+                if length_x != 0 and length_y != 0:
+
+                    field_size_list.append(str(length_y) + "x" + str(length_x))
+            else:
+                if length_x==0 or length_y==0:
+                    field_size_list.append("Not Extracted")
+
+    return ','.join(field_size_list)
+
 
 
 
