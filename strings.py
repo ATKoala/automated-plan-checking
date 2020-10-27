@@ -39,4 +39,4 @@ no_wedge = "no wedge"
 STANDARD_FLUENCE = "STANDARD" # When fluence mode is listed as "STANDARD" in dicom, it is not FFF
 FFF = "FFF"
 ANY_VALUE = "-" # Truth table uses hyphen to denote any value is acceptable
-
+NOT_APPLICABLE = "NOT APPLICABLE"
