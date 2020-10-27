@@ -101,12 +101,28 @@ Run tests for a particular class with `python -m unittest test_parameter_retriev
 
 Run a particular test (i.e prescription dose) with `python -m unittest test_parameter_retrieval.<ClassName>.<FunctionName>` where `<ClassName>` and `<FunctionName>` could be `TestIMRTExtractionValues` and `test_total_prescription_dose`, respectively.
 
-## Documentation Overview
-
-Full project documentation generated from a Confluence space can be found in [docs](docs) folder
-
-It contains the project background in more depth as well as architecture, full user guide, requirements list, ...
-
 ## Changelog
 
-...
+### Sprint 2
+More error handling[#21]
+Field size parameter implemented[#20]
+Refactor[#19]
+Strings Module[#18]
+Properties File[#17]
+VMAT pass/fail]
+Truth table standardization[#14]
+Input truth table[#13]
+Add batch processing[#11]
+More informative output[#10]
+
+### Sprint 1
+
+Modularize parameter extraction[#9]
+Unit Tests[#8]
+Nominal Beam Energy[#4]
+Command line args[#3]
+Total Prescription Dose[#2]
+SSD (initial commit)
+Number of fractions (initial commit)
+Gantry Angle (initial commit)
+Collimator angle (initial commit)
