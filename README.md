@@ -72,7 +72,7 @@ The goal of this project and our clients want our team to achieve is to create a
 
 ### Architecture
 
-[Architecture](https://github.com/SuryadiTjandra/automated-plan-checking/blob/master/docs/docs/System-Design-and-Architecture.pdf) of the project, exported from Confluence. It includes components of the program and system design.
+[Architecture](https://github.com/SuryadiTjandra/automated-plan-checking/blob/master/docs/System-Design-and-Architecture.pdf) of the project, exported from Confluence. It includes components of the program and system design.
 
 ### Test cases
 

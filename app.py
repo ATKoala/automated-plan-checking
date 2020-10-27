@@ -18,7 +18,7 @@ def main():
     user_input = parse_arguments()
     
     #Retrieve default settings from properties file
-    properties = read_properties_file("properties.txt")
+    properties = read_properties_file("settings.txt")
     
     # Process the supplied arguments
     inputs = user_input["inputs"] if user_input["inputs"] else [properties["default_input_folder"]]
@@ -87,7 +87,7 @@ def parse_arguments():
     parser.add_argument("-t", "--truth_table", dest="truth_table_file",
                         help="The file containing the truth table to be used for determining pass/fail results.")    
     parser.add_argument("-o", "--output", metavar="FOLDER",
-                        help="The location where the reports for processed DICOMs should be saved (creates folder if doesn't yet exist). If unspecified, each report will be saved next to its DICOM buddy.")
+                        help="The location where the reports for processed DICOMs should be saved (creates folder if doesn't yet exist). If unspecified, each report will be saved in a Reports folder in this directory.")
     parser.add_argument("-c", "--case_number", metavar="NUMBER", type=int,
                         help="The case number of input DICOMS. If specified, assumes all DICOMS in this batch will be this case.")
     parser.add_argument("-f", "--format", choices=["csv", "json"], default="csv", dest="output_format",
@@ -115,29 +115,29 @@ def read_properties_file(properties_file):
 # Each key(i.e. case, mode req, etc) refers to a column of the truth table
 # Each key has an associated list which gives every row value corresponing to that column in order
 default_truth_table = {
-    strings.case :  ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17'],
-    strings.mode :  ['False', 'False', 'False', 'False', 'False', 'True', 'True', 'True', 'False', 'True', 'True',
+    "case": ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17'],
+    "mode req": ['False', 'False', 'False', 'False', 'False', 'True', 'True', 'True', 'False', 'True', 'True',
                 'True', 'True', 'True', 'True', 'True', 'True'],
-    strings.prescription_dose_slash_fractions : ['2/-/-', '2/-/-', '2/-/-', '2/-/-', '50/25/-', '50/25/-', '50/25/-', '50/25/-', '900/3/MU', '45/3/-', '24/2/-',
+    "prescription dose/#": ['2/-/-', '2/-/-', '2/-/-', '2/-/-', '50/25/-', '50/25/-', '50/25/-', '50/25/-', '900/3/MU', '45/3/-', '24/2/-',
                             '48/4/-', '3/-/-', '3/-/-', '20/-/-', '20/-/-', '20/-/-'],
-    strings.prescription_point : ['1 or 3', '5', '3', '3', 'chair', 'CShape', 'CShape', 'C8Target', '-', 'SoftTissTarget',
+    "prescription point": ['1 or 3', '5', '3', '3', 'chair', 'CShape', 'CShape', 'C8Target', '-', 'SoftTissTarget',
                         'SpineTarget', 'LungTarget', '1', '1', 'PTV_c14_c15', '-', '-'],
-    strings.isocenter_point : ['surf', '3', '3', '3', '3', '3', '3', '3', 'SoftTiss', 'SoftTiss', 'Spine', 'Lung', '1',
+    "isocentre point": ['surf', '3', '3', '3', '3', '3', '3', '3', 'SoftTiss', 'SoftTiss', 'Spine', 'Lung', '1',
                         '1', '1', '-', '-'],
-    strings.override : ['bone', 'no override', 'no override', 'no override', 'no override', 'lungs', 'no override',
+    "override": ['bone', 'no override', 'no override', 'no override', 'no override', 'lungs', 'no override',
                 'no override', 'lungs', 'lungs', 'no override', 'no override', 'central cube', 'central cube',
                 'central cube', 'central cube', 'central cube'],
-    strings.collimator : ['0', '-', '-', '-', '0', '*0', '*0', '*0', '-', '-', '-', '-', '-', '-', '-', '-', '-'],
-    strings.gantry: ['0', '270,0,90', '90', '90', '0', '150,60,0,300,210', '150,60,0,300,210', '150,60,0,300,210', '-',
+    "collimator": ['0', '-', '-', '-', '0', '*0', '*0', '*0', '-', '-', '-', '-', '-', '-', '-', '-', '-'],
+    "gantry": ['0', '270,0,90', '90', '90', '0', '150,60,0,300,210', '150,60,0,300,210', '150,60,0,300,210', '-',
             '-', '-', '-', '-', '-', '-', '-', '-'],
-    strings.SSD : ['100', '86,93,86', '86', '86', '93', '?,89,93,89,?', '?,89,93,89,?', '?,89,93,89,?', '90', '-', '-',
+    "SSD": ['100', '86,93,86', '86', '86', '93', '?,89,93,89,?', '?,89,93,89,?', '?,89,93,89,?', '90', '-', '-',
             '-', '-', '-', '-', '-', '-'],
-    strings.couch : ['-', '-', '-', '-', '-', 'couch?', 'couch?', 'couch?', '-', 'couch?', 'couch?', 'couch?', '-', '-',
+    'couch': ['-', '-', '-', '-', '-', 'couch?', 'couch?', 'couch?', '-', 'couch?', 'couch?', 'couch?', '-', '-',
             'couch?', 'couch?', 'couch?'],
-    strings.field_size : ['10x10', '10x6,10x12,10x6', '10x12', '10x12', '-', '-', '-', '-', '3x3,2x2,1x1', '-', '-', '-',
+    'field size': ['10x10', '10x6,10x12,10x6', '10x12', '10x12', '-', '-', '-', '-', '3x3,2x2,1x1', '-', '-', '-',
                 '3x3', '1.5x1.5', '-', '-', '-'],
-    strings.wedge : ['no wedge', '30,no wedge,30', 'no wedge', '60', 'no wedge', 'no wedge', 'no wedge', 'no wedge', 'no wedge', 'no wedge', 'no wedge', 'no wedge', 'no wedge', 'no wedge', 'no wedge', 'no wedge', 'no wedge'],
-    strings.meas : ["'1','3','10','-','-','-','-','-','-'",
+    'wedge': ['no wedge', '30,no wedge,30', 'no wedge', '60', 'no wedge', 'no wedge', 'no wedge', 'no wedge', 'no wedge', 'no wedge', 'no wedge', 'no wedge', 'no wedge', 'no wedge', 'no wedge', 'no wedge', 'no wedge'],
+    'meas': ["'1','3','10','-','-','-','-','-','-'",
             "'5_RLAT','8_RLAT','5_AP','8_AP','5_LLAT','8_LLAT','-','-','-'", "'3','5','-','-','-','-','-','-','-'",
             "'3','5','-','-','-','-','-','-','-'", "'11','12','13','14','15','18','19','20','21'",
             "'11','12','13','14','15','16','17','-','-'", "'11','12','13','14','15','16','17','-','-'",
@@ -147,12 +147,11 @@ default_truth_table = {
             "'Lung','-','-','-','-','-','-','-','-'", "'1_3','4_3','-','-','-','-','-','-','-'",
             "'1_1.5','4_1.5','-','-','-','-','-','-','-'", "'1','3','-','-','-','-','-','-','-'",
             "'1','3','-','-','-','-','-','-','-'", "'1','2','3','-','-','-','-','-','-'"],
-    strings.energy : ["6,6FFF,10,10FFF,18", "6,6FFF,10,10FFF,18", "6,6FFF,10,10FFF,18", "6,6FFF,10,10FFF,18",
+    'energy': ["6,6FFF,10,10FFF,18", "6,6FFF,10,10FFF,18", "6,6FFF,10,10FFF,18", "6,6FFF,10,10FFF,18",
             "6,6FFF,10,10FFF,18", "6,6FFF,10,10FFF,18", "6,6FFF,10,10FFF,18", "6,6FFF,10,10FFF,18",
             "6,6FFF,10,10FFF,18", "6,6FFF,10,10FFF,18", "6,6FFF,10,10FFF,18", "6,6FFF,10,10FFF,18",
             "6,6FFF,10,10FFF,18", "6,6FFF,10,10FFF,18", "6,6FFF,10,10FFF,18", "6,6FFF,10,10FFF,18",
-            "6,6FFF,10,10FFF,18"]}
-
-
+            "6,6FFF,10,10FFF,18"]
+}
 if __name__ == "__main__":
     main()
