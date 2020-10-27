@@ -16,7 +16,7 @@ def extract_parameters(filepath, case):
     
     # created a variable file_type in circumstances where it is useful to identify whether the file is a VMAT for example
     # at the moment it does this by identifying wheter the control point index has different gantry angles for different control points of the same beam
-    file_type = _extract_mode(dataset)
+    file_type = _extract_mode(dataset, case)
     
     # define a list of parameters that need to be found
     parameters = [strings.mode, strings.prescription_dose_slash_fractions, strings.prescription_point, strings.isocenter_point, strings.override, strings.collimator,
@@ -26,7 +26,7 @@ def extract_parameters(filepath, case):
     #run the extraction functions for each parameter and store the values in parameter_values dictionary
     parameter_values = {}
     for parameter in parameters:
-        parameter_values[parameter] = extractor_functions[parameter](dataset)
+        parameter_values[parameter] = extractor_functions[parameter](dataset, case)
 
     return parameter_values, file_type
 
