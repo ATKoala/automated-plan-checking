@@ -1,22 +1,27 @@
 # Table of contents
+
 [**Project background**](#project-background)
 
 [**Features**](#features)
-  * [**Sprint1**](#sprint1)
-  * [**Sprint2**](#sprint2)
+
+- [**Sprint1**](#sprint1)
+- [**Sprint2**](#sprint2)
   
 [**Documentation**](#documentation)
-  * [**Architecture**](#architecture)
-  * [**Test cases**](#test-cases)
+
+- [**Architecture**](#architecture)
+- [**Test cases**](#test-cases)
   
 [**System requirements**](#system-requirements)
 
 [**Installation and Usage**](#installation-and-usage)
-  * [**Testing**](#testing)
+
+- [**Testing**](#testing)
   
 [**Changelog**](#changelog)
 
 ## Project background
+
 This project is with the Australian Radiation Protection and Nuclear Safety Agency.
 
 The aim is to create a program that can perform an automated check of data and parameters with a Pass/Fail result.
@@ -26,47 +31,55 @@ Currently, the only way to verify planning parameters is to manually check pdf p
 The goal of this project and our clients want our team to achieve is to create a program that can replace the manual process outlined in the previous paragraph; which will read data points directly from the DICOM files generated and perform an automated check of the parameters extracted.
 
 ## Features
+
 ### Sprint1
-01	As an Auditor,	I want parameter values to be output when running the program, as a csv
 
-02	As an Auditor,	I also want each parameter value to be evaluated with a pass/fail result and recorded in the csv output
+01 As an Auditor, I want parameter values to be output when running the program, as a csv
 
-05	As an Auditor,	I want to be able to specify the case of the files I'm processing (necessary if partial parameter extraction)
+02 As an Auditor, I also want each parameter value to be evaluated with a pass/fail result and recorded in the csv output
 
-07	As an Auditor,	(Parameter) I want to know the angle of the machine gantry
+05 As an Auditor, I want to be able to specify the case of the files I'm processing (necessary if partial parameter extraction)
 
-08	As an Auditor,	(Parameter) I want to know the angle of the beam limiting device (aka collimator)
+07 As an Auditor, (Parameter) I want to know the angle of the machine gantry
 
-09	As an Auditor,	(Parameter) I want to know the SSD (source to skin distance)
+08 As an Auditor, (Parameter) I want to know the angle of the beam limiting device (aka collimator)
 
-10	As an Auditor,	(Parameter) I want to know the total amount of radiation dose planned(aka prescription dose/#)
+09 As an Auditor, (Parameter) I want to know the SSD (source to skin distance)
 
-11	As an Auditor,	(Parameter) I want to know the number of fractions the dose will be split up into(combined with prescription dose, 50/25 means 50 dose 25 fractions)
+10 As an Auditor, (Parameter) I want to know the total amount of radiation dose planned(aka prescription dose/#)
 
-12	As an Auditor,	(Parameter) I want to know the wedge angle(s)
+11 As an Auditor, (Parameter) I want to know the number of fractions the dose will be split up into(combined with prescription dose, 50/25 means 50 dose 25 fractions)
 
-13	As an Auditor,	(Parameter) I want to know the machine energy(doesn't need to be evaluated)
+12 As an Auditor, (Parameter) I want to know the wedge angle(s)
 
-14	As an Auditor,	(Parameter) I want to know the fluence mode of the radiation beams(attached to energy)
+13 As an Auditor, (Parameter) I want to know the machine energy(doesn't need to be evaluated)
+
+14 As an Auditor, (Parameter) I want to know the fluence mode of the radiation beams(attached to energy)
+
 ### Sprint2
-03	As an Auditor,	I want the value acceptance ranges to be output in the csv as well
 
-04	As an Auditor,	It would be useful that  the range of acceptable values will automated modified depending on the file
+03 As an Auditor, I want the value acceptance ranges to be output in the csv as well
 
-06	As an Auditor,	I want to be able to process batches of dicoms at a time
+04 As an Auditor, It would be useful that  the range of acceptable values will automated modified depending on the file
 
-15	As an Auditor,	(Parameter) I want to know the field size of the radiation beam
+06 As an Auditor, I want to be able to process batches of dicoms at a time
 
-16	As an Auditor,  (Parameter) I want to know the modality of treatment [imrt, vmat, 3dcrt, dcat, tomo, f-cone, hyp-arc, g-knife]
+15 As an Auditor, (Parameter) I want to know the field size of the radiation beam
+
+16 As an Auditor, (Parameter) I want to know the modality of treatment [imrt, vmat, 3dcrt, dcat, tomo, f-cone, hyp-arc, g-knife]
 
 ## Documentation
 
 ### Architecture
+
 [Architecture](https://github.com/SuryadiTjandra/automated-plan-checking/blob/master/docs/atkoala-Architecture-271020-1313-2124.pdf) of the project, exported from Confluence. It includes components of the program and system design.
+
 ### Test cases
+
 [Test cases](https://github.com/SuryadiTjandra/automated-plan-checking/blob/master/tests/atkoala-Test-271020-0054-2114.pdf) of the project ,exported from Confluence.
 
 ## System requirements
+
 - **Python 3.6** or above
 - **pydicom** (can be installed with `pip install pydicom`)
 - **pandas** (can be installed with `pip install pandas`)
@@ -99,38 +112,32 @@ Usage:
 "--format csv" can be added in any command as the argument, generating csv output file. More details can be found in the [User guide](https://github.com/SuryadiTjandra/automated-plan-checking/blob/master/docs/atkoala-UserGuide-271020-1338-2126.pdf).
 
 ## Testing
+
 Run the tests with `python -m unittest`
 
 Run tests for a particular class with `python -m unittest test_parameter_retrieval.ClassName`, where `<ClassName>` could be replaced by `TestIMRTExtractionValues`.
- - e.g `python -m unittest test_parameter_retrieval.TestIMRTExtractionValues`
+
+- e.g `python -m unittest test_parameter_retrieval.TestIMRTExtractionValues`
 
 Run a particular test (i.e prescription dose) with `python -m unittest test_parameter_retrieval.ClassName.FunctionName`, where `<ClassName>` and `<FunctionName>` could be `TestIMRTExtractionValues` and `test_total_prescription_dose`, respectively.
- - e.g `python -m unittest test_parameter_retrieval.TestIMRTExtractionValues.test_total_prescription_dose`
 
+- e.g `python -m unittest test_parameter_retrieval.TestIMRTExtractionValues.test_total_prescription_dose`
 
 ## Changelog
 
 ### Sprint 2
 
-More error handling ([#21)](https://github.com/SuryadiTjandra/automated-plan-checking/pull/21))
-
-Field size parameter implemented ([#20)](https://github.com/SuryadiTjandra/automated-plan-checking/pull/20))
-
-Mode parameter ([#20)](https://github.com/SuryadiTjandra/automated-plan-checking/pull/20))
-
-Refactor ([#19](https://github.com/SuryadiTjandra/automated-plan-checking/pull/19))
-
-Strings Module ([#18](https://github.com/SuryadiTjandra/automated-plan-checking/pull/18))
-
-Properties File ([#17](https://github.com/SuryadiTjandra/automated-plan-checking/pull/17))
-
-Truth table standardization ([#14](https://github.com/SuryadiTjandra/automated-plan-checking/pull/14))
-
-Input truth table ([#13](https://github.com/SuryadiTjandra/automated-plan-checking/pull/13))
-
-Add batch processing ([#11](https://github.com/SuryadiTjandra/automated-plan-checking/pull/11))
-
-More informative output ([#10](https://github.com/SuryadiTjandra/automated-plan-checking/pull/10))
+- Update mode output ([#23)](https://github.com/SuryadiTjandra/automated-plan-checking/pull/23))
+- More error handling ([#21)](https://github.com/SuryadiTjandra/automated-plan-checking/pull/21))
+- Field size parameter implemented ([#20)](https://github.com/SuryadiTjandra/automated-plan-checking/pull/20))
+- Mode parameter ([#20)](https://github.com/SuryadiTjandra/automated-plan-checking/pull/20))
+- Refactor ([#19](https://github.com/SuryadiTjandra/automated-plan-checking/pull/19))
+- Strings Module ([#18](https://github.com/SuryadiTjandra/automated-plan-checking/pull/18))
+- Properties File ([#17](https://github.com/SuryadiTjandra/automated-plan-checking/pull/17))
+- Truth table standardization ([#14](https://github.com/SuryadiTjandra/automated-plan-checking/pull/14))
+- Input truth table ([#13](https://github.com/SuryadiTjandra/automated-plan-checking/pull/13))
+- Add batch processing ([#11](https://github.com/SuryadiTjandra/automated-plan-checking/pull/11))
+- More informative output ([#10](https://github.com/SuryadiTjandra/automated-plan-checking/pull/10))
 
 ### Sprint 1
 
