@@ -70,7 +70,7 @@ def _evaluate_ssd(param_value, table_value, **kwargs):
         return strings.PASS
 
 
-def _evaluate_wedge(param_value, table_value, file_type, **kwargs):
+def _evaluate_wedge(param_value, table_value, **kwargs):
 
     for value in table_value.split(","):
         if not value.isdigit() and value!=strings.ANY_VALUE and value!="no wedge":
@@ -82,13 +82,13 @@ def _evaluate_wedge(param_value, table_value, file_type, **kwargs):
     else:
         return strings.PASS if table_value == param_value else strings.FAIL
 
-def _evaluate_prescription_dose(param_value, table_value, file_type, **kwargs):
+def _evaluate_prescription_dose(param_value, table_value, **kwargs):
     for i in range(0, 3):
         if table_value.split("/")[i] != strings.ANY_VALUE and table_value.split("/")[i] != param_value.split("/")[i]:
             return strings.FAIL
     return strings.PASS
 
-def _evaluate_collimator(param_value, table_value, file_type, **kwargs):
+def _evaluate_collimator(param_value, table_value, **kwargs):
 
     for value in table_value.split(","):
         if not value.isdigit() and value!=strings.ANY_VALUE:
@@ -102,19 +102,19 @@ def _evaluate_collimator(param_value, table_value, file_type, **kwargs):
              table_value[1:] != param_value
     return strings.PASS if result else strings.FAIL
 
-def _evaluate_energy(param_value, table_value, file_type, **kwargs):
+def _evaluate_energy(param_value, table_value, **kwargs):
     if param_value in ["6","6FFF","10","10FFF","18"]:
         return "N/A"
     else:
         return "N/A"
 
-def _evaluate_field_size(param_value, table_value, file_type, **kwargs):
+def _evaluate_field_size(param_value, table_value, **kwargs):
     if param_value =="Sorry, cannot extract field size with MLCX/MLCY":
         return "NOT IMPLEMENTED FOR MLCX/MLCY"
     else:
         return strings.PASS if param_value == table_value or table_value == '-' else strings.FAIL
 
-def _evaluate_default(param_value, table_value, file_type, **kwargs):
+def _evaluate_default(param_value, table_value, **kwargs):
     return strings.PASS if param_value == table_value or table_value == '-' else strings.FAIL
 
 evaluator_functions = {
