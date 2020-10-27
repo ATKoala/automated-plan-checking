@@ -16,7 +16,7 @@ def main():
     user_input = parse_arguments()
     
     #Retrieve default settings from properties file
-    properties = read_properties_file("properties.txt")
+    properties = read_properties_file("settings.txt")
     
     # Process the supplied arguments
     inputs = user_input["inputs"] if user_input["inputs"] else [properties["default_input_folder"]]
