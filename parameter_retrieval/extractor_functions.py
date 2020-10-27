@@ -108,7 +108,7 @@ def _extract_energy(dataset):
         if beam.BeamDescription == strings.SETUP_beam:
             continue
         
-        energy = int(beam.ControlPointSequence[first_sequence_item].NominalBeamEnergy)
+        energy = str(int(beam.ControlPointSequence[first_sequence_item].NominalBeamEnergy))
         if beam.PrimaryFluenceModeSequence[first_sequence_item].FluenceMode != strings.STANDARD_FLUENCE:
             energy += str(beam.PrimaryFluenceModeSequence[first_sequence_item].FluenceModeID)
     return energy
