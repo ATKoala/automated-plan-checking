@@ -174,8 +174,6 @@ class TestEvaluation(unittest.TestCase):
             strings.meas : "'1','3','10','-','-','-','-','-','-'",
             strings.energy : "6"
         }
-        treatment_type = 'not VMAT'
-
         self.assertEqual(evaluate_parameters(passing_parameters, truth_table, case), self.pass_evaluation)
 
     def test_case_2(self): 
@@ -195,7 +193,6 @@ class TestEvaluation(unittest.TestCase):
             strings.meas : "'5_RLAT','8_RLAT','5_AP','8_AP','5_LLAT','8_LLAT','-','-','-'",
             strings.energy : "6"
         }
-        treatment_type = 'not VMAT'
         self.assertEqual(evaluate_parameters(passing_parameters, truth_table, case), self.pass_evaluation)
 
     def test_case_3(self): 
@@ -215,7 +212,6 @@ class TestEvaluation(unittest.TestCase):
             strings.meas : "'3','5','-','-','-','-','-','-','-'",
             strings.energy : "6"
         }
-        treatment_type = 'not VMAT'
         self.assertEqual(evaluate_parameters(passing_parameters, truth_table, case), self.pass_evaluation)
 
     def test_case_4(self): 
@@ -235,7 +231,6 @@ class TestEvaluation(unittest.TestCase):
             strings.meas : "'3','5','-','-','-','-','-','-','-'",
             strings.energy : "6"
         }
-        treatment_type = 'not VMAT'
         self.assertEqual(evaluate_parameters(passing_parameters, truth_table, case), self.pass_evaluation)
         
     def test_case_5(self): 
@@ -255,7 +250,6 @@ class TestEvaluation(unittest.TestCase):
             strings.meas : "'11','12','13','14','15','18','19','20','21'",
             strings.energy : "6"
         }
-        treatment_type = 'not VMAT'
         self.assertEqual(evaluate_parameters(passing_parameters, truth_table, case), self.pass_evaluation)
 
     def test_case_6(self): 
@@ -275,7 +269,6 @@ class TestEvaluation(unittest.TestCase):
             strings.meas : "'11','12','13','14','15','16','17','-','-'",
             strings.energy : "6"
         }
-        treatment_type = 'not VMAT'
         self.assertEqual(evaluate_parameters(passing_parameters, truth_table, case), self.pass_evaluation)
 
     def test_case_7(self): 
@@ -295,7 +288,6 @@ class TestEvaluation(unittest.TestCase):
             strings.meas : "'11','12','13','14','15','16','17','-','-'",
             strings.energy : "6"
         }
-        treatment_type = 'not VMAT'
         self.assertEqual(evaluate_parameters(passing_parameters, truth_table, case), self.pass_evaluation)
 
     def test_case_8(self): 
@@ -315,7 +307,6 @@ class TestEvaluation(unittest.TestCase):
             strings.meas : "'11','12','13','14','15','17','18','-','-'",
             strings.energy : "6"
         }
-        treatment_type = 'not VMAT'
         self.assertEqual(evaluate_parameters(passing_parameters, truth_table, case), self.pass_evaluation)
 
     def test_case_9(self): 
@@ -335,7 +326,6 @@ class TestEvaluation(unittest.TestCase):
             strings.meas : "'SoftTiss_3','SoftTiss_2','SoftTiss_1','-','-','-','-','-','-'",
             strings.energy : "6"
         }
-        treatment_type = 'not VMAT'
         self.assertEqual(evaluate_parameters(passing_parameters, truth_table, case), self.pass_evaluation)
 
     def test_case_10(self): 
@@ -355,7 +345,6 @@ class TestEvaluation(unittest.TestCase):
             strings.meas : "'SoftTiss','-','-','-','-','-','-','-','-'",
             strings.energy : "6"
         }
-        treatment_type = 'not VMAT'
         self.assertEqual(evaluate_parameters(passing_parameters, truth_table, case), self.pass_evaluation)
 
 
@@ -376,7 +365,6 @@ class TestEvaluation(unittest.TestCase):
             strings.meas : "'Spine2Inf','Spine1Sup','Cord','-','-','-','-','-','-'",
             strings.energy : "6"
         }
-        treatment_type = 'not VMAT'
         self.assertEqual(evaluate_parameters(passing_parameters, truth_table, case), self.pass_evaluation)
 
     def test_case_12(self): 
@@ -396,7 +384,6 @@ class TestEvaluation(unittest.TestCase):
             strings.meas : "'Lung','-','-','-','-','-','-','-','-'",
             strings.energy : "6"
         }
-        treatment_type = 'not VMAT'
         self.assertEqual(evaluate_parameters(passing_parameters, truth_table, case), self.pass_evaluation)
 
     def test_case_13(self): 
@@ -416,7 +403,6 @@ class TestEvaluation(unittest.TestCase):
             strings.meas : "'1_3','4_3','-','-','-','-','-','-','-'",
             strings.energy : "6"
         }
-        treatment_type = 'not VMAT'
         self.assertEqual(evaluate_parameters(passing_parameters, truth_table, case), self.pass_evaluation)
 
 
@@ -437,7 +423,6 @@ class TestEvaluation(unittest.TestCase):
             strings.meas : "'1_1.5','4_1.5','-','-','-','-','-','-','-'",
             strings.energy : "6"
         }
-        treatment_type = 'not VMAT'
         self.assertEqual(evaluate_parameters(passing_parameters, truth_table, case), self.pass_evaluation)
 
 
@@ -458,7 +443,6 @@ class TestEvaluation(unittest.TestCase):
             strings.meas : "'1','3','-','-','-','-','-','-','-'",
             strings.energy : "6"
         }
-        treatment_type = 'not VMAT'
         self.assertEqual(evaluate_parameters(passing_parameters, truth_table, case), self.pass_evaluation)
 
     def test_case_16(self): 
@@ -478,7 +462,6 @@ class TestEvaluation(unittest.TestCase):
             strings.meas : "'1','3','-','-','-','-','-','-','-'",
             strings.energy : "6"
         }
-        treatment_type = 'not VMAT'
         self.assertEqual(evaluate_parameters(passing_parameters, truth_table, case), self.pass_evaluation)
 
     def test_case_17(self): 
@@ -498,7 +481,6 @@ class TestEvaluation(unittest.TestCase):
             strings.meas : "'1','2','3','-','-','-','-','-','-'",
             strings.energy : "6"
         }
-        treatment_type = 'not VMAT'
         self.assertEqual(evaluate_parameters(passing_parameters, truth_table, case), self.pass_evaluation)
 
 if __name__ == '__main__' : 
