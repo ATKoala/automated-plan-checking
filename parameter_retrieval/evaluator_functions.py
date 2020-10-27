@@ -82,8 +82,9 @@ def _evaluate_wedge(param_value, table_value, **kwargs):
         return strings.PASS if table_value == param_value else strings.FAIL
 
 def _evaluate_prescription_dose(param_value, table_value, **kwargs):
+    prescription_items = table_value.split("/")
     for i in range(0, 3):
-        if table_value.split("/")[i] != strings.ANY_VALUE and table_value.split("/")[i] != param_value.split("/")[i]:
+        if prescription_items[i] != strings.ANY_VALUE and prescription_items[i] != prescription_items[i]:
             return strings.FAIL
     return strings.PASS
 

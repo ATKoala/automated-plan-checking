@@ -5,4 +5,4 @@
 
 default_input_folder = data/Input
 default_output_folder = Reports
-truth_table_file = data/truth_table_example.csv
+truth_table_file = data/truth_table_lvl3_example.csv
