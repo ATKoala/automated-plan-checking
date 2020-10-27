@@ -104,24 +104,23 @@ Run a particular test (i.e prescription dose) with `python -m unittest test_para
 ## Changelog
 
 ### Sprint 2
-More error handling[#21]
-Field size parameter implemented[#20]
-Refactor[#19]
-Strings Module[#18]
-Properties File[#17]
-VMAT pass/fail]
-Truth table standardization[#14]
-Input truth table[#13]
-Add batch processing[#11]
-More informative output[#10]
+More error handling[#21](#21)
+Field size parameter implemented[#20](#20)
+Refactor[#19](#19)
+Strings Module[#18](#18)
+Properties File[#17](#17)
+Truth table standardization[#14](#14)
+Input truth table[#13](#13)
+Add batch processing[#11](#11)
+More informative output[#10](#10)
 
 ### Sprint 1
 
-Modularize parameter extraction[#9]
-Unit Tests[#8]
-Nominal Beam Energy[#4]
-Command line args[#3]
-Total Prescription Dose[#2]
+Modularize parameter extraction[#9](#9)
+Unit Tests[#8](#8)
+Nominal Beam Energy[#4](#7)
+Command line args[#3](#3)
+Total Prescription Dose[#2](#2)
 SSD (initial commit)
 Number of fractions (initial commit)
 Gantry Angle (initial commit)
