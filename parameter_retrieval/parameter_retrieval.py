@@ -11,9 +11,7 @@ from .evaluator_functions import evaluator_functions
 # We are mostly using parameters from the first item of Sequences; is this ok?  
 first_sequence_item = 0
 
-def extract_parameters(filepath, case):
-    dataset = dicom.read_file(filepath, force=True)
-    
+def extract_parameters(dataset, case):
     # define a list of parameters that need to be found
     parameters = [strings.mode, strings.prescription_dose_slash_fractions, strings.prescription_point, strings.isocenter_point, strings.override, strings.collimator,
                   strings.gantry, strings.SSD, strings.couch, strings.field_size, strings.wedge, strings.meas, strings.energy]
@@ -45,6 +43,7 @@ def evaluate_parameters(parameter_values, truth_table, case):
     }
     #iterate through each parameter you want to check
     for param in parameter_values:
+        #print(param)
         # if the parameter_values[param] has not been extracted we cant determine PASS/FAIL
         # in these instances we simply return the message to indicate it has not been implemented
         if parameter_values[param] == strings.NOT_IMPLEMENTED or parameter_values[param] is False:

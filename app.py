@@ -6,6 +6,7 @@ The extractor result is then passed to the outputter.
 import os
 import argparse
 import strings
+import pydicom as dicom
 from pathlib import Path
 from parameter_retrieval.parameter_retrieval import extract_parameters, evaluate_parameters
 from outputter import output
@@ -32,8 +33,6 @@ def main():
         os.mkdir(output)
 
     # Look for the given file or files or directories (aka folders) and process them
-    # TODO error handling for unexpected inputs for each case 
-    #       - leave it until after we decide on which input methods to keep 
     for location in inputs:
         # Check if input is [file,case] [file,case] ... format
         comma_case = None
@@ -63,8 +62,14 @@ def process_dicom(location, destination, output_format, case_number, truth_table
         except ValueError:
             print("Case must be an integer!")
 
+    dataset = dicom.read_file(location, force=True)
+
+    # Ensure the dicom that we want to process is a plan file
+    if dataset.Modality is not "RTPLAN":
+        return
+
     # Extract and evaluate the dicom 
-    parameters = extract_parameters(location, case_number)
+    parameters = extract_parameters(dataset, case_number)
     evaluations = evaluate_parameters(parameters, truth_table, case_number)
 
     # solutions == the truth table values for the given case

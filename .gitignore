@@ -2,7 +2,7 @@ Documents/Output
 Reports/
 .idea/
 .vscode/
-Resources/override
+data/override
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
