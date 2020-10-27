@@ -8,7 +8,7 @@ See https://docs.python.org/3/library/unittest.html for more information about u
 - TestEvaluation is a collection of tests on the parameter evaluation: given a set of parameters, 
    it verifies that the pass/fail results are as expected
 
-The 2 DICOM files tested are included in the Resources subdirectory.
+The 2 DICOM files tested are included in the data subdirectory.
 The correct values for each test are derived from the corresponding pdf reports in each of IMRT and VMAT directories (7a.pdf, 7b.pdf).
 
 Basic method to run all tests: `python -m unittest`
@@ -25,7 +25,7 @@ class TestIMRTExtractionValues(unittest.TestCase):
     @classmethod
     def setUpClass(self): 
         # We use the extraction function once here and inspect the results in the tests below
-        self.extracted = extract_parameters('./Resources/Input/YellowLvlIII_7a.dcm', 7)
+        self.extracted = extract_parameters('./data/Input/YellowLvlIII_7a.dcm', 7)
 
     def test_field_size(self):
         self.assertEqual(self.extracted['field size'], '10x10')
@@ -60,7 +60,7 @@ class TestVMATExtractionValues(unittest.TestCase):
     @classmethod
     def setUpClass(self): 
         # We use the extraction function once here and inspect the results in the tests below
-        self.extracted, _ = extract_parameters('./Resources/Input/YellowLvlIII_7b.dcm', 7)
+        self.extracted = extract_parameters('./data/Input/YellowLvlIII_7b.dcm', 7)
 
     def test_prescription_dose(self):
         # test return 50/25/MU
@@ -140,8 +140,9 @@ class TestEvaluation(unittest.TestCase):
     def setUpClass(self): 
         # If all parameters pass, evaluate_parameters() should return this.
         # We'll use this to compare with the actual results in our tests below
+
         self.pass_evaluation = {
-            strings.mode : strings.PASS,
+            strings.mode : strings.NOT_APPLICABLE,
             strings.prescription_dose_slash_fractions : strings.PASS,
             strings.prescription_point : strings.PASS,
             strings.isocenter_point : strings.PASS,
@@ -153,7 +154,7 @@ class TestEvaluation(unittest.TestCase):
             strings.field_size : strings.PASS,
             strings.wedge : strings.PASS,
             strings.meas : strings.PASS,
-            strings.energy : "N/A" #strings.PASS
+            strings.energy : "N/A" 
         }
 
     def test_case_1(self): 
