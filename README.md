@@ -72,7 +72,7 @@ The goal of this project and our clients want our team to achieve is to create a
 
 ### Architecture
 
-[Architecture](https://github.com/SuryadiTjandra/automated-plan-checking/blob/master/docs/atkoala-Architecture-271020-1313-2124.pdf) of the project, exported from Confluence. It includes components of the program and system design.
+[Architecture](https://github.com/SuryadiTjandra/automated-plan-checking/blob/master/docs/docs/System-Design-and-Architecture.pdf) of the project, exported from Confluence. It includes components of the program and system design.
 
 ### Test cases
 
@@ -141,11 +141,11 @@ Run a particular test (i.e prescription dose) with `python -m unittest test_para
 
 ### Sprint 1
 
-- Modularize parameter extraction[#9](#9)
-- Unit Tests[#8](#8)
-- Nominal Beam Energy[#4](#7)
-- Command line args[#3](#3)
-- Total Prescription Dose[#2](#2)
+- Modularize parameter extraction ([#9](https://github.com/SuryadiTjandra/automated-plan-checking/pull/9))
+- Unit Tests ([#8](https://github.com/SuryadiTjandra/automated-plan-checking/pull/8))
+- Nominal Beam Energy ([#4](https://github.com/SuryadiTjandra/automated-plan-checking/pull/4))
+- Command line args ([#3](https://github.com/SuryadiTjandra/automated-plan-checking/pull/3))
+- Total Prescription Dose ([#2](https://github.com/SuryadiTjandra/automated-plan-checking/pull/2))
 - SSD (initial commit)
 - Number of fractions (initial commit)
 - Gantry Angle (initial commit)
