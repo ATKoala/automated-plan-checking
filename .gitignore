@@ -2,6 +2,10 @@ Documents/Output
 Reports/
 .idea/
 .vscode/
+<<<<<<< Updated upstream
+=======
+override.py
+>>>>>>> Stashed changes
 Resources/override
 
 # Byte-compiled / optimized / DLL files
