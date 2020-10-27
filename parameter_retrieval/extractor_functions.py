@@ -4,9 +4,25 @@ first_sequence_item = 0
 
 def _extract_mode(dataset):
     #Test whether the gantry angle changes within a single beam. If so, that indicates it is a VMAT file
-    gantry_angle_changed = int(dataset.BeamSequence[0].ControlPointSequence[0].GantryAngle) != \
+
+    # For case 6,7,8, the possibilities are IMRT, VMAT and TOMO
+    # Introduction of https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5665865/ shows tomo moves 
+    moving_gantry = int(dataset.BeamSequence[0].ControlPointSequence[0].GantryAngle) != \
                             int(dataset.BeamSequence[0].ControlPointSequence[1].GantryAngle)
-    return strings.VMAT if gantry_angle_changed else strings.IMRT
+
+    # One beam will be the setup beam, which is not counted
+    number_of_beams = len(dataset.BeamSequence) - 1
+
+    # If IMRT there should be 5 static gantry positions (5 beams) for each case, and the intensity of the 
+    # beam is modulated by moving the multi leaf collimator (MLC) to different control points within each 
+    # gantry angle. If VMAT the gantry and the MLCs all move at the same time so each control point has 
+    # both gantry moves and MLC moves.
+    #  - Andrew Alvez, 2020
+    if moving_gantry:
+        mode = strings.VMAT
+    if not moving_gantry and number_of_beams is 5:
+        mode = strings.IMRT
+    return mode
 
 def _extract_prescription_dose(dataset):
     # Total Prescription Dose
@@ -161,7 +177,7 @@ def to_be_implemented(dataset):
     return strings.NOT_IMPLEMENTED
 
 extractor_functions = {
-    strings.mode_req                : _extract_mode,
+    strings.mode                    : _extract_mode,
     strings.prescription_dose_slash_fractions     : _extract_prescription_dose,
     strings.prescription_point      : to_be_implemented,
     strings.isocenter_point         : to_be_implemented,

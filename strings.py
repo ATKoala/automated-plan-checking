@@ -13,7 +13,7 @@ What kind of strings go in here:
 '''
 case = "case"
 NOT_IMPLEMENTED= "NOT IMPLEMENTED"
-mode_req = "mode req"
+mode = "mode"
 prescription_dose_slash_fractions = "prescription dose/#"
 prescription_point = "prescription point"
 isocenter_point = "isocentre point"

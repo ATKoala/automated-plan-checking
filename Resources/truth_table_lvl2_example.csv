@@ -1,4 +1,4 @@
-case,mode req,prescription dose/#,prescription point,isocentre point,override,collimator,gantry,SSD,couch,field size,wedge,meas,energy
+case,mode,prescription dose/#,prescription point,isocentre point,override,collimator,gantry,SSD,couch,field size,wedge,meas,energy
 1,FALSE,10/-/-,2,2,-,0,0,90,-,10 (SI) x 10 (LR),no wedge,-,"6,6FFF,10,10FFF,18"
 2,FALSE,2/-/-,2,2,-,0,0,90,-,20 (SI) x 20 (LR),no wedge,-,"6,6FFF,10,10FFF,18"
 3,FALSE,2/-/-,2,2,-,0,0,85,-,10 (SI) x 10 (LR),no wedge,-,"6,6FFF,10,10FFF,18"
