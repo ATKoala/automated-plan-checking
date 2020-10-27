@@ -67,7 +67,7 @@ The goal of this project and our clients want our team to achieve is to create a
 [Test cases](https://github.com/SuryadiTjandra/automated-plan-checking/blob/master/tests/atkoala-Test-271020-0054-2114.pdf) of the project ,exported from Confluence.
 
 ## System requirements
-- **Python 3** or above
+- **Python 3.6** or above
 - **pydicom** (can be installed with `pip install pydicom`)
 - **pandas** (can be installed with `pip install pandas`)
 
@@ -85,25 +85,33 @@ Usage:
   - `python app.py --inputs Resources/Input`
 - Multiple dicoms or folders in any order
   - `python app.py --inputs FOLDER1 FOLDER2 FILE1 FILE2 FOLDER3 (etc...)`
+  - Example: - `python app.py --inputs Resources/Input OTHER_DICOM_FOLDER --format csv --case_number 6`
 - Specify case number for each input item
   - `python app.py --inputs INPUT1,CASE1 INPUT2,CASE2`
+  - Example: - `python app.py --inputs Resources/Input/YellowLvlIII_7a.dcm,1 Resources/Input/YellowLvlIII_7b.dcm,2 --format csv`
 - Specify case for all inputs
   - `python app.py --inputs INPUTS --case_number 6`
+  - Example: - `python app.py --inputs Resources/Input --format csv --case_number 6`
 - Specify a custom truth table (default uses level 3 table)
   - `python app.py --inputs INPUTS --truth_table truth_table_example.csv`
-More details can be found in the [User guide](https://github.com/SuryadiTjandra/automated-plan-checking/blob/master/docs/atkoala-UserGuide-271020-1338-2126.pdf).
+  - Example: - `python app.py --inputs Resources/Input --format csv --truth_table truth_table_example.csv`
+
+"--format csv" can be added in any command as the argument, generating csv output file. More details can be found in the [User guide](https://github.com/SuryadiTjandra/automated-plan-checking/blob/master/docs/atkoala-UserGuide-271020-1338-2126.pdf).
 
 ## Testing
+Run the tests with `python -m unittest`
 
-Run all tests with `python -m unittest`
+Run tests for a particular class with `python -m unittest test_parameter_retrieval.ClassName`, where `<ClassName>` could be replaced by `TestIMRTExtractionValues`.
+ - e.g `python -m unittest test_parameter_retrieval.TestIMRTExtractionValues`
 
-Run tests for a particular class with `python -m unittest test_parameter_retrieval.<ClassName>`, where `<ClassName>` could be replaced by `TestIMRTExtractionValues`.
+Run a particular test (i.e prescription dose) with `python -m unittest test_parameter_retrieval.ClassName.FunctionName`, where `<ClassName>` and `<FunctionName>` could be `TestIMRTExtractionValues` and `test_total_prescription_dose`, respectively.
+ - e.g `python -m unittest test_parameter_retrieval.TestIMRTExtractionValues.test_total_prescription_dose`
 
-Run a particular test (i.e prescription dose) with `python -m unittest test_parameter_retrieval.<ClassName>.<FunctionName>` where `<ClassName>` and `<FunctionName>` could be `TestIMRTExtractionValues` and `test_total_prescription_dose`, respectively.
 
 ## Changelog
 
 ### Sprint 2
+
 More error handling ([#21)](https://github.com/SuryadiTjandra/automated-plan-checking/pull/21))
 
 Field size parameter implemented ([#20)](https://github.com/SuryadiTjandra/automated-plan-checking/pull/20))
@@ -126,20 +134,12 @@ More informative output ([#10](https://github.com/SuryadiTjandra/automated-plan-
 
 ### Sprint 1
 
-Modularize parameter extraction ([#9](https://github.com/SuryadiTjandra/automated-plan-checking/pull/9))
-
-Unit Tests ([#8](https://github.com/SuryadiTjandra/automated-plan-checking/pull/8))
-
-Nominal Beam Energy ([#4](https://github.com/SuryadiTjandra/automated-plan-checking/pull/7))
-
-Command line args ([#3](https://github.com/SuryadiTjandra/automated-plan-checking/pull/3))
-
-Total Prescription Dose ([#2](https://github.com/SuryadiTjandra/automated-plan-checking/pull/2))
-
-SSD (initial commit)
-
-Number of fractions (initial commit)
-
-Gantry Angle (initial commit)
-
-Collimator angle (initial commit)
+- Modularize parameter extraction[#9](#9)
+- Unit Tests[#8](#8)
+- Nominal Beam Energy[#4](#7)
+- Command line args[#3](#3)
+- Total Prescription Dose[#2](#2)
+- SSD (initial commit)
+- Number of fractions (initial commit)
+- Gantry Angle (initial commit)
+- Collimator angle (initial commit)

@@ -108,19 +108,23 @@ def _evaluate_energy(param_value, table_value, **kwargs):
         return "N/A"
 
 def _evaluate_field_size(param_value, table_value, **kwargs):
-    if param_value =="Not Extracted":
-        return "NOT IMPLEMENTED FOR MLCX/MLCY"
-    else:
-        if table_value == '-':
-            return strings.PASS
-        else:
-            truth_table_ssd_list = table_value.split(',')
-            i = 0
-            for i in range(len(truth_table_ssd_list)):
-                if truth_table_ssd_list[i] != '?':
-                    if param_value == truth_table_ssd_list[i]:
-                        return strings.PASS
-            return strings.FAIL
+    if table_value == strings.ANY_VALUE:
+        return strings.PASS
+    truth_table_ssd_list = table_value.split(',')
+    param_value=param_value.split(',')
+    #print(len(truth_table_ssd_list))
+    #print(param_value)
+    if len(truth_table_ssd_list) != len(param_value):
+        return "Inconsistent beam number"
+
+    i = 0
+    for i in range(len(truth_table_ssd_list)):
+        if truth_table_ssd_list[i] != '?':
+            if param_value[i]=="Not Extracted":
+                return "Not Implemented For MLCX/MLCY"
+            if truth_table_ssd_list[i]!= param_value[i]:
+                return strings.FAIL
+    return strings.PASS
 
 
 def _evaluate_default(param_value, table_value, **kwargs):
