@@ -108,11 +108,11 @@ Test code is in `test_parameter_retrieval.py`.
 
 Run the tests with `python -m unittest`
 
-Run tests for a particular class with `python -m unittest test_parameter_retrieval.ClassName`
+Run tests for a particular class with `python -m unittest test_parameter_retrieval.ClassName`, where `<ClassName>` could be replaced by `TestIMRTExtractionValues`.
 
 e.g `python -m unittest test_parameter_retrieval.TestIMRTExtractionValues`
 
-Run a particular test (i.e prescription dose) with `python -m unittest test_parameter_retrieval.ClassName.FunctionName`
+Run a particular test (i.e prescription dose) with `python -m unittest test_parameter_retrieval.ClassName.FunctionName`, where `<ClassName>` and `<FunctionName>` could be `TestIMRTExtractionValues` and `test_total_prescription_dose`, respectively.
 
 e.g. `python -m unittest test_parameter_retrieval.TestIMRTExtractionValues.test_total_prescription_dose`
 
