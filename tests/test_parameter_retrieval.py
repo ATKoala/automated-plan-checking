@@ -46,7 +46,7 @@ class TestIMRTExtractionValues(unittest.TestCase):
         self.assertEqual(self.extracted[strings.SSD], [85.19,89.42,92.67,89.57,85.19])
 
     def test_energy(self): 
-        self.assertEqual(self.extracted[strings.energy], 6.0)
+        self.assertEqual(self.extracted[strings.energy], '6')
 
     def test_wedge_angles(self): 
         # Note :  extraction function returns 0,0,0,0,0 for the 5 beams respectively
@@ -81,7 +81,7 @@ class TestVMATExtractionValues(unittest.TestCase):
         self.assertEqual(self.extracted[strings.SSD], [87.17])
 
     def test_energy(self): 
-        self.assertEqual(self.extracted[strings.energy], 6.0)
+        self.assertEqual(self.extracted[strings.energy], '6')
 
     def test_wedge_angles(self): 
         # Note :  extraction function returns 0,0,0,0,0 for the 5 beams respectively
@@ -153,7 +153,7 @@ class TestEvaluation(unittest.TestCase):
             strings.field_size : strings.PASS,
             strings.wedge : strings.PASS,
             strings.meas : strings.PASS,
-            strings.energy : strings.PASS
+            strings.energy : "N/A" #strings.PASS
         }
 
     def test_case_1(self): 
