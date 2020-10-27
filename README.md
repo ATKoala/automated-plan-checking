@@ -101,10 +101,6 @@ Run tests for a particular class with `python -m unittest test_parameter_retriev
 
 Run a particular test (i.e prescription dose) with `python -m unittest test_parameter_retrieval.<ClassName>.<FunctionName>` where `<ClassName>` and `<FunctionName>` could be `TestIMRTExtractionValues` and `test_total_prescription_dose`, respectively.
 
-## Features
-
-...
-
 ## Documentation Overview
 
 Full project documentation generated from a Confluence space can be found in [docs](docs) folder
