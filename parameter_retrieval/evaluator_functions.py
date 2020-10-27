@@ -115,17 +115,23 @@ def _evaluate_field_size(param_value, table_value, **kwargs):
     param_value=param_value.split(',')
     #print(len(truth_table_ssd_list))
     #print(param_value)
-    if len(truth_table_ssd_list) != len(param_value):
-        return "Inconsistent beam number"
 
-    i = 0
-    for i in range(len(truth_table_ssd_list)):
-        if truth_table_ssd_list[i] != '?':
-            if param_value[i]=="Not Extracted":
+    if len(truth_table_ssd_list) == 1:
+        for i in range(len(param_value)):
+            if param_value[i] == "Not Extracted":
                 return "Not Implemented For MLCX/MLCY"
-            if truth_table_ssd_list[i]!= param_value[i]:
+            if truth_table_ssd_list[0] != param_value[i]:
                 return strings.FAIL
-    return strings.PASS
+        return strings.PASS
+    else:
+        i = 0
+        for i in range(len(truth_table_ssd_list)):
+            if truth_table_ssd_list[i] != '?':
+                if param_value[i]=="Not Extracted":
+                    return "Not Implemented For MLCX/MLCY"
+                if truth_table_ssd_list[i]!= param_value[i]:
+                    return strings.FAIL
+        return strings.PASS
 
 
 def _evaluate_default(param_value, table_value, **kwargs):

@@ -122,7 +122,7 @@ def _extract_field_size(dataset):
 
     for beam in beams:
         #print(beam)
-        #print("/n/n/n/n/n/")
+        #print("\n\n")
         beam_type_number = len(beam.ControlPointSequence[0].BeamLimitingDevicePositionSequence)
         # print("\n" + str(beam_type_number) + " types of device in total:")
 
@@ -158,6 +158,7 @@ def _extract_field_size(dataset):
                 if length_x==0 or length_y==0:
                     field_size_list.append("Not Extracted")
 
+    #print(field_size_list)
     return ','.join(field_size_list)
 
 
