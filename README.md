@@ -16,6 +16,7 @@
 
 [**Installation and Usage**](#installation-and-usage)
 
+- [**Truth table specification**](#truth-table-specification)
 - [**Testing**](#testing)
   
 [**Changelog**](#changelog)
@@ -110,6 +111,36 @@ Usage:
   - Example: - `python app.py --inputs Resources/Input --format csv --truth_table truth_table_example.csv`
 
 "--format csv" can be added in any command as the argument, generating csv output file. More details can be found in the [User guide](https://github.com/SuryadiTjandra/automated-plan-checking/blob/master/docs/atkoala-UserGuide-271020-1338-2126.pdf).
+
+### Truth table specification
+
+- Must be in csv format.
+- Column headings must be standard parameters (case, mode, prescription dose ...).
+- There are specified formats for Gantry angle, SSD, Prescripton Dose/# Fractions, Wedge Angle, Collimator, and Field Size.
+- Mode and Energy are not evaluated with a pass/fail value.
+- Other parameters (Prescription Point, Isocenter, Override, Couch, Meas.) have not beem implemented, therefore no formats have been specified yet.
+- Unless otherwise specified, there should be no spaces in any truth table entries
+- Gantry angle:
+  - dash (-) indicating all values pass
+  - numbers separated by commas to indicate the gantry of each beam
+- SSD:
+  - dash (-) indicating all values pass
+  - numbers separated by commas to indicate the SSD of each beam. Any number can be replaced with a question mark (?) for a specific beam to indicate it accepts any value.
+- Prescription Dose/#:
+  - Prescription dose followed by a slash followed by the number of fractions followed by dosimeter unit (e.g. 2/1/-)
+  - The dosimeter unit can be dash (-) if all units are accepted, otherwise it can specify MU
+- Wedge Angle:
+  - Comma separated string of numbers/no wedge
+  - "no wedge" has a space inbetween
+- Collimator:
+  - number, dash or asterix number
+  - asterix means the value must not be the following number
+- Field Size
+  - dash (-) indicating all values pass
+  - A single field size can be specified with length by width (e.g. 10x10)
+  - Multiple field sizes should be separated by commas, indicating the field size of each beam
+
+Sample truth tables (for [level 2](data/truth_table_example.csv) and [level 3](data/truth_table_lvl2_example.csv)) 
 
 ## Testing
 
