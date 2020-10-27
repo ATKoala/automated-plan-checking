@@ -90,13 +90,13 @@ Usage Examples:
   - Example: - `python app.py --inputs Resources/Input OTHER_DICOM_FOLDER --format csv --case_number 6`
 - Specify case number for each input item
   - `python app.py --inputs INPUT1,CASE1 INPUT2,CASE2`
- - Example: - `python app.py --inputs Resources/Input/YellowLvlIII_7a.dcm,1 Resources/Input/YellowLvlIII_7b.dcm,2 --format csv`
+  - Example: - `python app.py --inputs Resources/Input/YellowLvlIII_7a.dcm,1 Resources/Input/YellowLvlIII_7b.dcm,2 --format csv`
 - Specify case for all inputs
   - `python app.py --inputs INPUTS --case_number 6`
- - Example: - `python app.py --inputs Resources/Input --format csv --case_number 6`
+  - Example: - `python app.py --inputs Resources/Input --format csv --case_number 6`
 - Specify a custom truth table (default uses level 3 table)
   - `python app.py --inputs INPUTS --truth_table truth_table_example.csv`
- - Example: - `python app.py --inputs Resources/Input --format csv --truth_table truth_table_example.csv`
+  - Example: - `python app.py --inputs Resources/Input --format csv --truth_table truth_table_example.csv`
 
 "--format csv" can be added in any command as the argument, generating csv output file. More details can be found in the [User guide](https://github.com/SuryadiTjandra/automated-plan-checking/blob/master/docs/atkoala-UserGuide-271020-1338-2126.pdf).
 
