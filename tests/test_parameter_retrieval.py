@@ -28,9 +28,6 @@ class TestIMRTExtractionValues(unittest.TestCase):
         dataset = pydicom.dcmread('./data/Input/YellowLvlIII_7a.dcm', force=True)
         self.extracted = extract_parameters(dataset, 7)
 
-    def test_field_size(self):
-        self.assertEqual(self.extracted['field size'], '10x10')
-
     def test_prescription_dose(self): 
         self.assertEqual(self.extracted[strings.prescription_dose_slash_fractions], '50/25/-')
 
@@ -41,18 +38,11 @@ class TestIMRTExtractionValues(unittest.TestCase):
         self.assertEqual(self.extracted[strings.gantry], '150,60,0,300,210')
 
     def test_ssd(self): 
-        # Notes on extraction output for this test
-        # - The pdf has SSDs as 85.19, 89.42, 92.67 89.57, 85.19 for the beams
-        # - But, currently testing using the string value for compatability with existing code
         self.assertEqual(self.extracted[strings.SSD], [85.19,89.42,92.67,89.57,85.19])
 
     def test_energy(self): 
         self.assertEqual(self.extracted[strings.energy], '6')
 
-    def test_wedge_angles(self): 
-        # Note :  extraction function returns 0,0,0,0,0 for the 5 beams respectively
-        #       but can't find this parameter through the pdf, so it's improper to test it.
-        pass
 
 class TestVMATExtractionValues(unittest.TestCase): 
     ''' Tests for verifying the correct values are extracted
@@ -71,10 +61,6 @@ class TestVMATExtractionValues(unittest.TestCase):
     def test_collimator(self): 
         self.assertEqual(self.extracted[strings.collimator], '355')
 
-    # can't confirm this in report
-    # def test_field_size(self):
-    #     self.assertEqual(self.extracted['field size'], '10x10')
-
     def test_gantry_angle(self):
         # test return big array 180->360->180->0->180
         self.assertEqual(self.extracted[strings.gantry], '180/360') 
@@ -84,11 +70,6 @@ class TestVMATExtractionValues(unittest.TestCase):
 
     def test_energy(self): 
         self.assertEqual(self.extracted[strings.energy], '6')
-
-    def test_wedge_angles(self): 
-        # Note :  extraction function returns 0,0,0,0,0 for the 5 beams respectively
-        #       but can't find this parameter through the pdf, so it's improper to test it.
-        pass
 
 truth_table = {
     strings.case :  ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17'],
@@ -136,7 +117,6 @@ class TestEvaluation(unittest.TestCase):
     Also, the correct answers are derived from the truth table. 
 
     Note that values of '-' are used for parameters where any value should be accepted.
-    Note that modalities are IMRT for all cases; TODO check if that's ok.
     '''
     @classmethod
     def setUpClass(self): 
@@ -156,7 +136,7 @@ class TestEvaluation(unittest.TestCase):
             strings.field_size : strings.PASS,
             strings.wedge : strings.PASS,
             strings.meas : strings.PASS,
-            strings.energy : "N/A" 
+            strings.energy : strings.NOT_APPLICABLE
         }
 
     def test_case_1(self): 
@@ -165,7 +145,6 @@ class TestEvaluation(unittest.TestCase):
             strings.mode : 'False',
             strings.prescription_dose_slash_fractions : '2/-/-',
             strings.prescription_point : '1 or 3',
-                #TODO Think this should work for either 1 or 3, not the string "1 or 3"? 
             strings.isocenter_point : 'surf',
             strings.override : 'bone',
             strings.collimator : '0',

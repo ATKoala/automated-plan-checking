@@ -102,10 +102,7 @@ def _evaluate_collimator(param_value, table_value, **kwargs):
     return strings.PASS if result else strings.FAIL
 
 def _evaluate_energy(param_value, table_value, **kwargs):
-    if param_value in ["6","6FFF","10","10FFF","18"]:
-        return "N/A"
-    else:
-        return "N/A"
+    return strings.NOT_APPLICABLE
 
 def _evaluate_field_size(param_value, table_value, **kwargs):
     if table_value == strings.ANY_VALUE:
