@@ -13,7 +13,7 @@ What kind of strings go in here:
 '''
 case = "case"
 NOT_IMPLEMENTED= "NOT IMPLEMENTED"
-mode_req = "mode req"
+mode = "mode"
 prescription_dose_slash_fractions = "prescription dose/#"
 prescription_point = "prescription point"
 isocenter_point = "isocentre point"
@@ -39,4 +39,4 @@ no_wedge = "no wedge"
 STANDARD_FLUENCE = "STANDARD" # When fluence mode is listed as "STANDARD" in dicom, it is not FFF
 FFF = "FFF"
 ANY_VALUE = "-" # Truth table uses hyphen to denote any value is acceptable
-
+NOT_APPLICABLE = "NOT APPLICABLE"

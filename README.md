@@ -111,15 +111,26 @@ Run a particular test (i.e prescription dose) with `python -m unittest test_para
 ## Changelog
 
 ### Sprint 2
-- More error handling[#21](#21)
-- Field size parameter implemented[#20](#20)
-- Refactor[#19](#19)
-- Strings Module[#18](#18)
-- Properties File[#17](#17)
-- Truth table standardization[#14](#14)
-- Input truth table[#13](#13)
-- Add batch processing[#11](#11)
-- More informative output[#10](#10)
+
+More error handling ([#21)](https://github.com/SuryadiTjandra/automated-plan-checking/pull/21))
+
+Field size parameter implemented ([#20)](https://github.com/SuryadiTjandra/automated-plan-checking/pull/20))
+
+Mode parameter ([#20)](https://github.com/SuryadiTjandra/automated-plan-checking/pull/20))
+
+Refactor ([#19](https://github.com/SuryadiTjandra/automated-plan-checking/pull/19))
+
+Strings Module ([#18](https://github.com/SuryadiTjandra/automated-plan-checking/pull/18))
+
+Properties File ([#17](https://github.com/SuryadiTjandra/automated-plan-checking/pull/17))
+
+Truth table standardization ([#14](https://github.com/SuryadiTjandra/automated-plan-checking/pull/14))
+
+Input truth table ([#13](https://github.com/SuryadiTjandra/automated-plan-checking/pull/13))
+
+Add batch processing ([#11](https://github.com/SuryadiTjandra/automated-plan-checking/pull/11))
+
+More informative output ([#10](https://github.com/SuryadiTjandra/automated-plan-checking/pull/10))
 
 ### Sprint 1
 

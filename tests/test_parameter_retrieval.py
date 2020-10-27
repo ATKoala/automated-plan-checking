@@ -90,7 +90,7 @@ class TestVMATExtractionValues(unittest.TestCase):
 
 truth_table = {
     strings.case :  ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17'],
-    strings.mode_req :  ['False', 'False', 'False', 'False', 'False', 'True', 'True', 'True', 'False', 'True', 'True',
+    strings.mode :  ['False', 'False', 'False', 'False', 'False', 'True', 'True', 'True', 'False', 'True', 'True',
                 'True', 'True', 'True', 'True', 'True', 'True'],
     strings.prescription_dose_slash_fractions : ['2/-/-', '2/-/-', '2/-/-', '2/-/-', '50/25/-', '50/25/-', '50/25/-', '50/25/-', '900/3/MU', '45/3/-', '24/2/-',
                             '48/4/-', '3/-/-', '3/-/-', '20/-/-', '20/-/-', '20/-/-'],
@@ -141,7 +141,7 @@ class TestEvaluation(unittest.TestCase):
         # If all parameters pass, evaluate_parameters() should return this.
         # We'll use this to compare with the actual results in our tests below
         self.pass_evaluation = {
-            strings.mode_req : strings.PASS,
+            strings.mode : strings.PASS,
             strings.prescription_dose_slash_fractions : strings.PASS,
             strings.prescription_point : strings.PASS,
             strings.isocenter_point : strings.PASS,
@@ -159,7 +159,7 @@ class TestEvaluation(unittest.TestCase):
     def test_case_1(self): 
         case = 1
         passing_parameters = {
-            strings.mode_req : 'False',
+            strings.mode : 'False',
             strings.prescription_dose_slash_fractions : '2/-/-',
             strings.prescription_point : '1 or 3',
                 #TODO Think this should work for either 1 or 3, not the string "1 or 3"? 
@@ -181,7 +181,7 @@ class TestEvaluation(unittest.TestCase):
     def test_case_2(self): 
         case = 2
         passing_parameters = {
-            strings.mode_req : 'False',
+            strings.mode : 'False',
             strings.prescription_dose_slash_fractions : '2/-/-',
             strings.prescription_point : '5',
             strings.isocenter_point : '3',
@@ -201,7 +201,7 @@ class TestEvaluation(unittest.TestCase):
     def test_case_3(self): 
         case = 3
         passing_parameters = {
-            strings.mode_req : 'False',
+            strings.mode : 'False',
             strings.prescription_dose_slash_fractions : '2/-/-',
             strings.prescription_point : '3',
             strings.isocenter_point : '3',
@@ -221,7 +221,7 @@ class TestEvaluation(unittest.TestCase):
     def test_case_4(self): 
         case = 4
         passing_parameters = {
-            strings.mode_req : 'False',
+            strings.mode : 'False',
             strings.prescription_dose_slash_fractions : '2/-/-',
             strings.prescription_point : '3',
             strings.isocenter_point : '3',
@@ -241,7 +241,7 @@ class TestEvaluation(unittest.TestCase):
     def test_case_5(self): 
         case = 5
         passing_parameters = {
-            strings.mode_req : 'False',
+            strings.mode : 'False',
             strings.prescription_dose_slash_fractions : '50/25/-',
             strings.prescription_point : 'chair',
             strings.isocenter_point : '3',
@@ -261,7 +261,7 @@ class TestEvaluation(unittest.TestCase):
     def test_case_6(self): 
         case = 6
         passing_parameters = {
-            strings.mode_req : 'True',
+            strings.mode : 'True',
             strings.prescription_dose_slash_fractions : '50/25/-',
             strings.prescription_point : 'CShape',
             strings.isocenter_point : '3',
@@ -281,7 +281,7 @@ class TestEvaluation(unittest.TestCase):
     def test_case_7(self): 
         case = 7
         passing_parameters = {
-            strings.mode_req : 'True',
+            strings.mode : 'True',
             strings.prescription_dose_slash_fractions : '50/25/-',
             strings.prescription_point : 'CShape',
             strings.isocenter_point : '3',
@@ -301,7 +301,7 @@ class TestEvaluation(unittest.TestCase):
     def test_case_8(self): 
         case = 8
         passing_parameters = {
-            strings.mode_req : 'True',
+            strings.mode : 'True',
             strings.prescription_dose_slash_fractions : '50/25/-',
             strings.prescription_point : 'C8Target',
             strings.isocenter_point : '3',
@@ -321,7 +321,7 @@ class TestEvaluation(unittest.TestCase):
     def test_case_9(self): 
         case = 9
         passing_parameters = {
-            strings.mode_req : 'False',
+            strings.mode : 'False',
             strings.prescription_dose_slash_fractions : '900/3/MU',
             strings.prescription_point : 'C8Target',
             strings.isocenter_point : 'SoftTiss',
@@ -341,7 +341,7 @@ class TestEvaluation(unittest.TestCase):
     def test_case_10(self): 
         case = 10
         passing_parameters = {
-            strings.mode_req : 'True',
+            strings.mode : 'True',
             strings.prescription_dose_slash_fractions : '45/3/-',
             strings.prescription_point : 'SoftTissTarget',
             strings.isocenter_point : 'SoftTiss',
@@ -362,7 +362,7 @@ class TestEvaluation(unittest.TestCase):
     def test_case_11(self): 
         case = 11
         passing_parameters = {
-            strings.mode_req : 'True',
+            strings.mode : 'True',
             strings.prescription_dose_slash_fractions : '24/2/-',
             strings.prescription_point : 'SpineTarget',
             strings.isocenter_point : 'Spine',
@@ -382,7 +382,7 @@ class TestEvaluation(unittest.TestCase):
     def test_case_12(self): 
         case = 12
         passing_parameters = {
-            strings.mode_req : 'True',
+            strings.mode : 'True',
             strings.prescription_dose_slash_fractions : '48/4/-',
             strings.prescription_point : 'LungTarget',
             strings.isocenter_point : 'Lung',
@@ -402,7 +402,7 @@ class TestEvaluation(unittest.TestCase):
     def test_case_13(self): 
         case = 13
         passing_parameters = {
-            strings.mode_req : 'True',
+            strings.mode : 'True',
             strings.prescription_dose_slash_fractions : '3/-/-',
             strings.prescription_point : '1',
             strings.isocenter_point : '1',
@@ -423,7 +423,7 @@ class TestEvaluation(unittest.TestCase):
     def test_case_14(self): 
         case = 14
         passing_parameters = {
-            strings.mode_req : 'True',
+            strings.mode : 'True',
             strings.prescription_dose_slash_fractions : '3/-/-',
             strings.prescription_point : '1',
             strings.isocenter_point : '1',
@@ -444,7 +444,7 @@ class TestEvaluation(unittest.TestCase):
     def test_case_15(self): 
         case = 15
         passing_parameters = {
-            strings.mode_req : 'True',
+            strings.mode : 'True',
             strings.prescription_dose_slash_fractions : '20/-/-',
             strings.prescription_point : 'PTV_c14_c15',
             strings.isocenter_point : '1',
@@ -464,7 +464,7 @@ class TestEvaluation(unittest.TestCase):
     def test_case_16(self): 
         case = 16
         passing_parameters = {
-            strings.mode_req : 'True',
+            strings.mode : 'True',
             strings.prescription_dose_slash_fractions : '20/-/-',
             strings.prescription_point : '-',
             strings.isocenter_point : '-',
@@ -484,7 +484,7 @@ class TestEvaluation(unittest.TestCase):
     def test_case_17(self): 
         case = 17
         passing_parameters = {
-            strings.mode_req : 'True',
+            strings.mode : 'True',
             strings.prescription_dose_slash_fractions : '20/-/-',
             strings.prescription_point : '-',
             strings.isocenter_point : '-',

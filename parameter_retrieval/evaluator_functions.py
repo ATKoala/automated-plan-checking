@@ -69,7 +69,6 @@ def _evaluate_ssd(param_value, table_value, **kwargs):
             i+=1
         return strings.PASS
 
-
 def _evaluate_wedge(param_value, table_value, **kwargs):
 
     for value in table_value.split(","):
@@ -137,8 +136,11 @@ def _evaluate_field_size(param_value, table_value, **kwargs):
 def _evaluate_default(param_value, table_value, **kwargs):
     return strings.PASS if param_value == table_value or table_value == '-' else strings.FAIL
 
+def _no_evaluation(param_value, table_value, **kwargs):
+    return strings.NOT_APPLICABLE
+
 evaluator_functions = {
-    strings.mode_req                : _evaluate_default,
+    strings.mode                    : _no_evaluation,
     strings.prescription_dose_slash_fractions    : _evaluate_prescription_dose,
     strings.prescription_point      : _evaluate_default,
     strings.isocenter_point         : _evaluate_default,

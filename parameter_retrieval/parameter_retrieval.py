@@ -11,27 +11,23 @@ from .evaluator_functions import evaluator_functions
 # We are mostly using parameters from the first item of Sequences; is this ok?  
 first_sequence_item = 0
 
-def extract_parameters(filepath):
+def extract_parameters(filepath, case):
     dataset = dicom.read_file(filepath, force=True)
     
-    # created a variable file_type in circumstances where it is useful to identify whether the file is a VMAT for example
-    # at the moment it does this by identifying wheter the control point index has different gantry angles for different control points of the same beam
-    file_type = _extract_mode(dataset)
-    
     # define a list of parameters that need to be found
-    parameters = [strings.mode_req, strings.prescription_dose_slash_fractions, strings.prescription_point, strings.isocenter_point, strings.override, strings.collimator,
+    parameters = [strings.mode, strings.prescription_dose_slash_fractions, strings.prescription_point, strings.isocenter_point, strings.override, strings.collimator,
                   strings.gantry, strings.SSD, strings.couch, strings.field_size, strings.wedge, strings.meas, strings.energy]
     
     
     #run the extraction functions for each parameter and store the values in parameter_values dictionary
     parameter_values = {}
     for parameter in parameters:
-        parameter_values[parameter] = extractor_functions[parameter](dataset)
+        parameter_values[parameter] = extractor_functions[parameter](dataset, case)
 
-    return parameter_values, file_type
+    return parameter_values
 
 
-def evaluate_parameters(parameter_values, truth_table, case, file_type):
+def evaluate_parameters(parameter_values, truth_table, case):
     case = int(case)
     # Initialise a dictionary where every key is a parameter and every associated value will either be strings.PASS,strings.FAIL or if that can't be determined the truth table value associated with that case will be added
     pass_fail_values = {}
@@ -45,7 +41,7 @@ def evaluate_parameters(parameter_values, truth_table, case, file_type):
         "parameter_values": parameter_values,
         "truth_table": truth_table,
         "case": case,
-        "file_type": file_type
+        "file_type": parameter_values[strings.mode]
     }
     #iterate through each parameter you want to check
     for param in parameter_values:
