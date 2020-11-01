@@ -140,7 +140,7 @@ More details can be found in the [User guide](https://github.com/SuryadiTjandra/
   - A single field size can be specified with length by width (e.g. 10x10)
   - Multiple field sizes should be separated by commas, indicating the field size of each beam
 
-Sample truth tables (for [level 2](data/truth_table_example.csv) and [level 3](data/truth_table_lvl2_example.csv)) 
+Sample truth tables (for [level 2](data/truth_table_example.csv) and [level 3](data/truth_table_lvl2_example.csv))
 
 ## Testing
 
