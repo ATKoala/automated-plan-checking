@@ -15,12 +15,13 @@ Extract and evaluate data from DICOM RT-PLAN files.
 [**Installation and Usage**](#installation-and-usage)
 
 - [**Truth table specification**](#truth-table-specification)
-- [**Testing**](#testing)
   
 [**Documentation**](#documentation)
 
 - [**Architecture**](#architecture)
 - [**Test cases**](#test-cases)
+
+[**Testing**](#testing)
 
 [**Features**](#features)
 
