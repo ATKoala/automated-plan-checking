@@ -4,7 +4,7 @@ The function to extract parameters from the specified DICOM file.
 
 # We import the pydicom library to use it's DICOM reading methods
 import pydicom as dicom
-import strings 
+from code import strings
 from .extractor_functions import extractor_functions, _extract_mode
 from .evaluator_functions import evaluator_functions
 
