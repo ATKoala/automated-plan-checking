@@ -1,18 +1,13 @@
 ''' Tests for Parameter Extraction and Evaluation
 
-This module contains a number of tests using python's unittest library.
-See https://docs.python.org/3/library/unittest.html for more information about unittest.
-
-- TestIMRTExtractionValues is a collection of tests verifying that the correct values are extracted from IMRT file (YellowLvlIII_7a.dcm)
-- TestVMATExtractionValues is a collection of tests verifying that the correct values are extracted from VMAT file (YellowLvlIII_7b.dcm)
-- TestEvaluation is a collection of tests on the parameter evaluation: given a set of parameters, 
-   it verifies that the pass/fail results are as expected
-
 The 2 DICOM files tested are included in the data subdirectory.
-The correct values for each test are derived from the corresponding pdf reports in each of IMRT and VMAT directories (7a.pdf, 7b.pdf).
+
+The correct values for each test are mostly derived from the corresponding pdf reports in 
+each of IMRT and VMAT directories (7a.pdf, 7b.pdf).
 
 Basic method to run all tests: `python -m unittest`
 '''
+
 import unittest
 import pydicom
 from code import strings
@@ -113,25 +108,22 @@ class TestEvaluation(unittest.TestCase):
         num_cases = 17
         for i in range(num_cases):
             case = i + 1
-            # Get the truth table values for this case into passing_data
+            # Get a set of values that should pass (directly from truth table)
             passing_data = dict([(key,value[i]) for key,value in self.truth_table.items()])
-            # Truth table also has a "case" value which we discard since it's not part of evaluation
+            # We discard the 'case' value since it's not part of evaluation
             del passing_data[strings.case]
-            # SSD needs to be converted from string to a list because thats what evaluation unction wants
+            # SSD needs to be converted from string to a list because thats what evaluation function wants
             passing_data[strings.SSD] = passing_data[strings.SSD].split(',')
             self.assertEqual(evaluate_parameters(passing_data, self.truth_table, case), self.pass_evaluation)
 
     def test_fail_lvl3_prescription(self):
         # Test that a prescription value that is meant to fail does get failed by the evaluation function
         case = 1
-        # Get the truth table values for this case into passing_data
         failing_data = dict([(key,value[case-1]) for key,value in self.truth_table.items()])
-        # Grabbing values fro truth table also produces the "case" value which we discard since it's not part of evaluation
         del failing_data[strings.case]
-        # SSD needs to be converted from string to a list because thats what evaluation unction wants
         failing_data[strings.SSD] = failing_data[strings.SSD].split(',')
 
-        # Make the prescription dose wrong - it should be 2/1/-
+        # Make the prescription dose wrong
         failing_data[strings.prescription_dose] = "50/25/-"
         self.assertNotEqual(evaluate_parameters(failing_data, self.truth_table, case), self.pass_evaluation)
 
@@ -139,12 +131,10 @@ class TestEvaluation(unittest.TestCase):
         # Test that a wrong collimator value gets failed correctly
         case = 6
         failing_data = dict([(key,value[case-1]) for key,value in self.truth_table.items()])
-        # Grabbing values fro truth table also produces the "case" value which we discard since it's not part of evaluation
         del failing_data[strings.case]
-        # SSD needs to be converted from string to a list because thats what evaluation unction wants
         failing_data[strings.SSD] = failing_data[strings.SSD].split(',')
         
-        # Make the angle wrong - it should be *not 0*
+        # Make the collimator angle wrong 
         failing_data[strings.prescription_dose] = "0"
         self.assertNotEqual(evaluate_parameters(failing_data, self.truth_table, case), self.pass_evaluation)
 
