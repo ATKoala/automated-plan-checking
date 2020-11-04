@@ -117,6 +117,9 @@ class TestEvaluation(unittest.TestCase):
             passing_data = dict([(key,value[i]) for key,value in self.truth_table.items()])
             # Truth table also has a "case" value which we discard since it's not part of evaluation
             del passing_data[strings.case]
+            # SSD needs to be converted from string to a list because thats what evaluation unction wants
+            passing_data[strings.SSD] = passing_data[strings.SSD].split(',')
+
             self.assertEqual(evaluate_parameters(passing_data, self.truth_table, case), self.pass_evaluation)
 
     def test_fail_lvl3_case1(self):
@@ -126,7 +129,9 @@ class TestEvaluation(unittest.TestCase):
         passing_data = dict([(key,value[case-1]) for key,value in self.truth_table.items()])
         # Grabbing values fro truth table also produces the "case" value which we discard since it's not part of evaluation
         del passing_data[strings.case]
-
+        # SSD needs to be converted from string to a list because thats what evaluation unction wants
+        passing_data[strings.SSD] = passing_data[strings.SSD].split(',')
+        
         # Make the prescription dose wrong - it should be 2/1/-
         passing_data[strings.prescription_dose] = "50/25/-"
         self.assertNotEqual(evaluate_parameters(passing_data, self.truth_table, case), self.pass_evaluation)
