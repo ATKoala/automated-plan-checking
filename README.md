@@ -103,13 +103,13 @@ Sample truth tables (for [level 2](data/truth_table_example.csv) and [level 3](d
 
 ## Documentation
 
-### Architecture
+- [User Guide](https://github.com/SuryadiTjandra/automated-plan-checking/blob/master/docs/User-Guide.pdf) 
 
-[Architecture](https://github.com/SuryadiTjandra/automated-plan-checking/blob/master/docs/System-Design-and-Architecture.pdf) of the project, exported from Confluence. It includes components of the program and system design.
+- [Architecture](https://github.com/SuryadiTjandra/automated-plan-checking/blob/master/docs/System-Design-and-Architecture.pdf). It includes components of the program and system design.
 
-### Test cases
+- [Test cases](https://github.com/SuryadiTjandra/automated-plan-checking/blob/master/docs/Test-Cases.pdf) describes the results from manually testing various parts of the system.
 
-[Test cases](https://github.com/SuryadiTjandra/automated-plan-checking/blob/master/docs/Acceptance-Tests.pdf) of the project, exported from Confluence.
+- [Parameter Information](https://github.com/SuryadiTjandra/automated-plan-checking/blob/master/docs/Parameter-Information.pdf) contains some information about the parameters.
 
 ## Testing
 
