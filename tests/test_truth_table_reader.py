@@ -1,3 +1,5 @@
+''' Test that the truth table reader function parses the csv input correctly'''
+
 import unittest
 from code.truth_table_reader import read_truth_table
 

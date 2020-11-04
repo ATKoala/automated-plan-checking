@@ -1,5 +1,6 @@
+'''A collection of functions dealing with extraction of data points from DICOM files'''
+
 from code import strings
-first_sequence_item = 0
 
 def _extract_mode(dataset, case):
     # For now, we are only producing IMRT vs VMAT modes for cases 6, 7, and 8
@@ -12,10 +13,10 @@ def _extract_mode(dataset, case):
     # One beam will be the setup beam, which is not counted
     number_of_beams = len(dataset.BeamSequence) - 1
 
-    # If IMRT there should be 5 static gantry positions (5 beams) for each case, and the intensity of the 
+    # "If IMRT there should be 5 static gantry positions (5 beams) for each case, and the intensity of the 
     # beam is modulated by moving the multi leaf collimator (MLC) to different control points within each 
     # gantry angle. If VMAT the gantry and the MLCs all move at the same time so each control point has 
-    # both gantry moves and MLC moves.
+    # both gantry moves and MLC moves.""
     if moving_gantry:
         mode = strings.VMAT
     elif not moving_gantry and number_of_beams is 5:
@@ -31,8 +32,6 @@ def _extract_prescription_dose(dataset, case):
     # This section deals with the 'prescription dose/#' parameter
     # You need to make sure that the format of parameter_values['perscription dose/#] is exactly the same as truth_table['perscription dose/#'] in cases where the file passes
     # To begin you assign the total_perscription dose to the parameter value
-    prescription_dose = total_prescription_dose
-
     # Then when perscription dose is 24,48,50, or 900 you also need to check the amount of fractions
     # and when its 900 the primary dosimeter unit needs to be 'MU' as well
     try:
@@ -40,12 +39,12 @@ def _extract_prescription_dose(dataset, case):
     except:
         prim_dosimeter_unit = "No primary dosimeter unit"
 
-    return prescription_dose + "/" + number_of_fractions + "/" + prim_dosimeter_unit
+    return total_prescription_dose + "/" + number_of_fractions + "/" + prim_dosimeter_unit
 
 def _extract_collimator(dataset, case):
-    #ignore setup beams
     beams = list(filter(lambda beam: beam.BeamDescription != strings.SETUP_beam, dataset.BeamSequence))
-    # record collimator value in the parameter_values dictionary as a string to be consistant with truth_table format 
+
+    # Record collimator value in the parameter_values dictionary as a string to be consistant with truth_table format 
     # According to the truth table the collimator only needs to be recorded for cases 1&5 where only 1 beam occurs    
     collimator_value = beams[len(beams)-1].ControlPointSequence[0].BeamLimitingDeviceAngle
     return str(int(collimator_value))
@@ -53,7 +52,6 @@ def _extract_collimator(dataset, case):
 def _extract_gantry(dataset, case):
     try:
         file_type = _extract_mode(dataset, case)
-
         #If the dataset is a VMAT file it goes through each of the control point sequence and finds each associated gantry angle and returns the lowest value slash the highest value
         if file_type == strings.VMAT:
             i = 0
@@ -91,7 +89,6 @@ def _extract_ssd(dataset, case):
                     return vmat_ssd_list
             return "error retrieving SSD"
         else:
-            #ignore setup beams
             beams = list(filter(lambda beam: beam.BeamDescription != strings.SETUP_beam, dataset.BeamSequence))
             #obtain the ssd of all beams
             #in the DICOM file the SSD is given in millimetres so its divided by 10 so its in centimetres
@@ -106,7 +103,7 @@ def _extract_wedge(dataset, case):
     #ignore setup beams
     beams = list(filter(lambda beam: beam.BeamDescription != strings.SETUP_beam, dataset.BeamSequence))
     # if there are wedges, get the wedge angle of the beam. Otherwise, get 0
-    wedge_angles = list(map(lambda beam: str(int(beam.WedgeSequence[0].WedgeAngle)) if int(beam.NumberOfWedges) > 0 else 'no wedge', beams))
+    wedge_angles = list(map(lambda beam: str(int(beam.WedgeSequence[0].WedgeAngle)) if int(beam.NumberOfWedges) > 0 else strings.no_wedge, beams))
 
     return ','.join(wedge_angles)
 
@@ -114,18 +111,16 @@ def _extract_energy(dataset, case):
     energy = ''
 
     for beam in dataset.BeamSequence:
-        #ignore setup beams
         if beam.BeamDescription == strings.SETUP_beam:
             continue
 
-        energy = str(int(beam.ControlPointSequence[first_sequence_item].NominalBeamEnergy))
-        if beam.PrimaryFluenceModeSequence[first_sequence_item].FluenceMode != strings.STANDARD_FLUENCE:
-            energy += str(beam.PrimaryFluenceModeSequence[first_sequence_item].FluenceModeID)
+        energy = str(int(beam.ControlPointSequence[0].NominalBeamEnergy))
+        if beam.PrimaryFluenceModeSequence[0].FluenceMode != strings.STANDARD_FLUENCE:
+            energy += str(beam.PrimaryFluenceModeSequence[0].FluenceModeID)
     return energy
 
 def _extract_field_size(dataset, case):
-    # ignore setup beams
-    beams = list(filter(lambda beam: beam.BeamDescription != "SETUP beam", dataset.BeamSequence))
+    beams = list(filter(lambda beam: beam.BeamDescription != strings.SETUP_beam, dataset.BeamSequence))
     # record collimator value in the parameter_values dictionary as a string to be consistant with truth_table format
     # According to the truth table the collimator only needs to be recorded for cases 1&5 where only 1 beam occurs
 
@@ -158,7 +153,7 @@ def _extract_field_size(dataset, case):
                     field_size_list.append(str(length_y) + "x" + str(length_x))
             else:
                 if length_x==0 or length_y==0:
-                    field_size_list.append("Not Extracted")
+                    field_size_list.append(strings.Not_Extracted)
 
     return ','.join(field_size_list)
 

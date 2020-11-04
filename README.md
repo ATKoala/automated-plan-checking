@@ -17,15 +17,15 @@ Extract and evaluate data from DICOM RT-PLAN files.
 - [**Truth table specification**](#truth-table-specification)
 - [**Testing**](#testing)
   
-[**Features**](#features)
-
-- [**Sprint1**](#sprint1)
-- [**Sprint2**](#sprint2)
-
 [**Documentation**](#documentation)
 
 - [**Architecture**](#architecture)
 - [**Test cases**](#test-cases)
+
+[**Features**](#features)
+
+- [**Sprint1**](#sprint1)
+- [**Sprint2**](#sprint2)
 
 [**Changelog**](#changelog)
 
@@ -57,13 +57,13 @@ Usage:
   - `python app.py --inputs data/Input`
 - Multiple dicoms or folders in any order
   - `python app.py --inputs FOLDER1 FOLDER2 FILE1 FILE2 FOLDER3 (etc...)`
-  - Example: - `python app.py --inputs data/Input data/Input/presentation-samples --case_number 6`
+  - Example: - `python app.py --inputs data/Input data/Input/more-input`
 - Specify case number for each input item
   - `python app.py --inputs INPUT1,CASE1 INPUT2,CASE2`
-  - Example: - `python app.py --inputs data/Input/YellowLvlIII_7a.dcm,1 data/Input/YellowLvlIII_7b.dcm,2`
+  - Example: - `python app.py --inputs data/Input/YellowLvlIII_7a.dcm,7 data/Input/YellowLvlIII_7b.dcm,7`
 - Specify case for all inputs
-  - `python app.py --inputs INPUTS --case_number 6`
-  - Example: - `python app.py --inputs data/Input  --case_number 6`
+  - `python app.py --inputs INPUTS --case_number 7`
+  - Example: - `python app.py --inputs data/Input  --case_number 7`
 - Specify a custom truth table (default uses level 3 table)
   - `python app.py --inputs INPUTS --truth_table TRUTH_TABLE`
   - Example: - `python app.py --inputs data/Input --truth_table data/truth_table_lvl3_.csv`
@@ -99,6 +99,16 @@ More details can be found in the [User guide](https://github.com/SuryadiTjandra/
   - Multiple field sizes should be separated by commas, indicating the field size of each beam
 
 Sample truth tables (for [level 2](data/truth_table_example.csv) and [level 3](data/truth_table_lvl2_example.csv))
+
+## Documentation
+
+### Architecture
+
+[Architecture](https://github.com/SuryadiTjandra/automated-plan-checking/blob/master/docs/System-Design-and-Architecture.pdf) of the project, exported from Confluence. It includes components of the program and system design.
+
+### Test cases
+
+[Test cases](https://github.com/SuryadiTjandra/automated-plan-checking/blob/master/docs/atkoala-Test-271020-0054-2114.pdf) of the project, exported from Confluence.
 
 ## Testing
 
@@ -149,16 +159,6 @@ Run a particular test (i.e prescription dose) with `python -m unittest test_para
 15 As an Auditor, (Parameter) I want to know the field size of the radiation beam
 
 16 As an Auditor, (Parameter) I want to know the modality of treatment [imrt, vmat, 3dcrt, dcat, tomo, f-cone, hyp-arc, g-knife]
-
-## Documentation
-
-### Architecture
-
-[Architecture](https://github.com/SuryadiTjandra/automated-plan-checking/blob/master/docs/System-Design-and-Architecture.pdf) of the project, exported from Confluence. It includes components of the program and system design.
-
-### Test cases
-
-[Test cases](https://github.com/SuryadiTjandra/automated-plan-checking/blob/master/tests/atkoala-Test-271020-0054-2114.pdf) of the project ,exported from Confluence.
 
 ## Changelog
 
