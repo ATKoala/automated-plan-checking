@@ -1,4 +1,13 @@
-'''A collection of functions dealing with extraction of data points from DICOM files'''
+'''A collection of functions dealing with extraction of data points from DICOM files
+
+Each function in supplied with the same arguments:
+
+dataset             - The full data from the RTPLAN being extracted
+struct_dose_files   - A dictionary of StudyInstanceUID mapping to a list of RTDOSE and RTSTRUCT files in the same folder as the RTPLAN. 
+                        May be empty if no RTDOSE or RTSTRUCT are found.
+                        Format should be {UID:[(filepath, modality), (filepath, modality)], ...}
+case                - The case number of the RTPLAN being extracted
+'''
 
 from code import strings
 
