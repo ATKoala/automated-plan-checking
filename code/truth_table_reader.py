@@ -1,3 +1,5 @@
+''' Parse the truth table from a csv input into a python dictionary'''
+
 import pandas as pd
 from pathlib import Path
 import csv

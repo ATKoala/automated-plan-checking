@@ -1,3 +1,5 @@
+'''A collection of functions dealing with extraction of data points from DICOM files'''
+
 from code import strings
 
 def _extract_mode(dataset, case):

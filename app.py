@@ -1,4 +1,4 @@
-''' automated-plan-checking
+''' automated-plan-checker
 
 Extracts and evaluates data points from DICOM RTPLAN files.
 This file covers the high level process of handling input and processing dicoms 
@@ -18,9 +18,8 @@ def main():
     Main function; everything starts here
     Handles input arguments and processes the dicoms
     '''
-    # Retrieve user inputs from command line arguments
+    # Retrieve user inputs and settings from command line arguments
     user_input = parse_arguments()
-    # Retrieve default settings from properties file
     properties = read_properties_file("settings.txt")
     
     # Process the supplied arguments

@@ -1,6 +1,4 @@
-"""
-The function to extract parameters from the specified DICOM file.
-"""
+'''This file applies the extraction and evaluation functions defined in extractor_functions.py and evaluator functions.py'''
 
 # We import the pydicom library to use it's DICOM reading methods
 import pydicom as dicom

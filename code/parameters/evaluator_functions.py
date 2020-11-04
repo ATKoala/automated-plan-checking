@@ -1,3 +1,5 @@
+''' A collection of functions dealing with evaluation of data extracted from DICOMs'''
+
 from code import strings
 
 def _evaluate_gantry(param_value, table_value, **kwargs):
