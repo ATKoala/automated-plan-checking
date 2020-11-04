@@ -4,5 +4,5 @@
 # property_value can only be string for now
 
 default_input_folder = data/Input
-default_output_folder = Reports
-truth_table_file = data/truth_table_lvl3_example.csv
+default_output_folder = reports
+truth_table_file = data/truth_table_lvl3.csv

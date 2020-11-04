@@ -13,7 +13,7 @@ first_sequence_item = 0
 
 def extract_parameters(dataset, case):
     # define a list of parameters that need to be found
-    parameters = [strings.mode, strings.prescription_dose_slash_fractions, strings.prescription_point, strings.isocenter_point, strings.override, strings.collimator,
+    parameters = [strings.mode, strings.prescription_dose, strings.prescription_point, strings.isocenter_point, strings.override, strings.collimator,
                   strings.gantry, strings.SSD, strings.couch, strings.field_size, strings.wedge, strings.meas, strings.energy]
     
     

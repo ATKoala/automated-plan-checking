@@ -83,14 +83,12 @@ def _extract_ssd(dataset, case):
     ssd_list = []
     try:
         if file_type == strings.VMAT:
-            i = 0
             vmat_ssd_list = []
-            while i < len(dataset.BeamSequence):
+            for i in range(len(dataset.BeamSequence)):
                 if dataset.BeamSequence[i].BeamDescription != strings.SETUP_beam:
                     for control_point in dataset.BeamSequence[i].ControlPointSequence:
                         vmat_ssd_list.append(round(float(control_point.ReferencedDoseReferenceSequence[1].BeamDosePointSSD)/10,2))
                     return vmat_ssd_list
-                i+=1
             return "error retrieving SSD"
         else:
             #ignore setup beams
@@ -170,7 +168,7 @@ def to_be_implemented(dataset, case):
 
 extractor_functions = {
     strings.mode                    : _extract_mode,
-    strings.prescription_dose_slash_fractions     : _extract_prescription_dose,
+    strings.prescription_dose       : _extract_prescription_dose,
     strings.prescription_point      : to_be_implemented,
     strings.isocenter_point         : to_be_implemented,
     strings.override                : to_be_implemented,

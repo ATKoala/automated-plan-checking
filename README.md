@@ -31,6 +31,8 @@ Extract and evaluate data from DICOM RT-PLAN files.
 
 ## Project background
 
+**README best viewed with a [markdown reader](https://markdownlivepreview.com/) or on its [github page](https://github.com/SuryadiTjandra/automated-plan-checking)**
+
 This project is with the Australian Radiation Protection and Nuclear Safety Agency.
 
 The aim is to create a program that can perform an automated check of data and parameters with a Pass/Fail result.
@@ -67,8 +69,8 @@ Usage:
   - `python app.py --inputs INPUTS --case_number 6`
   - Example: - `python app.py --inputs data/Input  --case_number 6`
 - Specify a custom truth table (default uses level 3 table)
-  - `python app.py --inputs INPUTS --truth_table truth_table_example.csv`
-  - Example: - `python app.py --inputs data/Input --truth_table truth_table_example.csv`
+  - `python app.py --inputs INPUTS --truth_table TRUTH_TABLE`
+  - Example: - `python app.py --inputs data/Input --truth_table data/truth_table_lvl3_.csv`
 
 More details can be found in the [User guide](https://github.com/SuryadiTjandra/automated-plan-checking/blob/master/docs/atkoala-UserGuide-271020-1338-2126.pdf).
 

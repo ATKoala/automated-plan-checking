@@ -46,7 +46,7 @@ class TestTruthTableReader(unittest.TestCase):
         }
                     
     def test_read_tt_csv(self):
-        tt = read_truth_table('tests/res/truth_table_test.csv')
+        tt = read_truth_table('tests/resources/truth_table_test.csv')
         for parameter in self.truth_table:
             for i in range(0, len(self.truth_table['case'])):
                 self.assertEqual(tt[parameter][i].upper(), self.truth_table[parameter][i].upper())

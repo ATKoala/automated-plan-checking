@@ -11,10 +11,11 @@ What kind of strings go in here:
 - Strings that are used more than once
 
 '''
-case = "case"
 NOT_IMPLEMENTED= "NOT IMPLEMENTED"
+NOT_APPLICABLE = "NOT APPLICABLE"
+case = "case"
 mode = "mode"
-prescription_dose_slash_fractions = "prescription dose/#"
+prescription_dose = "prescription dose/#"
 prescription_point = "prescription point"
 isocenter_point = "isocentre point"
 override = "override"
@@ -39,4 +40,4 @@ no_wedge = "no wedge"
 STANDARD_FLUENCE = "STANDARD" # When fluence mode is listed as "STANDARD" in dicom, it is not FFF
 FFF = "FFF"
 ANY_VALUE = "-" # Truth table uses hyphen to denote any value is acceptable
-NOT_APPLICABLE = "NOT APPLICABLE"
+lvl3_truth_table = "data/truth_table_lvl3.csv"
