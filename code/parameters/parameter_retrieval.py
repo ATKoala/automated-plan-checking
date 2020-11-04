@@ -6,7 +6,7 @@ from code import strings
 from .extractor_functions import extractor_functions, _extract_mode
 from .evaluator_functions import evaluator_functions
 
-def extract_parameters(dataset, case):
+def extract_parameters(dataset, struct_dose_files, case):
     # define a list of parameters that need to be found
     parameters = [strings.mode, strings.prescription_dose, strings.prescription_point, strings.isocenter_point, strings.override, strings.collimator,
                   strings.gantry, strings.SSD, strings.couch, strings.field_size, strings.wedge, strings.meas, strings.energy]
@@ -14,7 +14,7 @@ def extract_parameters(dataset, case):
     #run the extraction functions for each parameter and store the values in parameter_values dictionary
     parameter_values = {}
     for parameter in parameters:
-        parameter_values[parameter] = extractor_functions[parameter](dataset, case)
+        parameter_values[parameter] = extractor_functions[parameter](dataset, struct_dose_files, case)
 
     return parameter_values
 
