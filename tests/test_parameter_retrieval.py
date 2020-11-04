@@ -119,11 +119,10 @@ class TestEvaluation(unittest.TestCase):
             del passing_data[strings.case]
             # SSD needs to be converted from string to a list because thats what evaluation unction wants
             passing_data[strings.SSD] = passing_data[strings.SSD].split(',')
-
             self.assertEqual(evaluate_parameters(passing_data, self.truth_table, case), self.pass_evaluation)
 
-    def test_fail_lvl3_case1(self):
-        # Test that values that are meant to fail do get failed by the evaluation function
+    def test_fail_lvl3_prescription(self):
+        # Test that a prescription value that is meant to fail does get failed by the evaluation function
         case = 1
         # Get the truth table values for this case into passing_data
         failing_data = dict([(key,value[case-1]) for key,value in self.truth_table.items()])
@@ -131,11 +130,24 @@ class TestEvaluation(unittest.TestCase):
         del failing_data[strings.case]
         # SSD needs to be converted from string to a list because thats what evaluation unction wants
         failing_data[strings.SSD] = failing_data[strings.SSD].split(',')
-        
+
         # Make the prescription dose wrong - it should be 2/1/-
         failing_data[strings.prescription_dose] = "50/25/-"
-        print(failing_data)
         self.assertNotEqual(evaluate_parameters(failing_data, self.truth_table, case), self.pass_evaluation)
+
+    def test_fail_lvl3_collimator(self):
+        # Test that a wrong collimator value gets failed correctly
+        case = 6
+        failing_data = dict([(key,value[case-1]) for key,value in self.truth_table.items()])
+        # Grabbing values fro truth table also produces the "case" value which we discard since it's not part of evaluation
+        del failing_data[strings.case]
+        # SSD needs to be converted from string to a list because thats what evaluation unction wants
+        failing_data[strings.SSD] = failing_data[strings.SSD].split(',')
+        
+        # Make the angle wrong - it should be *not 0*
+        failing_data[strings.prescription_dose] = "0"
+        self.assertNotEqual(evaluate_parameters(failing_data, self.truth_table, case), self.pass_evaluation)
+
 
 if __name__ == '__main__' : 
     unittest.main()

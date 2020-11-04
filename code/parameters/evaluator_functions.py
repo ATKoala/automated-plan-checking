@@ -70,7 +70,6 @@ def _evaluate_ssd(param_value, table_value, **kwargs):
         return strings.PASS
 
 def _evaluate_wedge(param_value, table_value, **kwargs):
-
     for value in table_value.split(","):
         if not value.isdigit() and value!=strings.ANY_VALUE and value!="no wedge":
             return strings.TRUTH_TABLE_ERROR
@@ -83,8 +82,9 @@ def _evaluate_wedge(param_value, table_value, **kwargs):
 
 def _evaluate_prescription_dose(param_value, table_value, **kwargs):
     prescription_items = param_value.split("/")
+    table_items = table_value.split("/")
     for i in range(3):
-        if prescription_items[i] != strings.ANY_VALUE and prescription_items[i] != table_value[i]:
+        if table_items[i] != strings.ANY_VALUE and prescription_items[i] != table_items[i]:
             return strings.FAIL
     return strings.PASS
 
