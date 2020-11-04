@@ -30,7 +30,7 @@ class TestIMRTExtractionValues(unittest.TestCase):
 
     def test_prescription_dose(self):
         # MU setting is not found in the PDF
-        self.assertEqual(self.extracted[strings.prescription_dose_slash_fractions], '50/25/MU')
+        self.assertEqual(self.extracted[strings.prescription_dose], '50/25/MU')
 
     def test_collimator(self): 
         self.assertEqual(self.extracted[strings.collimator], '0')
@@ -57,7 +57,7 @@ class TestVMATExtractionValues(unittest.TestCase):
     def test_prescription_dose(self):
         # Function returns 50/25/MU, but MU is not found in PDF Report.
         # but Michael says it be like that, so...
-        self.assertEqual(self.extracted[strings.prescription_dose_slash_fractions], '50/25/MU')
+        self.assertEqual(self.extracted[strings.prescription_dose], '50/25/MU')
 
     def test_collimator(self): 
         self.assertEqual(self.extracted[strings.collimator], '355')
@@ -94,7 +94,7 @@ class TestEvaluation(unittest.TestCase):
         # We'll use this to compare with the actual results in our tests below
         self.pass_evaluation = {
             strings.mode                                : strings.NOT_APPLICABLE,
-            strings.prescription_dose_slash_fractions   : strings.PASS,
+            strings.prescription_dose                   : strings.PASS,
             strings.prescription_point                  : strings.PASS,
             strings.isocenter_point                     : strings.PASS,
             strings.override                            : strings.PASS,
@@ -108,16 +108,28 @@ class TestEvaluation(unittest.TestCase):
             strings.energy                              : strings.NOT_APPLICABLE
         }
 
-    def test_all_lvl3_passing(self):
+    def test_passing_lvl3_all(self):
+        # Test that the evaluation passes all cases when values are directly retrieved from the truth table
         num_cases = 17
         for i in range(num_cases):
             case = i + 1
-            passing_data = {}
-            for key, value in self.truth_table.items():
-                if key == strings.case:
-                    continue
-                passing_data[key] = value[i]
+            # Get the truth table values for this case into passing_data
+            passing_data = dict([(key,value[i]) for key,value in self.truth_table.items()])
+            # Truth table also has a "case" value which we discard since it's not part of evaluation
+            del passing_data[strings.case]
             self.assertEqual(evaluate_parameters(passing_data, self.truth_table, case), self.pass_evaluation)
+
+    def test_fail_lvl3_case1(self):
+        # Test that values that are meant to fail do get failed by the evaluation function
+        case = 1
+        # Get the truth table values for this case into passing_data
+        passing_data = dict([(key,value[case-1]) for key,value in self.truth_table.items()])
+        # Grabbing values fro truth table also produces the "case" value which we discard since it's not part of evaluation
+        del passing_data[strings.case]
+
+        # Make the prescription dose wrong - it should be 2/1/-
+        passing_data[strings.prescription_dose] = "50/25/-"
+        self.assertNotEqual(evaluate_parameters(passing_data, self.truth_table, case), self.pass_evaluation)
 
 if __name__ == '__main__' : 
     unittest.main()

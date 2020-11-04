@@ -137,7 +137,7 @@ def _no_evaluation(param_value, table_value, **kwargs):
 
 evaluator_functions = {
     strings.mode                    : _no_evaluation,
-    strings.prescription_dose_slash_fractions    : _evaluate_prescription_dose,
+    strings.prescription_dose       : _evaluate_prescription_dose,
     strings.prescription_point      : _evaluate_default,
     strings.isocenter_point         : _evaluate_default,
     strings.override                : _evaluate_default,
