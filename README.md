@@ -31,15 +31,11 @@ Extract and evaluate data from DICOM RT-PLAN files.
 
 ## Project background
 
-**README best viewed with a [markdown reader](https://markdownlivepreview.com/) or on its [github page](https://github.com/SuryadiTjandra/automated-plan-checking)**
-
 This project is with the Australian Radiation Protection and Nuclear Safety Agency.
 
 The aim is to create a program that can perform an automated check of data and parameters with a Pass/Fail result.
 
-Currently, the only way to verify planning parameters is to manually check pdf print outs. The information required is contained in the DICOM RT-PLAN files created for each treatment plan. Clients need a program that can extract the information from the DICOM file and then compare this data to a standard data set to verify it is within specifications.
-
-The goal of this project and our clients want our team to achieve is to create a program that can replace the manual process outlined in the previous paragraph; which will read data points directly from the DICOM files generated and perform an automated check of the parameters extracted.
+Currently, the process to verify planning parameters is to manually check pdf print outs. The information required is contained in the DICOM RT-PLAN files created for each treatment plan. The goal is a program that can directly extract the information from the DICOM file and then compare this data to a standard data set to produce a pass/fail evaluation.
 
 ## System requirements
 

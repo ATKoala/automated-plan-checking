@@ -1,4 +1,4 @@
-import strings
+from code import strings
 
 def _evaluate_gantry(param_value, table_value, **kwargs):
     # This line checks whether the parameter value found is the same as the truth table value (this is why the formating of the two dictionaries is important) and gives a "PASS" value
@@ -82,9 +82,9 @@ def _evaluate_wedge(param_value, table_value, **kwargs):
         return strings.PASS if table_value == param_value else strings.FAIL
 
 def _evaluate_prescription_dose(param_value, table_value, **kwargs):
-    prescription_items = table_value.split("/")
-    for i in range(0, 3):
-        if prescription_items[i] != strings.ANY_VALUE and prescription_items[i] != prescription_items[i]:
+    prescription_items = param_value.split("/")
+    for i in range(3):
+        if prescription_items[i] != strings.ANY_VALUE and prescription_items[i] != table_value[i]:
             return strings.FAIL
     return strings.PASS
 

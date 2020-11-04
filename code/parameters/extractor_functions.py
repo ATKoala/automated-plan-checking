@@ -1,4 +1,4 @@
-import strings
+from code import strings
 first_sequence_item = 0
 
 def _extract_mode(dataset, case):

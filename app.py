@@ -5,13 +5,12 @@ The extractor result is then passed to the outputter.
 """
 import os
 import argparse
-import strings
-import pydicom as dicom
+import pydicom 
 from pathlib import Path
-from parameter_retrieval.parameter_retrieval import extract_parameters, evaluate_parameters
-from outputter import output
-from pathlib import Path
-from truth_table_reader import read_truth_table
+from code import strings
+from code.parameters.parameter_retrieval import extract_parameters, evaluate_parameters
+from code.outputter import output
+from code.truth_table_reader import read_truth_table
 
 def main():
     # Retrieve user inputs from command line arguments
@@ -26,7 +25,7 @@ def main():
     output_format = user_input["output_format"]
     truth_table_file = user_input["truth_table_file"] if user_input["truth_table_file"] else properties["truth_table_file"]
     truth_table = read_truth_table(truth_table_file) 
-    print(f"Applying truth table: {truth_table_file}")
+    print(f"\nApplying truth table: {truth_table_file}\n")
     
     # Output location is Reports folder by default (if command is run without the output argument)
     output = user_input["output"] if user_input["output"] else properties["default_output_folder"]
@@ -56,7 +55,7 @@ def main():
                         process_dicom(item.path, output, output_format, final_case, truth_table)
 
 def process_dicom(location, destination, output_format, case_number, truth_table):
-    dataset = dicom.read_file(location, force=True)
+    dataset = pydicom.read_file(location, force=True)
     # Ensure the dicom that we want to process is a plan file
     if str(dataset.Modality) != "RTPLAN":
         return

@@ -1,5 +1,5 @@
 import unittest
-from truth_table_reader import read_truth_table
+from code.truth_table_reader import read_truth_table
 
 class TestTruthTableReader(unittest.TestCase):
 

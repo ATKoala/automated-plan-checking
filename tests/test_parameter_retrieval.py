@@ -15,8 +15,8 @@ Basic method to run all tests: `python -m unittest`
 '''
 import unittest
 import pydicom
-import strings
-from parameter_retrieval.parameter_retrieval import extract_parameters, evaluate_parameters
+from code import strings
+from code.parameters.parameter_retrieval import extract_parameters, evaluate_parameters
 
 class TestIMRTExtractionValues(unittest.TestCase): 
     ''' Tests for verifying the correct values are extracted for IMRT file
@@ -87,7 +87,7 @@ class TestEvaluation(unittest.TestCase):
     '''
     @classmethod
     def setUpClass(self): 
-        from truth_table_reader import read_truth_table
+        from code.truth_table_reader import read_truth_table
         self.truth_table = read_truth_table(strings.lvl3_truth_table)
 
         # If all parameters pass, evaluate_parameters() should return this.
@@ -126,15 +126,16 @@ class TestEvaluation(unittest.TestCase):
         # Test that values that are meant to fail do get failed by the evaluation function
         case = 1
         # Get the truth table values for this case into passing_data
-        passing_data = dict([(key,value[case-1]) for key,value in self.truth_table.items()])
+        failing_data = dict([(key,value[case-1]) for key,value in self.truth_table.items()])
         # Grabbing values fro truth table also produces the "case" value which we discard since it's not part of evaluation
-        del passing_data[strings.case]
+        del failing_data[strings.case]
         # SSD needs to be converted from string to a list because thats what evaluation unction wants
-        passing_data[strings.SSD] = passing_data[strings.SSD].split(',')
+        failing_data[strings.SSD] = failing_data[strings.SSD].split(',')
         
         # Make the prescription dose wrong - it should be 2/1/-
-        passing_data[strings.prescription_dose] = "50/25/-"
-        self.assertNotEqual(evaluate_parameters(passing_data, self.truth_table, case), self.pass_evaluation)
+        failing_data[strings.prescription_dose] = "50/25/-"
+        print(failing_data)
+        self.assertNotEqual(evaluate_parameters(failing_data, self.truth_table, case), self.pass_evaluation)
 
 if __name__ == '__main__' : 
     unittest.main()
