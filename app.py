@@ -74,11 +74,12 @@ def process_dicom(location, destination, output_format, case_number, truth_table
         return
 
     # Prompt for case number if not specified
+    cases = len(truth_table["case"])
     while not isinstance(case_number, int):
         try:
             case_number = int(input(f"What is the case number for {location}? "))
         except ValueError:
-            print("Case must be an integer!")
+            print(f"Case must be an integer between 1 and {cases}!")
 
     # Extract and evaluate the DICOM 
     parameters = extract_parameters(dataset, case_number)

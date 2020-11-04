@@ -24,9 +24,9 @@ def evaluate_parameters(parameter_values, truth_table, case):
     pass_fail_values = {}
     
     # Check if the case number is valid
+    cases = len(truth_table["case"])
     if case not in range(1, 18):
-        raise Exception("Invalid case number! Must be between 1 and 18.")
-        #print(case)
+        raise Exception(f"Invalid case number! Must be between 1 and {cases}")
 
     # Grouped information that will be passed onto evaluation functions
     context = {
