@@ -47,25 +47,49 @@ def main():
             comma_case = int(input_item[1])
         final_case = case_number if comma_case is None else comma_case
 
-        # Handle the case where a file is specified
+        # Handle the input where a file is specified
         if os.path.isfile(location):
-            process_dicom(location, output, output_format, final_case, truth_table)
+            folder_path = os.path.dirname(location)
+            dose_struct_index = dose_struct_references(folder_path)
+            process_dicom(location, output, output_format, final_case, truth_table, dose_struct_index)
 
-        # The case where a folder is specified
+        # Handle the input where a folder is specified
         else:
+            # First we scan through the entire folder once to find out what dose and structure files we have
+            dose_struct_index = dose_struct_references(location)
+            # Then, scan through the folder and process each RTPLAN DICOM
             with os.scandir(location) as folder:
                 for item in folder:
                     if item.is_file() and item.name.endswith(".dcm"):
-                        process_dicom(item.path, output, output_format, final_case, truth_table)
+                        process_dicom(item.path, output, output_format, final_case, truth_table, dose_struct_index)
 
-def process_dicom(location, destination, output_format, case_number, truth_table):
+def dose_struct_references(folder_path):
+    dose_struct_index = {}
+    with os.scandir(folder_path) as folder:
+        for item in folder:
+            if item.is_file() and item.name.endswith(".dcm"):
+                ref = dose_struct_reference(item.path)
+                if ref:
+                    if ref[0] in dose_struct_index:
+                        dose_struct_index[ref[0]] += [ref[1:]]
+                    else:
+                        dose_struct_index[ref[0]] = [ref[1:]]
+    return dose_struct_index
+
+def dose_struct_reference(file_path):
+    dataset = pydicom.dcmread(file_path, force=True, specific_tags=["StudyInstanceUID", "Modality"])
+    if str(dataset.Modality) in ["RTDOSE", "RTSTRUCT"]:
+        return dataset.StudyInstanceUID, file_path, dataset.Modality
+
+def process_dicom(location, destination, output_format, case_number, truth_table, dose_struct_index={}):
     ''' Function to process a single DICOM RTPLAN
 
-    location        - the filepath of the DICOM
-    destination     - the filepath of the folder in which the result will be saved to
-    output_format   - perhaps there will be support for json output in the future? currently always csv
-    case_number     - the case number of the truth table that parameters should be evaluated against (see data/truth_table_lvl3.csv)
-    truth_table     - a dictionary of correct values for each case
+    location            - the filepath of the DICOM
+    destination         - the filepath of the folder in which the result will be saved to
+    output_format       - perhaps there will be support for json output in the future? currently always csv
+    case_number         - the case number of the truth table that parameters should be evaluated against (see data/truth_table_lvl3.csv)
+    truth_table         - a dictionary of correct values for each case
+    dose_struct_index   - a dictionary mapping StudyInstanceUID to (location, modality) pairs of dose and structure set DICOMs
     '''
     dataset = pydicom.read_file(location, force=True)
 
@@ -77,12 +101,17 @@ def process_dicom(location, destination, output_format, case_number, truth_table
     cases = len(truth_table["case"])
     while not isinstance(case_number, int):
         try:
-            case_number = int(input(f"What is the case number for {location}? "))
+            case_number = int(input(f"What is the case number for {location}?"))
         except ValueError:
             print(f"Case must be an integer between 1 and {cases}!")
 
+    # Look for any related dose files or structure sets
+    struct_dose_files = {}
+    if dataset.StudyInstanceUID in dose_struct_index:
+        struct_dose_files[dataset.StudyInstanceUID] = dose_struct_index[dataset.StudyInstanceUID]
+
     # Extract and evaluate the DICOM 
-    parameters = extract_parameters(dataset, case_number)
+    parameters = extract_parameters(dataset, struct_dose_files, case_number)
     evaluations = evaluate_parameters(parameters, truth_table, case_number)
     solutions = dict([(key, truth_table[key][case_number-1]) for key in truth_table])
 

@@ -1,4 +1,17 @@
-''' A collection of functions dealing with evaluation of data extracted from DICOMs'''
+''' A collection of functions dealing with evaluation of data extracted from DICOMs
+
+Each function in supplied with the same arguments (**kwargs are a bundled set of values):
+
+param_value - the value extracted (and formatted) by the corresponding extraction function
+table_value - the value from the truth table (corresponding to case and parameter)
+
+**kwargs {
+    "parameter_values"  - the complete dictionary of extracted values
+    "truth_table"       - the complete truth table dictionary
+    "case"              - the case number of this plan that's being evaluated
+    "file_type"         - Whether it's IMRT, VMAT or not VMAT
+}
+'''
 
 from code import strings
 

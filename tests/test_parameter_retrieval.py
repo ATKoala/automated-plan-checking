@@ -4,6 +4,7 @@ import unittest
 import pydicom
 from code import strings
 from code.parameters.parameter_retrieval import extract_parameters, evaluate_parameters
+from app import dose_struct_references
 
 class TestIMRTExtractionValues(unittest.TestCase): 
     ''' Tests for verifying the correct values are extracted for IMRT file
@@ -13,7 +14,7 @@ class TestIMRTExtractionValues(unittest.TestCase):
     def setUpClass(self): 
         # We use the extraction function once here and inspect the results in the tests below
         dataset = pydicom.dcmread('./data/Input/YellowLvlIII_7a.dcm', force=True)
-        self.extracted = extract_parameters(dataset, 7)
+        self.extracted = extract_parameters(dataset, {}, 7)
 
     def test_prescription_dose(self):
         # MU setting is not found in the PDF
@@ -39,7 +40,7 @@ class TestVMATExtractionValues(unittest.TestCase):
     def setUpClass(self): 
         # We use the extraction function once here and inspect the results in the tests below
         dataset = pydicom.dcmread('./data/Input/YellowLvlIII_7b.dcm', force=True)
-        self.extracted = extract_parameters(dataset, 7)
+        self.extracted = extract_parameters(dataset, {}, 7)
 
     def test_prescription_dose(self):
         # Function returns 50/25/MU, but MU is not found in PDF Report.

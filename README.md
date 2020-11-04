@@ -109,7 +109,7 @@ Sample truth tables (for [level 2](data/truth_table_example.csv) and [level 3](d
 
 ### Test cases
 
-[Test cases](https://github.com/SuryadiTjandra/automated-plan-checking/blob/master/docs/atkoala-Test-271020-0054-2114.pdf) of the project, exported from Confluence.
+[Test cases](https://github.com/SuryadiTjandra/automated-plan-checking/blob/master/docs/Acceptance-Tests.pdf) of the project, exported from Confluence.
 
 ## Testing
 

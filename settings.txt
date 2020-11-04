@@ -7,7 +7,7 @@
 # default_input_folder = C:\Users\Jimothy\dicoms\
 # default_input_folder = C:\Users\Jimothy\dicoms\ data/Inputs
 
-default_input_folder = data/Input,7
+default_input_folder = data/override,7
 
 
 # default_output_folder Sample settings:
