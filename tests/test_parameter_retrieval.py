@@ -83,7 +83,7 @@ class TestEvaluation(unittest.TestCase):
     @classmethod
     def setUpClass(self): 
         from code.truth_table_reader import read_truth_table
-        self.truth_table = read_truth_table(strings.lvl3_truth_table)
+        self.truth_table = read_truth_table("data/truth)table_lvl3.csv")
 
         # If all parameters pass, evaluate_parameters() should return this.
         # We'll use this to compare with the actual results in our tests below
