@@ -89,7 +89,6 @@ def _evaluate_prescription_dose(param_value, table_value, **kwargs):
     return strings.PASS
 
 def _evaluate_collimator(param_value, table_value, **kwargs):
-
     for value in table_value.split(","):
         if not value.isdigit() and value!=strings.ANY_VALUE:
             if not value[0] == "*" or len(value)<2 or not value[1:].isdigit():
@@ -127,7 +126,6 @@ def _evaluate_field_size(param_value, table_value, **kwargs):
                 if truth_table_ssd_list[i]!= param_value[i]:
                     return strings.FAIL
         return strings.PASS
-
 
 def _evaluate_default(param_value, table_value, **kwargs):
     return strings.PASS if param_value == table_value or table_value == '-' else strings.FAIL
