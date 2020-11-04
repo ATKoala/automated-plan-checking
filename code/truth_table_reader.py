@@ -1,4 +1,4 @@
-''' Parse the truth table from a csv input into a python dictionary'''
+''' Module for parsing the truth table from a csv input into a python dictionary'''
 
 import pandas as pd
 from pathlib import Path

@@ -15,7 +15,7 @@ from code.parameters.parameter_retrieval import extract_parameters, evaluate_par
 
 def main():
     '''
-    Main function; everything starts here
+    Main function; everything starts here.
     Handles input arguments and processes the dicoms
     '''
     # Retrieve user inputs and settings from command line arguments
@@ -23,15 +23,16 @@ def main():
     properties = read_properties_file("settings.txt")
     
     # Process the supplied arguments
-    inputs = user_input["inputs"] if user_input["inputs"] else [properties["default_input_folder"]]
-    case_number = user_input["case_number"]
+    settings_input = properties["default_input_folder"].split()
+    inputs = user_input["inputs"] if user_input["inputs"] else settings_input
+    output = user_input["output"] if user_input["output"] else properties["default_output_folder"]
     output_format = user_input["output_format"]
+    case_number = user_input["case_number"]
     truth_table_file = user_input["truth_table_file"] if user_input["truth_table_file"] else properties["truth_table_file"]
     truth_table = read_truth_table(truth_table_file) 
-    output = user_input["output"] if user_input["output"] else properties["default_output_folder"]
 
-    # Print truth table being applied: this can be tricky for the user due to the settings file defaulting to lvl3
-    print(f"\nApplying truth table: {truth_table_file}\n")
+    # Print truth table being applied: this can be confusing for the user due to the settings file defaulting to lvl3
+    print(f"\nUsing truth table: {truth_table_file}\n")
     # Create the output folder if it doesn't exist
     if not os.path.isdir(output):
         os.mkdir(output)
@@ -52,7 +53,6 @@ def main():
 
         # The case where a folder is specified
         else:
-            # Using 'with' keyword to release directory resources after processed
             with os.scandir(location) as folder:
                 for item in folder:
                     if item.is_file() and item.name.endswith(".dcm"):
@@ -80,7 +80,7 @@ def process_dicom(location, destination, output_format, case_number, truth_table
         except ValueError:
             print("Case must be an integer!")
 
-    # Extract and evaluate the dicom 
+    # Extract and evaluate the DICOM 
     parameters = extract_parameters(dataset, case_number)
     evaluations = evaluate_parameters(parameters, truth_table, case_number)
     solutions = dict([(key, truth_table[key][case_number-1]) for key in truth_table])

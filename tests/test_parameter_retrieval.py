@@ -1,12 +1,4 @@
-''' Tests for Parameter Extraction and Evaluation
-
-The 2 DICOM files tested are included in the data subdirectory.
-
-The correct values for each test are mostly derived from the corresponding pdf reports in 
-each of IMRT and VMAT directories (7a.pdf, 7b.pdf).
-
-Basic method to run all tests: `python -m unittest`
-'''
+''' Tests for Parameter Extraction and Evaluation'''
 
 import unittest
 import pydicom
