@@ -73,16 +73,18 @@ def _evaluate_ssd(param_value, table_value, **kwargs):
 
 def _evaluate_wedge(param_value, table_value, **kwargs):
     for value in table_value.split(","):
-        if not value.isdigit() and value!=strings.ANY_VALUE and value!="no wedge":
+        if not value.isdigit() and value!=strings.ANY_VALUE and value!=strings.no_wedge:
             return strings.TRUTH_TABLE_ERROR
 
-    if table_value == 'no wedge':
-        all_no_wedge = all(map(lambda w_angle: w_angle == 'no wedge', param_value.split(',')))
+    if table_value == strings.no_wedge:
+        all_no_wedge = all(map(lambda w_angle: w_angle == strings.no_wedge, param_value.split(',')))
         return strings.PASS if all_no_wedge else strings.FAIL
     else:
         return strings.PASS if table_value == param_value else strings.FAIL
 
 def _evaluate_prescription_dose(param_value, table_value, **kwargs):
+    ''' param_value and table_value are in the format DOSE/FRACTION/UNIT'''
+
     prescription_items = param_value.split("/")
     table_items = table_value.split("/")
     for i in range(3):
@@ -104,6 +106,7 @@ def _evaluate_collimator(param_value, table_value, **kwargs):
     return strings.PASS if result else strings.FAIL
 
 def _evaluate_energy(param_value, table_value, **kwargs):
+    ''' Energy is just desired information; not for evaluation'''
     return strings.NOT_APPLICABLE
 
 def _evaluate_field_size(param_value, table_value, **kwargs):
@@ -114,7 +117,7 @@ def _evaluate_field_size(param_value, table_value, **kwargs):
 
     if len(truth_table_ssd_list) == 1:
         for i in range(len(param_value)):
-            if param_value[i] == "Not Extracted":
+            if param_value[i] == strings.Not_Extracted:
                 return "Not Implemented For MLCX/MLCY"
             if truth_table_ssd_list[0] != param_value[i]:
                 return strings.FAIL
@@ -123,14 +126,16 @@ def _evaluate_field_size(param_value, table_value, **kwargs):
         i = 0
         for i in range(len(truth_table_ssd_list)):
             if truth_table_ssd_list[i] != '?':
-                if param_value[i]=="Not Extracted":
+                if param_value[i]==strings.Not_Extracted:
                     return "Not Implemented For MLCX/MLCY"
                 if truth_table_ssd_list[i]!= param_value[i]:
                     return strings.FAIL
         return strings.PASS
 
 def _evaluate_default(param_value, table_value, **kwargs):
-    return strings.PASS if param_value == table_value or table_value == '-' else strings.FAIL
+    if param_value == table_value or table_value == strings.ANY_VALUE:
+        return strings.PASS
+    return strings.FAIL
 
 def _no_evaluation(param_value, table_value, **kwargs):
     return strings.NOT_APPLICABLE

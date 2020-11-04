@@ -13,10 +13,10 @@ def _extract_mode(dataset, case):
     # One beam will be the setup beam, which is not counted
     number_of_beams = len(dataset.BeamSequence) - 1
 
-    # If IMRT there should be 5 static gantry positions (5 beams) for each case, and the intensity of the 
+    # "If IMRT there should be 5 static gantry positions (5 beams) for each case, and the intensity of the 
     # beam is modulated by moving the multi leaf collimator (MLC) to different control points within each 
     # gantry angle. If VMAT the gantry and the MLCs all move at the same time so each control point has 
-    # both gantry moves and MLC moves.
+    # both gantry moves and MLC moves.""
     if moving_gantry:
         mode = strings.VMAT
     elif not moving_gantry and number_of_beams is 5:
@@ -103,7 +103,7 @@ def _extract_wedge(dataset, case):
     #ignore setup beams
     beams = list(filter(lambda beam: beam.BeamDescription != strings.SETUP_beam, dataset.BeamSequence))
     # if there are wedges, get the wedge angle of the beam. Otherwise, get 0
-    wedge_angles = list(map(lambda beam: str(int(beam.WedgeSequence[0].WedgeAngle)) if int(beam.NumberOfWedges) > 0 else 'no wedge', beams))
+    wedge_angles = list(map(lambda beam: str(int(beam.WedgeSequence[0].WedgeAngle)) if int(beam.NumberOfWedges) > 0 else strings.no_wedge, beams))
 
     return ','.join(wedge_angles)
 
@@ -153,7 +153,7 @@ def _extract_field_size(dataset, case):
                     field_size_list.append(str(length_y) + "x" + str(length_x))
             else:
                 if length_x==0 or length_y==0:
-                    field_size_list.append("Not Extracted")
+                    field_size_list.append(strings.Not_Extracted)
 
     return ','.join(field_size_list)
 

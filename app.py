@@ -63,7 +63,7 @@ def process_dicom(location, destination, output_format, case_number, truth_table
 
     location        - the filepath of the DICOM
     destination     - the filepath of the folder in which the result will be saved to
-    output_format   - perhaps there will be support for json output in the future? currently just csv always
+    output_format   - perhaps there will be support for json output in the future? currently always csv
     case_number     - the case number of the truth table that parameters should be evaluated against (see data/truth_table_lvl3.csv)
     truth_table     - a dictionary of correct values for each case
     '''

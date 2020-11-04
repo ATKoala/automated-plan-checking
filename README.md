@@ -17,15 +17,15 @@ Extract and evaluate data from DICOM RT-PLAN files.
 - [**Truth table specification**](#truth-table-specification)
 - [**Testing**](#testing)
   
-[**Features**](#features)
-
-- [**Sprint1**](#sprint1)
-- [**Sprint2**](#sprint2)
-
 [**Documentation**](#documentation)
 
 - [**Architecture**](#architecture)
 - [**Test cases**](#test-cases)
+
+[**Features**](#features)
+
+- [**Sprint1**](#sprint1)
+- [**Sprint2**](#sprint2)
 
 [**Changelog**](#changelog)
 
@@ -100,6 +100,16 @@ More details can be found in the [User guide](https://github.com/SuryadiTjandra/
 
 Sample truth tables (for [level 2](data/truth_table_example.csv) and [level 3](data/truth_table_lvl2_example.csv))
 
+## Documentation
+
+### Architecture
+
+[Architecture](https://github.com/SuryadiTjandra/automated-plan-checking/blob/master/docs/System-Design-and-Architecture.pdf) of the project, exported from Confluence. It includes components of the program and system design.
+
+### Test cases
+
+[Test cases](https://github.com/SuryadiTjandra/automated-plan-checking/blob/master/docs/atkoala-Test-271020-0054-2114.pdf) of the project, exported from Confluence.
+
 ## Testing
 
 Run the tests with `python -m unittest`
@@ -149,16 +159,6 @@ Run a particular test (i.e prescription dose) with `python -m unittest test_para
 15 As an Auditor, (Parameter) I want to know the field size of the radiation beam
 
 16 As an Auditor, (Parameter) I want to know the modality of treatment [imrt, vmat, 3dcrt, dcat, tomo, f-cone, hyp-arc, g-knife]
-
-## Documentation
-
-### Architecture
-
-[Architecture](https://github.com/SuryadiTjandra/automated-plan-checking/blob/master/docs/System-Design-and-Architecture.pdf) of the project, exported from Confluence. It includes components of the program and system design.
-
-### Test cases
-
-[Test cases](https://github.com/SuryadiTjandra/automated-plan-checking/blob/master/tests/atkoala-Test-271020-0054-2114.pdf) of the project ,exported from Confluence.
 
 ## Changelog
 
