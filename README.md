@@ -1,10 +1,10 @@
 # automated-plan-checking
 
-Extract and evaluate data from DICOM RT-PLAN files.
+`Extract and evaluate data from DICOM RT-PLAN files.`
 
 `Unimelb COMP90082 :: 2020 Semester 2 :: Team AT-Koala`
 
-**README best viewed with a [markdown reader](https://markdownlivepreview.com/) or on the [github page](https://github.com/SuryadiTjandra/automated-plan-checking)**
+*README best viewed with a [markdown reader](https://markdownlivepreview.com/) or on the [github page](https://github.com/SuryadiTjandra/automated-plan-checking)*
 
 ## Table of contents
 
@@ -14,10 +14,12 @@ Extract and evaluate data from DICOM RT-PLAN files.
 
 [**Installation and Usage**](#installation-and-usage)
   
+- [**Usage**](#usage)
+
 [**Documentation**](#documentation)
 
-- [**For User**](#for-user)
-- [**For Developer**](#for-developer)
+- [**For Users**](#for-users)
+- [**For Developers**](#for-developers)
 
 [**Testing**](#testing)
 
@@ -48,7 +50,7 @@ To download as zip: <https://github.com/SuryadiTjandra/automated-plan-checking/a
 
 To install with git: `git clone https://github.com/SuryadiTjandra/automated-plan-checking.git`
 
-Usage:
+### Usage
 
 - Process single dicom
   - `python app.py --inputs data/Input/YellowLvlIII_7a.dcm`
@@ -71,8 +73,6 @@ More details can be found in the [User guide](docs/User-Guide.pdf).
 
 ## Documentation
 
-Various useful documents are stored in the docs/ folder:
-
 ### For Users
 
 - [User Guide](User-Guide.pdf)
@@ -80,16 +80,11 @@ Various useful documents are stored in the docs/ folder:
 ### For Developers
 
 - [Customising Truth Tables](docs/Writing-Truth-Tables.pdf)
-
 - [Adding a new Parameter](docs/Adding-Parameters.pdf)
-
-- [User Stories](docs/User-Stories.pdf) contains the features completed and not completed, as well as notes on completed features.
-
+- [User Stories](docs/User-Stories.pdf) shows the stories completed and not completed, as well as notes on completed features.
 - [Architecture](docs/System-Design-and-Architecture.pdf) includes components of the program and how modules fit together.
-
 - [Test cases](docs/Test-Cases.pdf) describes the results from manually testing various parts of the system.
-
-- [Parameter Information](docs/Parameter-Information.pdf) contains some information about the parameters for future developers without the domain knowledge.
+- [Parameter Information](docs/Parameter-Information.pdf) contains some information about the parameters for future developers without domain knowledge.
 
 ## Testing
 
