@@ -4,7 +4,7 @@
 
 `Unimelb COMP90082 :: 2020 Semester 2 :: Team AT-Koala`
 
-*README best viewed with a [markdown reader](https://markdownlivepreview.com/) or on the [github page](https://github.com/SuryadiTjandra/automated-plan-checking)*
+*README best viewed with a [markdown reader](https://markdownlivepreview.com/) or on the [github page](https://github.com/ATKoala/automated-plan-checking)*
 
 ## Table of contents
 
