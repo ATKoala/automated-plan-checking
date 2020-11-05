@@ -75,7 +75,7 @@ More details can be found in the [User guide](docs/User-Guide.pdf).
 
 ### For Users
 
-- [User Guide](User-Guide.pdf)
+- [User Guide](docs/User-Guide.pdf)
 
 ### For Developers
 
