@@ -2,7 +2,7 @@
 
 # We import the pydicom library to use it's DICOM reading methods
 import pydicom as dicom
-from code import strings
+from code_files import strings
 from .extractor_functions import extractor_functions, _extract_mode
 from .evaluator_functions import evaluator_functions
 
