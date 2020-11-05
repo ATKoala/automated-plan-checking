@@ -1,8 +1,8 @@
 # automated-plan-checking
 
-`Unimelb COMP90082 :: 2020 Semester 2 :: Team AT-Koala`
-
 Extract and evaluate data from DICOM RT-PLAN files.
+
+`Unimelb COMP90082 :: 2020 Semester 2 :: Team AT-Koala`
 
 **README best viewed with a [markdown reader](https://markdownlivepreview.com/) or on the [github page](https://github.com/SuryadiTjandra/automated-plan-checking)**
 
@@ -15,6 +15,9 @@ Extract and evaluate data from DICOM RT-PLAN files.
 [**Installation and Usage**](#installation-and-usage)
   
 [**Documentation**](#documentation)
+
+- [**For User**](#for-user)
+- [**For Developer**](#for-developer)
 
 [**Testing**](#testing)
 
@@ -64,25 +67,29 @@ Usage:
   - `python app.py --inputs INPUTS --truth_table TRUTH_TABLE`
   - Example: - `python app.py --inputs data/Input --truth_table data/truth_table_lvl3_.csv`
 
-More details can be found in the [User guide](https://github.com/SuryadiTjandra/automated-plan-checking/blob/master/docs/atkoala-UserGuide-271020-1338-2126.pdf).
+More details can be found in the [User guide](docs/User-Guide.pdf).
 
 ## Documentation
 
 Various useful documents are stored in the docs/ folder:
 
+### For Users
+
 - [User Guide](User-Guide.pdf)
+
+### For Developers
 
 - [Customising Truth Tables](docs/Writing-Truth-Tables.pdf)
 
 - [Adding a new Parameter](docs/Adding-Parameters.pdf)
 
-- [User Stories](docs/User-Stories.pdf)
+- [User Stories](docs/User-Stories.pdf) contains the features completed and not completed, as well as notes on completed features.
 
-- [Architecture](docs/System-Design-and-Architecture.pdf). It includes components of the program and system design.
+- [Architecture](docs/System-Design-and-Architecture.pdf) includes components of the program and how modules fit together.
 
 - [Test cases](docs/Test-Cases.pdf) describes the results from manually testing various parts of the system.
 
-- [Parameter Information](docs/Parameter-Information.pdf) contains some information about the parameters.
+- [Parameter Information](docs/Parameter-Information.pdf) contains some information about the parameters for future developers without the domain knowledge.
 
 ## Testing
 
