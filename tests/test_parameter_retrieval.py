@@ -2,8 +2,8 @@
 
 import unittest
 import pydicom
-from code import strings
-from code.parameters.parameter_retrieval import extract_parameters, evaluate_parameters
+from code_files import strings
+from code_files.parameters.parameter_retrieval import extract_parameters, evaluate_parameters
 from app import dose_struct_references
 
 class TestIMRTExtractionValues(unittest.TestCase): 

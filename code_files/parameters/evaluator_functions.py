@@ -13,7 +13,7 @@ table_value - the value from the truth table (corresponding to case and paramete
 }
 '''
 
-from code import strings
+from code_files import strings
 
 def _evaluate_gantry(param_value, table_value, **kwargs):
     # This line checks whether the parameter value found is the same as the truth table value (this is why the formating of the two dictionaries is important) and gives a "PASS" value

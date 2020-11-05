@@ -8,10 +8,10 @@ import pydicom
 import os
 import argparse
 from pathlib import Path
-from code import strings
-from code.outputter import output
-from code.truth_table_reader import read_truth_table
-from code.parameters.parameter_retrieval import extract_parameters, evaluate_parameters
+from code_files import strings
+from code_files.outputter import output
+from code_files.truth_table_reader import read_truth_table
+from code_files.parameters.parameter_retrieval import extract_parameters, evaluate_parameters
 
 def main():
     '''

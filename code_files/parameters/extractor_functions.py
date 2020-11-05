@@ -9,7 +9,7 @@ struct_dose_files   - A dictionary of StudyInstanceUID mapping to a list of RTDO
 case                - The case number of the RTPLAN being extracted
 '''
 
-from code import strings
+from code_files import strings
 
 def _extract_mode(dataset, struct_dose_files, case):
     # For now, we are only producing IMRT vs VMAT modes for cases 6, 7, and 8
