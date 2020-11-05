@@ -68,9 +68,15 @@ More details can be found in the [User guide](https://github.com/SuryadiTjandra/
 
 ## Documentation
 
-- [User Guide](https://github.com/SuryadiTjandra/automated-plan-checking/blob/master/docs/User-Guide.pdf) 
+Various useful documents are stored in the docs/ folder:
+
+- [User Guide](https://github.com/SuryadiTjandra/automated-plan-checking/blob/master/docs/User-Guide.pdf)
 
 - [Customising Truth Tables](https://github.com/SuryadiTjandra/automated-plan-checking/blob/master/docs/Writing-Truth-Tables.pdf)
+
+- [Adding a new Parameter](https://github.com/SuryadiTjandra/automated-plan-checking/blob/master/docs/Adding-Parameters.pdf)
+
+- [User Stories](https://github.com/SuryadiTjandra/automated-plan-checking/blob/master/docs/User-Stories.pdf)
 
 - [Architecture](https://github.com/SuryadiTjandra/automated-plan-checking/blob/master/docs/System-Design-and-Architecture.pdf). It includes components of the program and system design.
 
