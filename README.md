@@ -44,9 +44,9 @@ Currently, the process to verify planning parameters is to manually check pdf pr
 
 ## Installation and Usage
 
-To download as zip: <https://github.com/SuryadiTjandra/automated-plan-checking/archive/master.zip>
+To download as zip: <https://github.com/ATKoala/automated-plan-checking/archive/master.zip>
 
-To install with git: `git clone https://github.com/SuryadiTjandra/automated-plan-checking.git`
+To install with git: `git clone https://github.com/ATKoala/automated-plan-checking.git`
 
 Usage:
 
