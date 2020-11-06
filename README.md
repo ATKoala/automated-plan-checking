@@ -8,7 +8,10 @@
 
 [**Project background**](#project-background)
 
-[**System requirements**](#system-requirements)
+[**System Setup**](#system-setup)
+
+- [**Anaconda and Spyder**](#anaconda-setup)
+- [**Pip and command line**](#pip-setup)
 
 [**Installation and Usage**](#installation-and-usage)
   
@@ -27,11 +30,22 @@ The aim is to create a program that can perform an automated check of data and p
 
 Currently, the process to verify planning parameters is to manually check pdf print outs. The information required is contained in the DICOM RT-PLAN files created for each treatment plan. The goal is a program that can directly extract the information from the DICOM file and then compare this data to a standard data set to produce a pass/fail evaluation.
 
-## System requirements
+## System Setup
 
-- **Python 3.6** or above
-- **pydicom** (can be installed with `pip install pydicom` or `conda install -c conda-forge pydicom`)
-- **pandas** (can be installed with `pip install pandas`)
+### Anaconda Setup
+
+1. Open Spyder
+2. Check the python version in the bottom bar, if it's below 3.6, update by running `conda update python` in the Spyder console.
+3. Anaconda comes with pandas preinstalled, but check it with `conda list pandas` in the console.
+4. Install pydicom by running `conda install -c conda-forge pydicom` in the console.
+
+### Pip Setup
+
+The necessary packages can also be installed using python's package manager pip and a command prompt/shell.
+
+1. Ensure that the python version is **Python 3.6** or above. (Run `python --version` on the command line)
+2. Install pydicom (can be installed with `pip install pydicom`)
+3. Install pandas (can be installed with `pip install pandas`)
 
 ## Installation and Usage
 
