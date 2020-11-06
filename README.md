@@ -55,6 +55,9 @@ To install with git: `git clone https://github.com/ATKoala/automated-plan-checki
 
 ### Usage
 
+1. Open the settings.txt file and edit the input, output and truth table files to the desired locations
+2. Navigate to app.py in Spyder and click Run.
+
 - Process single dicom
   - `python app.py --inputs data/Input/YellowLvlIII_7a.dcm`
 - Process a folder of dicoms
