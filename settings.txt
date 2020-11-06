@@ -30,14 +30,15 @@ silent_run = false
 ##### Sample Settings ##############################################
 # Some exaples for each setting
 
-# default_input = data/Input,7
-# default_input = data/Input/YellowLvlIII_7a.dcm * data/Input/YellowLvlIII_7b.dcm,7
+# default_input = data/sample
+# default_input = data/sample,7
+# default_input = data/sample/YellowLvlIII_7a.dcm * data/sample/sample2
 # default_input = C:\Users\Jimothy\dicoms\
-# default_input = C:\Users\Jimothy\dicoms\ * data/Inputs
+# default_input = C:\Users\Jimothy\dicoms\ * data/sample
 
 # truth_table_file = data/truth_table_lvl2.csv
 # truth_table_file = C:\Users\Jimothy\dicoms\truth_table.csv
 
-# default_output_folder = C:\Users\Jimothy\dicoms\reports
+# default_output_folder = C:\Users\Jimothy\dicoms\csvreports
 
 # silent_run = true
