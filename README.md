@@ -2,9 +2,7 @@
 
 `Extract and evaluate data from DICOM RT-PLAN files.`
 
-`Unimelb COMP90082 :: 2020 Semester 2 :: Team AT-Koala`
-
-*README best viewed with a [markdown reader](https://markdownlivepreview.com/) or on the [github page](https://github.com/ATKoala/automated-plan-checking)*
+*README best viewed on the [github page](https://github.com/ATKoala/automated-plan-checking)*
 
 ## Table of contents
 
@@ -20,15 +18,6 @@
 
 - [**For Users**](#for-users)
 - [**For Developers**](#for-developers)
-
-[**Testing**](#testing)
-
-[**Features**](#features)
-
-- [**Sprint1**](#sprint1)
-- [**Sprint2**](#sprint2)
-
-[**Changelog**](#changelog)
 
 ## Project background
 
@@ -85,81 +74,3 @@ More details can be found in the [User guide](docs/User-Guide.pdf).
 - [Architecture](docs/System-Design-and-Architecture.pdf) includes components of the program and how modules fit together.
 - [Test cases](docs/Test-Cases.pdf) describes the results from manually testing various parts of the system.
 - [Parameter Information](docs/Parameter-Information.pdf) contains some information about the parameters for future developers without domain knowledge.
-
-## Testing
-
-Run the tests with `python -m unittest`
-
-Run tests for a particular class with `python -m unittest test_parameter_retrieval.[ClassName]`.
-
-- e.g `python -m unittest test_parameter_retrieval.TestIMRTExtractionValues`
-
-Run a particular test (i.e prescription dose) with `python -m unittest test_parameter_retrieval.[ClassName].[FunctionName]`.
-
-- e.g `python -m unittest test_parameter_retrieval.TestIMRTExtractionValues.test_total_prescription_dose`
-
-## Features
-
-### Sprint1
-
-01 As an Auditor, I want parameter values to be output when running the program, as a csv
-
-02 As an Auditor, I also want each parameter value to be evaluated with a pass/fail result and recorded in the csv output
-
-05 As an Auditor, I want to be able to specify the case of the files I'm processing (necessary if partial parameter extraction)
-
-07 As an Auditor, (Parameter) I want to know the angle of the machine gantry
-
-08 As an Auditor, (Parameter) I want to know the angle of the beam limiting device (aka collimator)
-
-09 As an Auditor, (Parameter) I want to know the SSD (source to skin distance)
-
-10 As an Auditor, (Parameter) I want to know the total amount of radiation dose planned(aka prescription dose/#)
-
-11 As an Auditor, (Parameter) I want to know the number of fractions the dose will be split up into(combined with prescription dose, 50/25 means 50 dose 25 fractions)
-
-12 As an Auditor, (Parameter) I want to know the wedge angle(s)
-
-13 As an Auditor, (Parameter) I want to know the machine energy(doesn't need to be evaluated)
-
-14 As an Auditor, (Parameter) I want to know the fluence mode of the radiation beams(attached to energy)
-
-### Sprint2
-
-03 As an Auditor, I want the value acceptance ranges to be output in the csv as well
-
-04 As an Auditor, It would be useful that  the range of acceptable values will automated modified depending on the file
-
-06 As an Auditor, I want to be able to process batches of dicoms at a time
-
-15 As an Auditor, (Parameter) I want to know the field size of the radiation beam
-
-16 As an Auditor, (Parameter) I want to know the modality of treatment [imrt, vmat, 3dcrt, dcat, tomo, f-cone, hyp-arc, g-knife]
-
-## Changelog
-
-### Sprint 2
-
-- Update mode output ([#23](https://github.com/SuryadiTjandra/automated-plan-checking/pull/23))
-- More error handling ([#21](https://github.com/SuryadiTjandra/automated-plan-checking/pull/21))
-- Field size parameter implemented ([#20](https://github.com/SuryadiTjandra/automated-plan-checking/pull/20))
-- Mode parameter ([#20](https://github.com/SuryadiTjandra/automated-plan-checking/pull/20))
-- Refactor ([#19](https://github.com/SuryadiTjandra/automated-plan-checking/pull/19))
-- Strings Module ([#18](https://github.com/SuryadiTjandra/automated-plan-checking/pull/18))
-- Properties File ([#17](https://github.com/SuryadiTjandra/automated-plan-checking/pull/17))
-- Truth table standardization ([#14](https://github.com/SuryadiTjandra/automated-plan-checking/pull/14))
-- Input truth table ([#13](https://github.com/SuryadiTjandra/automated-plan-checking/pull/13))
-- Add batch processing ([#11](https://github.com/SuryadiTjandra/automated-plan-checking/pull/11))
-- More informative output ([#10](https://github.com/SuryadiTjandra/automated-plan-checking/pull/10))
-
-### Sprint 1
-
-- Modularize parameter extraction ([#9](https://github.com/SuryadiTjandra/automated-plan-checking/pull/9))
-- Unit Tests ([#8](https://github.com/SuryadiTjandra/automated-plan-checking/pull/8))
-- Nominal Beam Energy ([#4](https://github.com/SuryadiTjandra/automated-plan-checking/pull/4))
-- Command line args ([#3](https://github.com/SuryadiTjandra/automated-plan-checking/pull/3))
-- Total Prescription Dose ([#2](https://github.com/SuryadiTjandra/automated-plan-checking/pull/2))
-- SSD (initial commit)
-- Number of fractions (initial commit)
-- Gantry Angle (initial commit)
-- Collimator angle (initial commit)
