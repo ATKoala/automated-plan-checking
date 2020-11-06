@@ -13,7 +13,7 @@ class TestIMRTExtractionValues(unittest.TestCase):
     @classmethod
     def setUpClass(self): 
         # We use the extraction function once here and inspect the results in the tests below
-        dataset = pydicom.dcmread('./data/Input/YellowLvlIII_7a.dcm', force=True)
+        dataset = pydicom.dcmread('tests/resources/YellowLvlIII_7a.dcm', force=True)
         self.extracted = extract_parameters(dataset, {}, 7)
 
     def test_prescription_dose(self):
@@ -39,7 +39,7 @@ class TestVMATExtractionValues(unittest.TestCase):
     @classmethod
     def setUpClass(self): 
         # We use the extraction function once here and inspect the results in the tests below
-        dataset = pydicom.dcmread('./data/Input/YellowLvlIII_7b.dcm', force=True)
+        dataset = pydicom.dcmread('tests/resources/YellowLvlIII_7b.dcm', force=True)
         self.extracted = extract_parameters(dataset, {}, 7)
 
     def test_prescription_dose(self):
@@ -75,7 +75,7 @@ class TestEvaluation(unittest.TestCase):
     '''
     @classmethod
     def setUpClass(self): 
-        from code.truth_table_reader import read_truth_table
+        from code_files.truth_table_reader import read_truth_table
         self.truth_table = read_truth_table("data/truth_table_lvl3.csv")
 
         # If all parameters pass, evaluate_parameters() should return this.
