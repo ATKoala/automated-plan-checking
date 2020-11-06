@@ -30,20 +30,20 @@ The aim is to create a program that can perform an automated check of data and p
 
 Currently, the process to verify planning parameters is to manually check pdf print outs. The information required is contained in the DICOM RT-PLAN files created for each treatment plan. The goal is a program that can directly extract the information from the DICOM file and then compare this data to a standard data set to produce a pass/fail evaluation.
 
-## Setting Up
+## System Setup
 
-### With Anaconda
+### Anaconda Setup
 
 1. Open Spyder
 2. Check the Python version. If it's lower than 3.6, run `conda update python` in the Spyder console.
-3. Anaconda comes with the pandas package preinstalled, but check it with `conda list pandas` in the console. It should look like:
-4. Lastly, install the pydicom package with `conda install -c conda-forge pydicom`
+3. Anaconda comes with the pandas package preinstalled, but check it with `conda list pandas` in the console.
+4. Install the pydicom package with `conda install -c conda-forge pydicom`
 
-### With command line
+### Pip Setup
 
-It's also possible to set up directly through the command line/powershell, with "pip" the python package manager.
+It's also possible to set up directly through the command line/shell, with "pip", the python package manager.
 
-1. Ensure Python 3.6 or higher with `python --version`
+1. Ensure Python version 3.6 or higher by running `python --version` in the command line
 2. Install **pandas** (Check if already insalled with `pip show pandas`. Can be installed with `pip install pandas`)
 3. Install **pydicom** (Check with `pip show pydicom`. Can be installed with `pip install pydicom`)
 
@@ -68,7 +68,7 @@ More details can be found in the [User guide](docs/User-Guide.pdf).
 
 ### For Developers
 
-- [Coding in a new Parameter](docs/Adding-Parameters.pdf)
+- [Developing a new Parameter](docs/Adding-Parameters.pdf)
 - [User Stories](docs/User-Stories.pdf) shows the features completed and not completed, as well as notes on completed features.
 - [Architecture](docs/System-Design-and-Architecture.pdf) includes components of the program and how modules fit together.
 - [Test cases](docs/Test-Cases.pdf) describes the results from manually testing various parts of the system.
