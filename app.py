@@ -26,13 +26,14 @@ def main():
     settings_input = [location.strip() for location in properties["default_input"].split('*')]
     inputs = user_input["inputs"] if user_input["inputs"] else settings_input
     output = user_input["output"] if user_input["output"] else properties["default_output_folder"]
+    silent = properties["silent_run"]
     output_format = user_input["output_format"]
     case_number = user_input["case_number"]
     truth_table_file = user_input["truth_table_file"] if user_input["truth_table_file"] else properties["truth_table_file"]
     truth_table = read_truth_table(truth_table_file) 
 
     # Print truth table being applied: this can be confusing for the user due to the settings file defaulting to lvl3
-    print(f"\nUsing truth table: {truth_table_file}\n")
+    info_print(f"\nUsing truth table: {truth_table_file}\n", silent)
     # Create the output folder if it doesn't exist
     if not os.path.isdir(output):
         os.mkdir(output)
@@ -65,8 +66,9 @@ def main():
             with os.scandir(location) as folder:
                 for item in folder:
                     if item.is_file() and item.name.endswith(".dcm"):
-                        process_dicom(item.path, output, output_format, final_case, truth_table, dose_struct_index)
-
+                        result = process_dicom(item.path, output, output_format, final_case, truth_table, dose_struct_index)
+                        info_print(result, silent)
+        
 def dose_struct_references(folder_path):
     ''' Function to scan a directory and build an index of RTDOSE and RTSTRUCT files by StudyInstanceUID
         Returns a dictionary of {StudyInstanceUID:[(modality, path), (modality, path)], ...}
@@ -126,10 +128,14 @@ def process_dicom(location, destination, output_format, case_number, truth_table
     output_location = os.path.join(destination,Path(location).stem)
     output_file = output(parameters, evaluations, solutions, output_location, output_format)
     if output_file:
-        print(f"{location} extracted to -> {output_file}")
+        return f"{location} extracted to -> {output_file}"
     else:
-        print(f"{location} failed extraction.")
+        return f"{location} failed extraction."
 
+def info_print(text,silent=False):
+    if not silent:
+        print(text)
+        
 def parse_arguments():
     parser = argparse.ArgumentParser(description="Extract and evaluate selected parameters of DICOM files for the purpose of auditing planned radiotherapy treatment.")
     parser.add_argument("-i", "--inputs", nargs='+',
@@ -140,9 +146,8 @@ def parse_arguments():
                         help="The location where the reports for processed DICOMs should be saved (creates folder if doesn't yet exist). If unspecified, each report will be saved in a Reports folder in this directory.")
     parser.add_argument("-c", "--case_number", metavar="NUMBER", type=int,
                         help="The case number of input DICOMS. If specified, assumes all DICOMS in this batch will be this case.")
-    parser.add_argument("-f", "--format", choices=["csv", "json"], default="csv", dest="output_format",
+    parser.add_argument("-f", "--format", choices=["csv"], default="csv", dest="output_format",
                         help="The format of the output file.")
-                    
     args = parser.parse_args()
     return vars(args)
     

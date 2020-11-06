@@ -25,3 +25,9 @@ default_output_folder = reports
 # truth_table_file = C:\Users\Jimothy\dicoms\truth_table.csv
 
 truth_table_file = data/truth_table_lvl3.csv
+
+### silent_run
+# Whether the diagnostic output should be printed or not
+# e.g the text describing what dicoms have been saved where, which truth table is being used, etc.
+# To run the program silently, set silent_run = True 
+silent_run = True
