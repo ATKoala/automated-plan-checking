@@ -22,7 +22,7 @@
 # Lines starting with hash (#) are comments and do not impact the settings
 
 ##### Settings ####################################################
-default_input = data/Input/,7  
+default_input = data/sample/,7  
 default_output_folder = reports
 truth_table_file = data/truth_table_lvl3.csv
 silent_run = false

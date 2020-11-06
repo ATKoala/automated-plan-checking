@@ -26,7 +26,7 @@ def main():
     settings_input = [location.strip() for location in properties["default_input"].split('*')]
     inputs = user_input["inputs"] if user_input["inputs"] else settings_input
     output = user_input["output"] if user_input["output"] else properties["default_output_folder"]
-    silent = properties["silent_run"]
+    silent = False if properties["silent_run"].lower() == "false" else True
     output_format = user_input["output_format"]
     case_number = user_input["case_number"]
     truth_table_file = user_input["truth_table_file"] if user_input["truth_table_file"] else properties["truth_table_file"]
