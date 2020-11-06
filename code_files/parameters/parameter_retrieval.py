@@ -6,15 +6,30 @@ from code_files import strings
 from .extractor_functions import extractor_functions, _extract_mode
 from .evaluator_functions import evaluator_functions
 
-def extract_parameters(dataset, struct_dose_files, case):
+def extract_parameters(dataset, dose_struct_paths, case):
+    ''' 
+    dataset             - A pydicom Dataset object
+    dose_struct_paths   - A dictionary {RTDOSE: [paths,...]), RTSTRUCT: [paths,...]}
+                            with RTDOSE and RTSTRUCT files sharing a StudyInstanceUID with the plan dicom being processed
+                          May be None if no associated dose/structs found
+    case                - The case of the RTPLAN being processed
+    '''
     # define a list of parameters that need to be found
     parameters = [strings.mode, strings.prescription_dose, strings.prescription_point, strings.isocenter_point, strings.override, strings.collimator,
                   strings.gantry, strings.SSD, strings.couch, strings.field_size, strings.wedge, strings.meas, strings.energy]
     
+    # Perhaps there should only be one dose and struct associated with a plan?
+    if dose_struct_paths and len(dose_struct_paths[strings.RTDOSE])!=1 or len(dose_struct_paths[strings.RTSTRUCT])!=1:
+        exit("In parameter/parameter_retrieval.py, in function extract_parameters()\n \
+              Unexpected number of dose/struct files found associated with one RTPLAN")
+              
+    dose = dicom.dcmread(dose_struct_paths[strings.RTDOSE][0], force=True)
+    struct = dicom.dcmread(dose_struct_paths[strings.RTSTRUCT][0], force=True)
+
     #run the extraction functions for each parameter and store the values in parameter_values dictionary
     parameter_values = {}
     for parameter in parameters:
-        parameter_values[parameter] = extractor_functions[parameter](dataset, struct_dose_files, case)
+        parameter_values[parameter] = extractor_functions[parameter](dataset, dose, struct, case)
 
     return parameter_values
 

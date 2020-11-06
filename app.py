@@ -65,7 +65,6 @@ def main():
         # Handle the input where a folder is specified
         else:
             # First we scan through the entire folder once to find out what dose and structure files we have
-            
             dose_struct_index = dose_struct_references(location)
             # Then, scan through the folder and process each RTPLAN DICOM
             with os.scandir(location) as folder:
@@ -76,26 +75,26 @@ def main():
         
 def dose_struct_references(folder_path):
     ''' Function to scan a directory and build an index of RTDOSE and RTSTRUCT files by StudyInstanceUID
-        Returns a dictionary of {StudyInstanceUID:[(modality, path), (modality, path)], ...}
+        Returns a dictionary: {StudyInstanceUID: {RTDOSE: [paths,...]), RTSTRUCT: [paths,...]}, ...}
     '''
     dose_struct_index = {}
     with os.scandir(folder_path) as folder:
         for item in folder:
             if item.is_file() and item.name.endswith(".dcm"):
-                ref = dose_struct_reference(item.path)
-                if ref:
-                    if ref[0] in dose_struct_index:
-                        dose_struct_index[ref[0]] += [ref[1:]]
-                    else:
-                        dose_struct_index[ref[0]] = [ref[1:]]
+                uid, modality, file_path = dose_struct_reference(item.path)
+                if uid not in dose_struct_index:
+                    dose_struct_index[uid] = {strings.RTDOSE:[], strings.RTSTRUCT:[], None:[]}
+                dose_struct_index[uid][modality].append(file_path)
     return dose_struct_index
 
 def dose_struct_reference(file_path):
     dataset = pydicom.dcmread(file_path, force=True, specific_tags=["StudyInstanceUID", "Modality"])
-    if str(dataset.Modality) in ["RTDOSE", "RTSTRUCT"]:
-        return dataset.StudyInstanceUID, file_path, dataset.Modality
+    if str(dataset.Modality) in [strings.RTDOSE, strings.RTSTRUCT]:
+        return dataset.StudyInstanceUID, dataset.Modality, file_path
+    else:
+        return None,None,None
 
-def process_dicom(location, destination, output_format, case_number, truth_table, dose_struct_index={}):
+def process_dicom(location, destination, output_format, case_number, truth_table, dose_struct_index):
     ''' Function to process a single DICOM RTPLAN
 
     location            - the filepath of the DICOM
@@ -103,13 +102,13 @@ def process_dicom(location, destination, output_format, case_number, truth_table
     output_format       - perhaps there will be support for json output in the future? currently always csv
     case_number         - the case number of the truth table that parameters should be evaluated against (see data/truth_table_lvl3.csv)
     truth_table         - a dictionary of correct values for each case
-    dose_struct_index   - a dictionary mapping StudyInstanceUID to (location, modality) pairs of dose and structure set DICOMs
+    dose_struct_index   - a dictionary {StudyInstanceUID: {RTDOSE: [paths,...]), RTSTRUCT: [paths,...]}, ...}
     '''
     dataset = pydicom.read_file(location, force=True)
 
     # If the dicom is not an RTPLAN, we don't want to process it. 
     if str(dataset.Modality) != "RTPLAN":
-        return
+        return "{:10} {}: not a plan file".format("SKIPPED", location)
 
     # Prompt for case number if not specified
     cases = len(truth_table["case"])
@@ -120,22 +119,19 @@ def process_dicom(location, destination, output_format, case_number, truth_table
             print(f"Case must be an integer between 1 and {cases}!")
 
     # Look for any related dose files or structure sets
-    struct_dose_files = {}
+    dose_struct_paths = None
     if dataset.StudyInstanceUID in dose_struct_index:
-        struct_dose_files[dataset.StudyInstanceUID] = dose_struct_index[dataset.StudyInstanceUID]
+        dose_struct_paths = dose_struct_index[dataset.StudyInstanceUID]
 
     # Extract and evaluate the DICOM 
-    parameters = extract_parameters(dataset, struct_dose_files, case_number)
+    parameters = extract_parameters(dataset, dose_struct_paths, case_number)
     evaluations = evaluate_parameters(parameters, truth_table, case_number)
     solutions = dict([(key, truth_table[key][case_number-1]) for key in truth_table])
 
     # Output the extracted parameters into the format specified by user
     output_location = os.path.join(destination,Path(location).stem)
     output_file = output(parameters, evaluations, solutions, output_location, output_format)
-    if output_file:
-        return f"{location} extracted to -> {output_file}"
-    else:
-        return f"{location} failed extraction."
+    return "{:10} {} -> {}".format("EXTRACTED", location, output_file)
 
 def info_print(text,silent=False):
     if not silent:
