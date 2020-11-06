@@ -15,7 +15,7 @@
 # 
 
 
-#### default_input ####
+##### default_input #####
 # List the locations of dicoms to be processed
 #
 # Each input item can be the path of a dicom file or a folder (presumably containing dicoms).
@@ -25,7 +25,7 @@
 # Each input item can also be paired with a number to indicate the file or all 
 # dicoms in the folder is of a certain case, e.g. item1,case1 * item2,case2
 #
-# Here are some sample settings:
+# Here are some example settings:
 #
 # default_input = data/Input
 # default_input = data/Input * data/Input/more-input/YellowLvlIII_1c6FFF,1
@@ -35,24 +35,27 @@
 default_input = data/Input,7  
 
 
-#### default_output_folder ####
+##### default_output_folder #####
 # Specify the location of the csv reports of processed dicoms
 #
-# Sample settings:
+# Example setting:
 # default_output_folder = C:\Users\Jimothy\dicoms\reports
 
 default_output_folder = reports
 
 
-### truth_table_file 
-# Sample settings:
+##### truth_table_file #####
+# Specify the location of the truht table that dicom values are evaluated against
+#
+# Example settings:
 # truth_table_file = data/truth_table_lvl2.csv
 # truth_table_file = C:\Users\Jimothy\dicoms\truth_table.csv
 
 truth_table_file = data/truth_table_lvl3.csv
 
-### silent_run
+##### silent_run #####
 # Whether the diagnostic output should be printed or not
 # e.g the text describing what dicoms have been saved where, which truth table is being used, etc.
-# To run the program silently, set silent_run = True 
-silent_run = False
+#
+# To run the program silently, set silent_run = true 
+silent_run = false
