@@ -55,25 +55,8 @@ To install with git: `git clone https://github.com/ATKoala/automated-plan-checki
 
 ### Usage
 
-1. Open the settings.txt file and edit the input, output and truth table files to the desired locations
+1. Open the settings.txt file and edit the input, output and truth table files to the desired locations.
 2. Navigate to app.py in Spyder and click Run.
-
-- Process single dicom
-  - `python app.py --inputs data/Input/YellowLvlIII_7a.dcm`
-- Process a folder of dicoms
-  - `python app.py --inputs data/Input`
-- Multiple dicoms or folders in any order
-  - `python app.py --inputs FOLDER1 FOLDER2 FILE1 FILE2 FOLDER3 (etc...)`
-  - Example: - `python app.py --inputs data/Input data/Input/more-input`
-- Specify case number for each input item
-  - `python app.py --inputs INPUT1,CASE1 INPUT2,CASE2`
-  - Example: - `python app.py --inputs data/Input/YellowLvlIII_7a.dcm,7 data/Input/YellowLvlIII_7b.dcm,7`
-- Specify case for all inputs
-  - `python app.py --inputs INPUTS --case_number 7`
-  - Example: - `python app.py --inputs data/Input  --case_number 7`
-- Specify a custom truth table (default uses level 3 table)
-  - `python app.py --inputs INPUTS --truth_table TRUTH_TABLE`
-  - Example: - `python app.py --inputs data/Input --truth_table data/truth_table_lvl3_.csv`
 
 More details can be found in the [User guide](docs/User-Guide.pdf).
 
