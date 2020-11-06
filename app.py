@@ -27,7 +27,7 @@ def main():
     inputs = user_input["inputs"] if user_input["inputs"] else settings_input
     output = user_input["output"] if user_input["output"] else properties["default_output_folder"]
     silent = True if properties["silent_run"].lower() == "true" else False
-    skip_dose_structure = False if properties["skip_dose_structure"].lower() == "true" else True
+    skip_dose_structure = True if properties["skip_dose_structure"].lower() == "true" else False
     output_format = user_input["output_format"]
     case_number = user_input["case_number"]
     truth_table_file = user_input["truth_table_file"] if user_input["truth_table_file"] else properties["truth_table_file"]
@@ -79,6 +79,7 @@ def dose_struct_references(folder_path, skip):
         Returns a dictionary: {StudyInstanceUID: {RTDOSE: [paths,...]), RTSTRUCT: [paths,...]}, ...}
     '''
     if skip:
+        print("hey")
         return None
     dose_struct_index = {}
     with os.scandir(folder_path) as folder:
@@ -123,7 +124,7 @@ def process_dicom(location, destination, output_format, case_number, truth_table
 
     # Look for any related dose files or structure sets
     dose_struct_paths = None
-    if dataset.StudyInstanceUID in dose_struct_index:
+    if dose_struct_index and dataset.StudyInstanceUID in dose_struct_index:
         dose_struct_paths = dose_struct_index[dataset.StudyInstanceUID]
 
     # Extract and evaluate the DICOM 

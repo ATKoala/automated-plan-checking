@@ -28,7 +28,7 @@ default_input = data/override/,6
 default_output_folder = reports
 truth_table_file = data/truth_table_lvl3.csv
 silent_run = false
-skip_dose_structure = true
+skip_dose_structure = false
 
 ##### Sample Settings ##############################################
 # Some examples for each setting
