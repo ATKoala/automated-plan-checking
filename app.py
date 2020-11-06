@@ -26,7 +26,8 @@ def main():
     settings_input = [location.strip() for location in properties["default_input"].split('*')]
     inputs = user_input["inputs"] if user_input["inputs"] else settings_input
     output = user_input["output"] if user_input["output"] else properties["default_output_folder"]
-    silent = False if properties["silent_run"].lower() == "false" else True
+    silent = True if properties["silent_run"].lower() == "true" else False
+    skip_dose_structure = False if properties["skip_dose_structure"].lower() == "true" else True
     output_format = user_input["output_format"]
     case_number = user_input["case_number"]
     truth_table_file = user_input["truth_table_file"] if user_input["truth_table_file"] else properties["truth_table_file"]
@@ -59,13 +60,13 @@ def main():
         # Handle the input where a file is specified
         if os.path.isfile(location):
             folder_path = Path(os.path.dirname(location))
-            dose_struct_index = dose_struct_references(folder_path)
+            dose_struct_index = dose_struct_references(folder_path, skip_dose_structure)
             process_dicom(location, output, output_format, final_case, truth_table, dose_struct_index)
 
         # Handle the input where a folder is specified
         else:
             # First we scan through the entire folder once to find out what dose and structure files we have
-            dose_struct_index = dose_struct_references(location)
+            dose_struct_index = dose_struct_references(location, skip_dose_structure)
             # Then, scan through the folder and process each RTPLAN DICOM
             with os.scandir(location) as folder:
                 for item in folder:
@@ -73,10 +74,12 @@ def main():
                         result = process_dicom(item.path, output, output_format, final_case, truth_table, dose_struct_index)
                         info_print(result, silent)
         
-def dose_struct_references(folder_path):
+def dose_struct_references(folder_path, skip):
     ''' Function to scan a directory and build an index of RTDOSE and RTSTRUCT files by StudyInstanceUID
         Returns a dictionary: {StudyInstanceUID: {RTDOSE: [paths,...]), RTSTRUCT: [paths,...]}, ...}
     '''
+    if skip:
+        return None
     dose_struct_index = {}
     with os.scandir(folder_path) as folder:
         for item in folder:

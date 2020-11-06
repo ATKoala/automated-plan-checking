@@ -44,6 +44,7 @@ More details can be found in the [User guide](docs/User-Guide.pdf).
 ### For Users
 
 - [User Guide](docs/User-Guide.pdf)
+- [Settings](docs/Settings.pdf)
 
 ### For Developers
 

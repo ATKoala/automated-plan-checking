@@ -3,7 +3,7 @@
 # on setting them, consult the file
 #    docs/Settings.pdf
 # If you can't find it, the file is also available online at:
-# https://github.com/ATKoala/
+# https://github.com/ATKoala/automated-plan-checking/blob/master/docs/Settings.pdf
 #
 
 ##### Some basic explanation of option syntax #####################
@@ -24,10 +24,11 @@
 
 
 ##### Settings ####################################################
-default_input = data/sample/,7  
-default_output_folder = fake/reports
+default_input = data/override/,6  
+default_output_folder = reports
 truth_table_file = data/truth_table_lvl3.csv
 silent_run = false
+skip_dose_structure = true
 
 ##### Sample Settings ##############################################
 # Some examples for each setting
@@ -44,3 +45,5 @@ silent_run = false
 # default_output_folder = C:\Users\Jimothy\dicoms\csvreports
 
 # silent_run = true
+
+# skip_dose_strucure = false
