@@ -1,18 +1,43 @@
+##### Some basic explanation of settings syntax #######################
+# The basic syntax is:
+# field = value
+#
+# Only one setting is allowed per line.
+#
+# The terms are typically case-insensitive except when specifying files or 
+# directories when on a system that has case-sensitive filenames).
+#
+# White space is stripped from the beginning and end of the line, as
+# well as immediately before and after the '='. "default_input" also strips 
+# whitespace areound the separator (*), all other whitespace is left intact.
+# 
 # Lines starting with hash (#) are comments and do not impact the settings
+# 
 
-### default_input_folder 
-# Works the similarly --input flag on the command line, but 
-#  each input item is separated by a star * instead of spaces.
+
+#### default_input ####
+# List the locations of dicoms to be processed
+#
+# Each input item can be the path of a dicom file or a folder (presumably containing dicoms).
+#
+# Each input item must be separated by a star (*).
+#
+# Each input item can also be paired with a number to indicate the file or all 
+# dicoms in the folder is of a certain case, e.g. item1,case1 * item2,case2
+#
 # Here are some sample settings:
-# default_input = data/Input,7
-# default_input = data/Input/YellowLvlIII_7a.dcm * data/Input/YellowLvlIII_7b.dcm,7
+#
+# default_input = data/Input
+# default_input = data/Input * data/Input/more-input/YellowLvlIII_1c6FFF,1
 # default_input = C:\Users\Jimothy\dicoms\
-# default_input = C:\Users\Jimothy\dicoms\ * data/Inputs
+# default_input = C:\Users\Jimothy\dicoms\ * data/Inputs,7
 
-default_input = data/Input/,7  
+default_input = data/Input,7  
 
 
-### default_output_folder 
+#### default_output_folder ####
+# Specify the location of the csv reports of processed dicoms
+#
 # Sample settings:
 # default_output_folder = C:\Users\Jimothy\dicoms\reports
 
@@ -30,4 +55,4 @@ truth_table_file = data/truth_table_lvl3.csv
 # Whether the diagnostic output should be printed or not
 # e.g the text describing what dicoms have been saved where, which truth table is being used, etc.
 # To run the program silently, set silent_run = True 
-silent_run = True
+silent_run = False

@@ -34,13 +34,13 @@ def main():
 
     # Print truth table being applied: this can be confusing for the user due to the settings file defaulting to lvl3
     info_print(f"\nUsing truth table: {truth_table_file}\n", silent)
+    
     # Create the output folder if it doesn't exist
     if not os.path.isdir(output):
         os.mkdir(output)
 
     # Look for the given file or files or directories (aka folders) and process them
     for location in inputs:
-        
         # Check if input item is [file,case] formatted
         comma_case = None
         input_item = location.split(",")
