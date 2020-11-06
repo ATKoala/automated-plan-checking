@@ -30,6 +30,25 @@ The aim is to create a program that can perform an automated check of data and p
 
 Currently, the process to verify planning parameters is to manually check pdf print outs. The information required is contained in the DICOM RT-PLAN files created for each treatment plan. The goal is a program that can directly extract the information from the DICOM file and then compare this data to a standard data set to produce a pass/fail evaluation.
 
+## Setting Up
+
+### With Anaconda
+
+1. Open Spyder
+2. Check the Python version. If it's lower than 3.6, run `conda update python` in the Spyder console.
+3. Anaconda comes with the pandas package preinstalled, but check it with `conda list pandas` in the console. It should look like:
+4. Lastly, install the pydicom package with `conda install -c conda-forge pydicom`
+
+### With command line
+
+It's also possible to set up directly through the command line/powershell, with "pip" the python package manager.
+
+1. Ensure Python 3.6 or higher with `python --version`
+2. Install **pandas** (Check if already insalled with `pip show pandas`. Can be installed with `pip install pandas`)
+3. Install **pydicom** (Check with `pip show pydicom`. Can be installed with `pip install pydicom`)
+
+## Installation and Usage
+
 To download as zip: <https://github.com/ATKoala/automated-plan-checking/archive/master.zip>
 
 ### Usage
@@ -44,12 +63,12 @@ More details can be found in the [User guide](docs/User-Guide.pdf).
 ### For Users
 
 - [User Guide](docs/User-Guide.pdf)
-- [Settings](docs/Settings.pdf)
+- [Using Settings](docs/Settings.pdf)
+- [Customising Truth Tables](docs/Writing-Truth-Tables.pdf)
 
 ### For Developers
 
-- [Customising Truth Tables](docs/Writing-Truth-Tables.pdf)
-- [Adding a new Parameter](docs/Adding-Parameters.pdf)
+- [Coding in a new Parameter](docs/Adding-Parameters.pdf)
 - [User Stories](docs/User-Stories.pdf) shows the features completed and not completed, as well as notes on completed features.
 - [Architecture](docs/System-Design-and-Architecture.pdf) includes components of the program and how modules fit together.
 - [Test cases](docs/Test-Cases.pdf) describes the results from manually testing various parts of the system.
