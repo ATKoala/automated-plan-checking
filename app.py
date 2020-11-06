@@ -37,7 +37,12 @@ def main():
     
     # Create the output folder if it doesn't exist
     if not os.path.isdir(output):
-        os.mkdir(output)
+        try:
+            os.mkdir(output)
+        except FileNotFoundError:
+            output = Path(output)
+            print(f"Tried creating the output directory <{output.name}>, but the location <{output.resolve().parent}> doesn't exist")
+            exit()
 
     # Look for the given file or files or directories (aka folders) and process them
     for location in inputs:
