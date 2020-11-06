@@ -23,7 +23,7 @@ def main():
     properties = read_properties_file("settings.txt")
     
     # Process the supplied arguments
-    settings_input = properties["default_input_folder"].split()
+    settings_input = [location.strip() for location in properties["default_input"].split('*')]
     inputs = user_input["inputs"] if user_input["inputs"] else settings_input
     output = user_input["output"] if user_input["output"] else properties["default_output_folder"]
     output_format = user_input["output_format"]
@@ -39,23 +39,27 @@ def main():
 
     # Look for the given file or files or directories (aka folders) and process them
     for location in inputs:
+        
         # Check if input item is [file,case] formatted
         comma_case = None
         input_item = location.split(",")
         if len(input_item) == 2:
-            location = input_item[0]
+            location = Path(input_item[0])
             comma_case = int(input_item[1])
+        else:
+            location = Path(location)
         final_case = case_number if comma_case is None else comma_case
 
         # Handle the input where a file is specified
         if os.path.isfile(location):
-            folder_path = os.path.dirname(location)
+            folder_path = Path(os.path.dirname(location))
             dose_struct_index = dose_struct_references(folder_path)
             process_dicom(location, output, output_format, final_case, truth_table, dose_struct_index)
 
         # Handle the input where a folder is specified
         else:
             # First we scan through the entire folder once to find out what dose and structure files we have
+            
             dose_struct_index = dose_struct_references(location)
             # Then, scan through the folder and process each RTPLAN DICOM
             with os.scandir(location) as folder:
@@ -64,6 +68,9 @@ def main():
                         process_dicom(item.path, output, output_format, final_case, truth_table, dose_struct_index)
 
 def dose_struct_references(folder_path):
+    ''' Function to scan a directory and build an index of RTDOSE and RTSTRUCT files by StudyInstanceUID
+        Returns a dictionary of {StudyInstanceUID:[(modality, path), (modality, path)], ...}
+    '''
     dose_struct_index = {}
     with os.scandir(folder_path) as folder:
         for item in folder:
@@ -101,7 +108,7 @@ def process_dicom(location, destination, output_format, case_number, truth_table
     cases = len(truth_table["case"])
     while not isinstance(case_number, int):
         try:
-            case_number = int(input(f"What is the case number for {location}?"))
+            case_number = int(input(f"What is the case number for {location}? "))
         except ValueError:
             print(f"Case must be an integer between 1 and {cases}!")
 
@@ -119,7 +126,9 @@ def process_dicom(location, destination, output_format, case_number, truth_table
     output_location = os.path.join(destination,Path(location).stem)
     output_file = output(parameters, evaluations, solutions, output_location, output_format)
     if output_file:
-        print("Extracted to file " + output_file)
+        print(f"{location} extracted to -> {output_file}")
+    else:
+        print(f"{location} failed extraction.")
 
 def parse_arguments():
     parser = argparse.ArgumentParser(description="Extract and evaluate selected parameters of DICOM files for the purpose of auditing planned radiotherapy treatment.")

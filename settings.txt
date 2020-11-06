@@ -1,22 +1,26 @@
 # Lines starting with hash (#) are comments and do not impact the settings
 
-# default_input_folder works the same way as the --input flag on the command line.
+### default_input_folder 
+# Works the similarly --input flag on the command line, but 
+#  each input item is separated by a star * instead of spaces.
 # Here are some sample settings:
-# default_input_folder = data/Input,7
-# default_input_folder = data/Input/YellowLvlIII_7a.dcm data/Input/YellowLvlIII_7b.dcm,7
-# default_input_folder = C:\Users\Jimothy\dicoms\
-# default_input_folder = C:\Users\Jimothy\dicoms\ data/Inputs
+# default_input = data/Input,7
+# default_input = data/Input/YellowLvlIII_7a.dcm * data/Input/YellowLvlIII_7b.dcm,7
+# default_input = C:\Users\Jimothy\dicoms\
+# default_input = C:\Users\Jimothy\dicoms\ * data/Inputs
 
-default_input_folder = data/Input,7
+default_input = data/Input/,7  
 
 
-# default_output_folder Sample settings:
+### default_output_folder 
+# Sample settings:
 # default_output_folder = C:\Users\Jimothy\dicoms\reports
 
 default_output_folder = reports
 
 
-# truth_table_file Sample settings:
+### truth_table_file 
+# Sample settings:
 # truth_table_file = data/truth_table_lvl2.csv
 # truth_table_file = C:\Users\Jimothy\dicoms\truth_table.csv
 

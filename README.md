@@ -41,7 +41,7 @@ Currently, the process to verify planning parameters is to manually check pdf pr
 ## System requirements
 
 - **Python 3.6** or above
-- **pydicom** (can be installed with `pip install pydicom`)
+- **pydicom** (can be installed with `pip install pydicom` or `conda install -c conda-forge pydicom`)
 - **pandas** (can be installed with `pip install pandas`)
 
 ## Installation and Usage

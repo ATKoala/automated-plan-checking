@@ -28,7 +28,7 @@ def _extract_mode(dataset, struct_dose_files, case):
     # both gantry moves and MLC moves.""
     if moving_gantry:
         mode = strings.VMAT
-    elif not moving_gantry and number_of_beams is 5:
+    elif not moving_gantry and number_of_beams == 5:
         mode = strings.IMRT
     else:
         mode = "UNKNOWN"
