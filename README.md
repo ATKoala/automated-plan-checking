@@ -41,11 +41,14 @@ ACDS computers come with Anaconda Navigator (which is a set of programs and soft
 
 1. Open Spyder
 ![Spyder in Anaconda Navigator](docs/images/open-spyder.png)
+
 2. Check the Python version. If it's lower than 3.6, run `conda update python` in the Spyder console.
 ![Checking Python version in Spyder](docs/images/python-version-spyder.png)
+
 3. Anaconda comes with the *pandas* package preinstalled, but check it with `conda list pandas` in the console.
-![Check for pandas](docs/images/list-pandas.png)
     - If it's missing, try running `conda install pandas` in the console.
+![Check for pandas](docs/images/list-pandas.png)
+
 4. Install the *pydicom* package with `conda install -c conda-forge pydicom`
 ![Running conda install pydicom](docs/images/conda-pydicom.png)
 
@@ -62,17 +65,20 @@ It's also possible to set up directly through the command line/shell, with "pip"
 ### Installation
 
 1. Directly download the zip from: <https://github.com/ATKoala/automated-plan-checking/archive/master.zip>
-    - Or, go to <https://github.com/ATKoala/automated-plan-checking>, click the green Code button and select "download as zip"
+    - Or, go to <https://github.com/ATKoala/automated-plan-checking>, click the green Code button and select "Download zip"
       ![Zip folder from Github page](docs/images/github-zip.png)
+
 2. Unzip it and move it to wherever you want the program to live
 3. You're done!
 
 ### Usage
 
-1. Navigate to app.py in Spyder and click Run.
-![text](docs/images)
-2. You did it!
-3. Next, open the [settings file](settings.txt) and point the input, output and truth table settings to the desired locations.
+1. In Spyder, navigate to the directory in which the program is saved and open app.py
+2. Click Run. On a fresh insrall from github, it will run the program on sample dicoms in the data/ folder.
+![Running in spyder](docs/images/running-in-spyder)
+In the image above the folder was renamed from automated-plan-checking-master to automated-plan-checking.
+
+Open the [settings file](settings.txt) to point the input, output and truth table settings to the desired locations.
 
 More detailed instructions can be found in the [User guide](docs/User-Guide.pdf).
 

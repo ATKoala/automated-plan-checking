@@ -7,8 +7,8 @@ from code_files.parameters.parameter_retrieval import extract_parameters, evalua
 from app import dose_struct_references
 
 class TestIMRTExtractionValues(unittest.TestCase): 
-    ''' Tests for verifying the correct values are extracted for IMRT file
-    The 'correct' answers are derived from the vendor report in Documents/Input/7a.pdf
+    ''' Tests for verifying the extraction function works correctly for tests/resources/YellowLvlIII_7a.dcm
+    The 'correct' answers are derived from the vendor report in tests/resources/7a.pdf
     '''
     @classmethod
     def setUpClass(self): 
@@ -33,8 +33,8 @@ class TestIMRTExtractionValues(unittest.TestCase):
         self.assertEqual(self.extracted[strings.energy], '6')
 
 class TestVMATExtractionValues(unittest.TestCase): 
-    ''' Tests for verifying the correct values are extracted
-    The 'correct' answers are derived from the vendor report in Documents/Input/7b.pdf
+    ''' Tests for verifying the extraction function works correctly for tests/resources/YellowLvlIII_7b.dcm
+    The 'correct' answers are derived from the vendor report in tests/resources/7b.pdf
     '''
     @classmethod
     def setUpClass(self): 
@@ -53,6 +53,7 @@ class TestVMATExtractionValues(unittest.TestCase):
     def test_gantry_angle(self):
         # Real result returns large array with values going from 180->360->180->0->180
         # PDF report formats it as "180/360", which does not match our own formatting
+        # Not sure how to handle
         # self.assertEqual(self.extracted[strings.gantry], '180/360')
         pass 
 
@@ -66,12 +67,10 @@ class TestVMATExtractionValues(unittest.TestCase):
 
 
 class TestEvaluation(unittest.TestCase): 
-    ''' Tests for verifying that parameter sets are passed correctly
+    ''' Tests for verifying that evaluation function works correctly
     Each case (from 1-17) of the truth table has its own test against a set of parameters that *should* pass.
-    It's currently infeasible to test every possible combination of pass/failure values, this is just a basic check. 
-    Also, the correct answers are derived from the truth table. 
+    Currently we don't test every possible combination of pass/failure values, just some as a sanity check. 
 
-    Note that values of '-' are used for parameters where any value should be accepted.
     '''
     @classmethod
     def setUpClass(self): 

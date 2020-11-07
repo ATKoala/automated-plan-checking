@@ -24,7 +24,7 @@
 
 
 ##### Settings ####################################################
-default_input = data/sample/,7  
+default_input = data/samples/,7  
 default_output_folder = reports
 truth_table_file = data/truth_table_lvl3.csv
 silent_run = false
@@ -33,11 +33,11 @@ skip_dose_structure = false
 ##### Sample Settings ##############################################
 # Some examples for each setting
 
-# default_input = data/sample
-# default_input = data/sample,7
-# default_input = data/sample/YellowLvlIII_7a.dcm * data/sample/sample2
+# default_input = data/samples
+# default_input = data/samples,7
+# default_input = data/samples/YellowLvlIII_7a.dcm * data/samples2
 # default_input = C:\Users\Jimothy\dicoms\
-# default_input = C:\Users\Jimothy\dicoms\ * data/sample
+# default_input = C:\Users\Jimothy\dicoms\ * data/samples
 
 # truth_table_file = data/truth_table_lvl2.csv
 # truth_table_file = C:\Users\Jimothy\dicoms\truth_table.csv
