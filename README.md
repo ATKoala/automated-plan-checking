@@ -32,31 +32,49 @@ Currently, the process to verify planning parameters is to manually check pdf pr
 
 ## System Setup
 
+Before you run the program, you will need to make sure your computer has the required software and libraries installed.
+You will need Python 3.6 (or higher) installed, as well as the *pandas* and *pydicom* libraries.
+
 ### Anaconda Setup
 
+ACDS computers come with Anaconda Navigator (which is a set of programs and software including Python, Spyder, Jupyter, etc..), so this will be the main entry point.
+
 1. Open Spyder
+![Spyder in Anaconda Navigator](docs/images/open-spyder.png)
 2. Check the Python version. If it's lower than 3.6, run `conda update python` in the Spyder console.
-3. Anaconda comes with the pandas package preinstalled, but check it with `conda list pandas` in the console.
-4. Install the pydicom package with `conda install -c conda-forge pydicom`
+![Checking Python version in Spyder](docs/images/python-version-spyder.png)
+3. Anaconda comes with the *pandas* package preinstalled, but check it with `conda list pandas` in the console.
+![Check for pandas](docs/images/list-pandas.png)
+    - If it's missing, try running `conda install pandas` in the console.
+4. Install the *pydicom* package with `conda install -c conda-forge pydicom`
+![Running conda install pydicom](docs/images/conda-pydicom/png)
 
 ### Pip Setup
 
 It's also possible to set up directly through the command line/shell, with "pip", the python package manager.
 
 1. Ensure Python version 3.6 or higher by running `python --version` in the command line
-2. Install **pandas** (Check if already insalled with `pip show pandas`. Can be installed with `pip install pandas`)
-3. Install **pydicom** (Check with `pip show pydicom`. Can be installed with `pip install pydicom`)
+2. Install *pandas* (Check if already insalled with `pip show pandas`. Can be installed with `pip install pandas`)
+3. Install *pydicom* (Check with `pip show pydicom`. Can be installed with `pip install pydicom`)
 
 ## Installation and Usage
 
-To download as zip: <https://github.com/ATKoala/automated-plan-checking/archive/master.zip>
+### Installation
+
+1. Directly download the zip from: <https://github.com/ATKoala/automated-plan-checking/archive/master.zip>
+    - Or, go to <https://github.com/ATKoala/automated-plan-checking>, click the green Code button and select "download as zip"
+      ![Zip folder from Github page](docs/images/github-zip)
+2. Unzip it and move it to wherever you want the program to live
+3. You're done!
 
 ### Usage
 
-1. Open the [settings file](settings.txt) and point the input, output and truth table settings to the desired locations.
-2. Navigate to app.py in Spyder and click Run.
+1. Navigate to app.py in Spyder and click Run.
+![text](docs/images)
+2. You did it!
+3. Next, open the [settings file](settings.txt) and point the input, output and truth table settings to the desired locations.
 
-More details can be found in the [User guide](docs/User-Guide.pdf).
+More detailed instructions can be found in the [User guide](docs/User-Guide.pdf).
 
 ## Documentation
 
