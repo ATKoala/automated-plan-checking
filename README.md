@@ -63,7 +63,7 @@ It's also possible to set up directly through the command line/shell, with "pip"
 
 1. Directly download the zip from: <https://github.com/ATKoala/automated-plan-checking/archive/master.zip>
     - Or, go to <https://github.com/ATKoala/automated-plan-checking>, click the green Code button and select "download as zip"
-      ![Zip folder from Github page](docs/images/github-zip)
+      ![Zip folder from Github page](docs/images/github-zip.png)
 2. Unzip it and move it to wherever you want the program to live
 3. You're done!
 
