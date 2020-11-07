@@ -46,8 +46,8 @@ ACDS computers come with Anaconda Navigator (which is a set of programs and soft
 ![Checking Python version in Spyder](docs/images/python-version-spyder.png)
 
 3. Anaconda comes with the *pandas* package preinstalled, but check it with `conda list pandas` in the console.
-    - If it's missing, try running `conda install pandas` in the console.
 ![Check for pandas](docs/images/list-pandas.png)
+    - If it's missing, try running `conda install pandas` in the console.
 
 4. Install the *pydicom* package with `conda install -c conda-forge pydicom`
 ![Running conda install pydicom](docs/images/conda-pydicom.png)
@@ -68,17 +68,18 @@ It's also possible to set up directly through the command line/shell, with "pip"
     - Or, go to <https://github.com/ATKoala/automated-plan-checking>, click the green Code button and select "Download zip"
       ![Zip folder from Github page](docs/images/github-zip.png)
 
-2. Unzip it and move it to wherever you want the program to live
+2. Unzip it and move it to wherever you want.
+    - Recommend renaming the folder from automated-plan-checking-master to automated-plan-checking; Github appends the "master" automatically because it comes from the "master" branch, but the program (and repository) itself is automated-plan-checking.
 3. You're done!
 
 ### Usage
 
 1. In Spyder, navigate to the directory in which the program is saved and open app.py
 2. Click Run. On a fresh insrall from github, it will run the program on sample dicoms in the data/ folder.
-![Running in spyder](docs/images/running-in-spyder)
-In the image above the folder was renamed from automated-plan-checking-master to automated-plan-checking.
+![Running in spyder](docs/images/running-in-spyder.png)
+    - In the image above the folder was renamed from automated-plan-checking-master to automated-plan-checking.
 
-Open the [settings file](settings.txt) to point the input, output and truth table settings to the desired locations.
+3. It may be desirable to use the [settings file](settings.txt) and specify different input locations depending on where your dicoms are.
 
 More detailed instructions can be found in the [User guide](docs/User-Guide.pdf).
 
