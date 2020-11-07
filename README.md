@@ -33,13 +33,13 @@ Currently, the process to verify planning parameters is to manually check pdf pr
 ## System Setup
 
 Before you run the program, you will need to make sure your computer has the required software and libraries installed.
-You will need Python 3.6 (or higher) installed, as well as the *pandas* and *pydicom* libraries.
+The following sections will guide you through this process.
 
 ### Anaconda Setup
 
-ACDS computers come with Anaconda Navigator (which is a set of programs and software including Python, Spyder, Jupyter, etc..), so this will be the main entry point.
+If you have Anaconda or are willing to install Anaconda, the setup can be done with the following steps.
 
-1. Open Spyder
+1. Open Spyder (from Anaconda Navigator in the image, but not required to open from Navigator)
 ![Spyder in Anaconda Navigator](docs/images/open-spyder.png)
 
 2. Check the Python version. If it's lower than 3.6, run `conda update python` in the Spyder console.
@@ -54,7 +54,7 @@ ACDS computers come with Anaconda Navigator (which is a set of programs and soft
 
 ### Pip Setup
 
-It's also possible to set up directly through the command line/shell, with "pip", the python package manager.
+Without Anaconda, it's also possible to set up directly through the command line/shell, with "pip", the python package manager.
 
 1. Ensure Python version 3.6 or higher by running `python --version` in the command line
 2. Install *pandas* (Check if already insalled with `pip show pandas`. Can be installed with `pip install pandas`)
@@ -69,15 +69,14 @@ It's also possible to set up directly through the command line/shell, with "pip"
       ![Zip folder from Github page](docs/images/github-zip.png)
 
 2. Unzip it and move it to wherever you want.
-    - Recommend renaming the folder from automated-plan-checking-master to automated-plan-checking; Github appends the "master" automatically because it comes from the "master" branch, but the program (and repository) itself is automated-plan-checking.
-3. You're done!
+    - Recommend renaming the folder from *automated-plan-checking-master* to *automated-plan-checking*; Github appends the "master" automatically because it comes from the "master" branch, but the program (and repository) itself is automated-plan-checking.
 
 ### Usage
 
 1. In Spyder, navigate to the directory in which the program is saved and open app.py
-2. Click Run. On a fresh insrall from github, it will run the program on sample dicoms in the data/ folder.
+2. Click Run. On a fresh install from github, it will run the program on sample dicoms in the data/ folder.
 ![Running in spyder](docs/images/running-in-spyder.png)
-    - In the image above the folder was renamed from automated-plan-checking-master to automated-plan-checking.
+    - In the image above, the program folder was renamed from automated-plan-checking-master to automated-plan-checking.
 
 3. It may be desirable to use the [settings file](settings.txt) and specify different input locations depending on where your dicoms are.
 
@@ -94,7 +93,7 @@ More detailed instructions can be found in the [User guide](docs/User-Guide.pdf)
 ### For Developers
 
 - [Developing a new Parameter](docs/Adding-Parameters.pdf)
-- [User Stories](docs/User-Stories.pdf) shows the features completed and not completed, as well as notes on completed features.
 - [Architecture](docs/System-Design-and-Architecture.pdf) includes components of the program and how modules fit together.
+- [Features](docs/User-Stories.pdf) shows the features completed and not completed, as well as notes on completed features.
 - [Test cases](docs/Test-Cases.pdf) describes the results from manually testing various parts of the system.
 - [Parameter Information](docs/Parameter-Information.pdf) contains some information about the parameters for future developers without domain knowledge.
