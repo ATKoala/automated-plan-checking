@@ -73,7 +73,7 @@ Without Anaconda, it's also possible to set up directly through the command line
 
 ### Usage
 
-1. In Spyder, navigate to the directory in which the program is saved and open app.py
+1. In Spyder, navigate to the directory in which the program is saved and open *app.py*.
 2. Click Run. On a fresh install from github, it will run the program on sample dicoms in the data/ folder.
 ![Running in spyder](docs/images/running-in-spyder.png)
     - In the image above, the program folder was renamed from automated-plan-checking-master to automated-plan-checking.
