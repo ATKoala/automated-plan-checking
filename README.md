@@ -47,7 +47,7 @@ ACDS computers come with Anaconda Navigator (which is a set of programs and soft
 ![Check for pandas](docs/images/list-pandas.png)
     - If it's missing, try running `conda install pandas` in the console.
 4. Install the *pydicom* package with `conda install -c conda-forge pydicom`
-![Running conda install pydicom](docs/images/conda-pydicom/png)
+![Running conda install pydicom](docs/images/conda-pydicom.png)
 
 ### Pip Setup
 
