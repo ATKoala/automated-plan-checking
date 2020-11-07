@@ -17,7 +17,7 @@
   
 - [**Usage**](#usage)
 
-[**Documentation**](#documentation)
+[**Documentation**](#further-documentation)
 
 - [**For Users**](#for-users)
 - [**For Developers**](#for-developers)
@@ -57,8 +57,8 @@ If you have Anaconda or are willing to install Anaconda, the setup can be done w
 Without Anaconda, it's also possible to set up directly through the command line/shell, with "pip", the python package manager.
 
 1. Ensure Python version 3.6 or higher by running `python --version` in the command line
-2. Install *pandas* (Check if already insalled with `pip show pandas`. Can be installed with `pip install pandas`)
-3. Install *pydicom* (Check with `pip show pydicom`. Can be installed with `pip install pydicom`)
+2. Install *pandas* (Check if already installed with `pip show pandas`. Installed with `pip install pandas`)
+3. Install *pydicom* (Check with `pip show pydicom`. Install with `pip install pydicom`)
 
 ## Installation and Usage
 
@@ -82,7 +82,7 @@ Without Anaconda, it's also possible to set up directly through the command line
 
 More detailed instructions can be found in the [User guide](docs/User-Guide.pdf).
 
-## Documentation
+## Further Documentation
 
 ### For Users
 
