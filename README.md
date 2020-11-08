@@ -14,10 +14,11 @@
 - [**Pip and command line**](#pip-setup)
 
 [**Installation and Usage**](#installation-and-usage)
-  
+
+- [**Installation**](#installation)
 - [**Usage**](#usage)
 
-[**Documentation**](#further-documentation)
+[**Documentation List**](#documentation-list)
 
 - [**For Users**](#for-users)
 - [**For Developers**](#for-developers)
@@ -70,20 +71,18 @@ Without Anaconda, it's also possible to set up directly through the command line
 2. In Spyder console, enter `!git clone https://github.com/ATKoala/automated-plan-checking.git`
 ![Git clone results](docs/images/run-git-clone.png)
 3. The program will be downloaded as a folder "automated-plan-checking", in the working directory. (in this example on the desktop)
-![Cloned folder](docs/images/show-clone-dir.png)
+![Cloned folder](docs/images/show-cloned-dir.png)
 
 ### Usage
 
 1. In Spyder, navigate to the directory in which the program is saved and open *app.py*.
 2. Click Run. On a fresh install from github, it will run the program on sample dicoms in the data/ folder.
 ![Running in spyder](docs/images/running-in-spyder.png)
-    - In the image above, the program folder was renamed from automated-plan-checking-master to automated-plan-checking.
-
 3. It may be desirable to use the [settings file](settings.txt) and specify different input locations depending on where your dicoms are, each time you run the program.
 
 More options for usage can be found in the [User guide](docs/User-Guide.pdf).
 
-## Further Documentation
+## Documentation List
 
 ### For Users
 
