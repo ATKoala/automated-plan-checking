@@ -14,9 +14,6 @@ def extract_parameters(dataset, dose_struct_paths, case):
                           May be None if no associated dose/structs found.
     case                - The case of the RTPLAN being processed
     '''
-    # define a list of parameters that need to be found
-    parameters = [strings.mode, strings.prescription_dose, strings.prescription_point, strings.isocenter_point, strings.override, strings.collimator,
-                  strings.gantry, strings.SSD, strings.couch, strings.field_size, strings.wedge, strings.meas, strings.energy]
     
     # Perhaps there should only be one dose and struct associated with a plan?
     if dose_struct_paths:
@@ -31,7 +28,7 @@ def extract_parameters(dataset, dose_struct_paths, case):
 
     #run the extraction functions for each parameter and store the values in parameter_values dictionary
     parameter_values = {}
-    for parameter in parameters:
+    for parameter in strings.parameters:
         parameter_values[parameter] = extractor_functions[parameter](dataset, dose, struct, case)
 
     return parameter_values
