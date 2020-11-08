@@ -69,7 +69,7 @@ Without Anaconda, it's also possible to set up directly through the command line
 
 1. In Spyder, navigate to where you want the program to go. In the example below, we are saving it on the desktop.
 ![Spyder navigation](docs/images/navigate-clone-location.png)
-2. In Spyder console, enter `!git clone https://github.com/ATKoala/automated-plan-checking.git`
+2. In Spyder console, enter `!git clone https://github.com/ATKoala/automated-plan-checking.git`. Note the exclamation mark!
 ![Git clone results](docs/images/run-git-clone.png)
 3. The program will be downloaded as a folder "automated-plan-checking", in the working directory. (in this example on the desktop)
 ![Cloned folder](docs/images/show-cloned-dir.png)
