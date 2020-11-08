@@ -23,6 +23,10 @@ wedge = "wedge"
 meas = "meas"
 energy = "energy"
 
+# define a list of all parameters
+parameters = [mode, prescription_dose, prescription_point, isocenter_point, override, 
+            collimator, gantry, SSD, couch, field_size, wedge, meas, energy]
+
 # Parameter values (which are directly used in code)
 ANY_SSD = "?" # In truth table, SSD sometimes in the format "?,89,93,89,?" with "?" accepting any value
 TRUTH_TABLE_ERROR = "Error: Check truth table format"
@@ -40,3 +44,5 @@ PASS = "PASS"
 NOT_IMPLEMENTED= "NOT IMPLEMENTED"
 NOT_APPLICABLE = "NOT APPLICABLE"
 Not_Extracted = "Not Extracted"
+RTDOSE = "RTDOSE"
+RTSTRUCT = "RTSTRUCT"

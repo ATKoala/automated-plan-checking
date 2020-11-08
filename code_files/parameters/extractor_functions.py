@@ -3,15 +3,14 @@
 Each function in supplied with the same arguments:
 
 dataset             - The full data from the RTPLAN being extracted
-struct_dose_files   - A dictionary of StudyInstanceUID mapping to a list of RTDOSE and RTSTRUCT files in the same folder as the RTPLAN. 
-                        May be empty if no RTDOSE or RTSTRUCT are found.
-                        Format should be {UID:[(filepath, modality), (filepath, modality)], ...}
+dose                - The RTDOSE associated with the RTPLAN. May be None if no associated dose found!
+struct              - The RTSTRUCT dicom associated with the RTPLAN. May be None. 
 case                - The case number of the RTPLAN being extracted
 '''
 
 from code_files import strings
 
-def _extract_mode(dataset, struct_dose_files, case):
+def _extract_mode(dataset, dose, struct, case):
     # For now, we are only producing IMRT vs VMAT modes for cases 6, 7, and 8
     if case not in [6, 7, 8]:
         return strings.NOT_IMPLEMENTED
@@ -34,7 +33,7 @@ def _extract_mode(dataset, struct_dose_files, case):
         mode = "UNKNOWN"
     return mode
 
-def _extract_prescription_dose(dataset, struct_dose_files, case):
+def _extract_prescription_dose(dataset, dose, struct, case):
     total_prescription_dose = str(int(dataset.DoseReferenceSequence[0].TargetPrescriptionDose))
     number_of_fractions = str(dataset.FractionGroupSequence[0].NumberOfFractionsPlanned)
 
@@ -50,7 +49,7 @@ def _extract_prescription_dose(dataset, struct_dose_files, case):
 
     return total_prescription_dose + "/" + number_of_fractions + "/" + prim_dosimeter_unit
 
-def _extract_collimator(dataset, struct_dose_files, case):
+def _extract_collimator(dataset, dose, struct, case):
     beams = list(filter(lambda beam: beam.BeamDescription != strings.SETUP_beam, dataset.BeamSequence))
 
     # Record collimator value in the parameter_values dictionary as a string to be consistant with truth_table format 
@@ -58,9 +57,9 @@ def _extract_collimator(dataset, struct_dose_files, case):
     collimator_value = beams[len(beams)-1].ControlPointSequence[0].BeamLimitingDeviceAngle
     return str(int(collimator_value))
 
-def _extract_gantry(dataset, struct_dose_files, case):
+def _extract_gantry(dataset, dose, struct, case):
     try:
-        file_type = _extract_mode(dataset, struct_dose_files, case)
+        file_type = _extract_mode(dataset, dose, struct, case)
         #If the dataset is a VMAT file it goes through each of the control point sequence and finds each associated gantry angle and returns the lowest value slash the highest value
         if file_type == strings.VMAT:
             i = 0
@@ -83,9 +82,9 @@ def _extract_gantry(dataset, struct_dose_files, case):
     except:
         return strings.ANY_VALUE
 
-def _extract_ssd(dataset, struct_dose_files, case):
+def _extract_ssd(dataset, dose, struct, case):
     #find SSD in centimeters
-    file_type = _extract_mode(dataset, struct_dose_files, case)
+    file_type = _extract_mode(dataset, dose, struct, case)
 
     ssd_list = []
     try:
@@ -106,7 +105,7 @@ def _extract_ssd(dataset, struct_dose_files, case):
     except:
         return "error retrieving SSD"
 
-def _extract_wedge(dataset, struct_dose_files, case):
+def _extract_wedge(dataset, dose, struct, case):
     # It may need more work to deal with VMAT files for cases 6,7,8
 
     #ignore setup beams
@@ -116,7 +115,7 @@ def _extract_wedge(dataset, struct_dose_files, case):
 
     return ','.join(wedge_angles)
 
-def _extract_energy(dataset, struct_dose_files, case):
+def _extract_energy(dataset, dose, struct, case):
     energy = ''
 
     for beam in dataset.BeamSequence:
@@ -128,7 +127,7 @@ def _extract_energy(dataset, struct_dose_files, case):
             energy += str(beam.PrimaryFluenceModeSequence[0].FluenceModeID)
     return energy
 
-def _extract_field_size(dataset, struct_dose_files, case):
+def _extract_field_size(dataset, dose, struct, case):
     beams = list(filter(lambda beam: beam.BeamDescription != strings.SETUP_beam, dataset.BeamSequence))
     # record collimator value in the parameter_values dictionary as a string to be consistant with truth_table format
     # According to the truth table the collimator only needs to be recorded for cases 1&5 where only 1 beam occurs
@@ -167,7 +166,7 @@ def _extract_field_size(dataset, struct_dose_files, case):
     return ','.join(field_size_list)
 
 #just a placeholder function to indicate which parameter extractions have not been implemented
-def to_be_implemented(dataset, struct_dose_files, case):
+def to_be_implemented(dataset, dose, struct, case):
     return strings.NOT_IMPLEMENTED
 
 extractor_functions = {
