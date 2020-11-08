@@ -58,8 +58,9 @@ If you have Anaconda or are willing to install Anaconda, the setup can be done w
 Without Anaconda, it's also possible to set up directly through the command line/shell, with "pip", the python package manager.
 
 1. Ensure Python version 3.6 or higher by running `python --version` in the command line
-2. Check that you can use pip, with `pip --version`. If it returns "pip is not recognized ...", try using `python -m pip --version` instead.
-3. Install *pandas* (Check if already installed with `pip show pandas`. Installed with `pip install pandas`)
+2. Check that you can use pip, with `pip --version`. 
+    - If it returns "pip is not recognized ...", try using `python -m pip --version` instead.
+3. Install *pandas* (Check if already installed with `pip show pandas`. Install with `pip install pandas`)
 4. Install *pydicom* (Check with `pip show pydicom`. Install with `pip install pydicom`)
 
 ## Installation and Usage
