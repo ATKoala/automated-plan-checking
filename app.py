@@ -14,12 +14,14 @@ from code_files.truth_table_reader import read_truth_table
 from code_files.parameters.parameter_retrieval import extract_parameters, evaluate_parameters
 
 silent = False
+skip_dose_structure = True
+
 def main():
     '''
     Main function; everything starts here.
     Handles input arguments and processes the dicoms
     '''
-    global silent 
+    global silent, skip_dose_structure
 
     # Retrieve user inputs and settings from command line arguments
     user_input = parse_arguments()
@@ -49,38 +51,39 @@ def main():
 
     # Look for the given file or files or directories (aka folders) and process them
     for location in inputs:
-        # Check if input item is [file,case] formatted
-        comma_case = None
-        input_item = location.split(",")
-        if len(input_item) == 2:
-            location = Path(input_item[0])
-            comma_case = int(input_item[1])
-        else:
-            location = Path(location)
-        final_case = case_number if comma_case is None else comma_case
+        process_location(location, output, case_number, truth_table)
 
-        # Handle the input where a file is specified
-        if os.path.isfile(location):
-            folder_path = Path(os.path.dirname(location))
-            dose_struct_index = dose_struct_references(folder_path, skip_dose_structure)
-            process_dicom(location, output, final_case, truth_table, dose_struct_index)
+def process_location(location, output, case_number, truth_table):
+    # Check if input item has case number attached
+    input_item = location.split(",")
+    if len(input_item) == 2:
+        location = Path(input_item[0])
+        case_number = int(input_item[1])
+    else:
+        location = Path(location)
 
-        # Handle the input where a folder is specified
-        else:
-            # First we scan through the entire folder once to find out what dose and structure files we have
-            dose_struct_index = dose_struct_references(location, skip_dose_structure)
-            # Then, scan through the folder and process each RTPLAN DICOM
-            with os.scandir(location) as folder:
-                for item in folder:
-                    if item.is_file() and item.name.endswith(".dcm"):
-                        result = process_dicom(item.path, output, final_case, truth_table, dose_struct_index)
-                        info_print(result)
+    # Handle the location where a file is specified
+    if os.path.isfile(location):
+        folder_path = Path(os.path.dirname(location))
+        dose_struct_index = dose_struct_references(folder_path)
+        process_dicom(location, output, case_number, truth_table, dose_struct_index)
+
+    # Handle the location where a folder is specified
+    else:
+        # First we scan through the entire folder once to find out what dose and structure files we have
+        dose_struct_index = dose_struct_references(location)
+        # Then, scan through the folder and process each RTPLAN DICOM
+        with os.scandir(location) as folder:
+            for item in folder:
+                if item.is_file() and item.name.endswith(".dcm"):
+                    result = process_dicom(item.path, output, case_number, truth_table, dose_struct_index)
+                    info_print(result)
         
-def dose_struct_references(folder_path, skip):
+def dose_struct_references(folder_path):
     ''' Function to scan a directory and build an index of RTDOSE and RTSTRUCT files by StudyInstanceUID
         Returns a dictionary: {StudyInstanceUID: {RTDOSE: [paths,...]), RTSTRUCT: [paths,...]}, ...}
     '''
-    if skip:
+    if skip_dose_structure:
         return None
     dose_struct_index = {}
     with os.scandir(folder_path) as folder:
