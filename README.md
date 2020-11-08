@@ -71,13 +71,13 @@ Without Anaconda, it's also possible to set up directly through the command line
 ![Spyder navigation](docs/images/navigate-clone-location.png)
 2. In Spyder console, enter `!git clone https://github.com/ATKoala/automated-plan-checking.git`. Note the exclamation mark!
 ![Git clone results](docs/images/run-git-clone.png)
-3. The program will be downloaded as a folder "automated-plan-checking", in the working directory. (in this example on the desktop)
+3. The program will be downloaded as a folder "automated-plan-checking", in the working directory. (In this example, the desktop)
 ![Cloned folder](docs/images/show-cloned-dir.png)
 
 ### Usage
 
 1. In Spyder, navigate to the directory in which the program is saved and open *app.py*.
-2. Click Run. On a fresh install from github, it will run the program on sample dicoms in the data/ folder.
+2. Click Run. On a fresh install from github, it will run the program on sample dicoms in the 'data' folder.
 ![Running in spyder](docs/images/running-in-spyder.png)
 3. It may be desirable to use the [settings file](settings.txt) and specify different input locations depending on where your dicoms are, each time you run the program.
 
@@ -94,7 +94,7 @@ More options for usage can be found in the [User guide](docs/User-Guide.pdf).
 ### For Developers
 
 - [Developing a new Parameter](docs/Adding-Parameters.pdf)
-- [Architecture](docs/System-Design-and-Architecture.pdf) includes components of the program and how modules fit together.
-- [Features](docs/User-Stories.pdf) shows the features completed and not completed, as well as notes on completed features.
-- [Test cases](docs/Test-Cases.pdf) describes the results from manually testing various parts of the system.
-- [Parameter Information](docs/Parameter-Information.pdf) contains some information about the parameters for future developers without domain knowledge.
+- [Architecture](docs/System-Design-and-Architecture.pdf): components of the program and how modules fit together.
+- [Features](docs/User-Stories.pdf): The features completed and not completed, as well as notes on completed features.
+- [Test cases](docs/Test-Cases.pdf): The results from manually testing various parts of the system.
+- [Parameter Information](docs/Parameter-Information.pdf): Some information about the parameters for future developers without domain knowledge.
