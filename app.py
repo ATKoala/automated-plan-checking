@@ -79,7 +79,6 @@ def dose_struct_references(folder_path, skip):
         Returns a dictionary: {StudyInstanceUID: {RTDOSE: [paths,...]), RTSTRUCT: [paths,...]}, ...}
     '''
     if skip:
-        print("hey")
         return None
     dose_struct_index = {}
     with os.scandir(folder_path) as folder:
