@@ -13,14 +13,12 @@ from code_files.outputter import output
 from code_files.truth_table_reader import read_truth_table
 from code_files.parameters.parameter_retrieval import extract_parameters, evaluate_parameters
 
-silent = False
-skip_dose_structure = True
+silent = None
+skip_dose_structure = None
 
 def main():
-    '''
-    Main function; everything starts here.
-    Handles input arguments and processes the dicoms
-    '''
+    ''' Handles input arguments and processes the dicoms'''
+
     global silent, skip_dose_structure
 
     # Retrieve user inputs and settings from command line arguments
@@ -50,6 +48,7 @@ def main():
     # Look for the given file or files or directories (aka folders) and process them
     for location in inputs:
         process_location(location, output, case_number, truth_table)
+    print()
 
 def process_location(location, output, case_number, truth_table):
     # Check if input item has case number attached
@@ -85,20 +84,21 @@ def dose_struct_references(folder_path):
         return None
     dose_struct_index = {}
     with os.scandir(folder_path) as folder:
-        for item in folder:
-            if item.is_file() and item.name.endswith(".dcm"):
-                uid, modality, file_path = dose_struct_reference(item.path)
-                if uid not in dose_struct_index:
-                    dose_struct_index[uid] = {strings.RTDOSE:[], strings.RTSTRUCT:[], None:[]}
-                dose_struct_index[uid][modality].append(file_path)
+        for entry in folder:
+            # uid, modality and file_path are all None if the entry is not a dose or structure file
+            uid, modality, file_path = dose_struct_reference(entry.path)
+            # create a new dictionary entry if we haven't seen this uid before
+            if uid not in dose_struct_index:
+                dose_struct_index[uid] = {strings.RTDOSE:[], strings.RTSTRUCT:[], None:[]}
+            dose_struct_index[uid][modality].append(file_path)
     return dose_struct_index
 
-def dose_struct_reference(file_path):
-    dataset = pydicom.dcmread(file_path, force=True, specific_tags=["StudyInstanceUID", "Modality"])
-    if str(dataset.Modality) in [strings.RTDOSE, strings.RTSTRUCT]:
-        return dataset.StudyInstanceUID, dataset.Modality, file_path
-    else:
-        return None,None,None
+def dose_struct_reference(dir_entry):
+    if dir_entry.is_file() and dir_entry.name.endwith(".dcm"):
+        dataset = pydicom.dcmread(dir_entry.path, force=True, specific_tags=["StudyInstanceUID", "Modality"])
+        if str(dataset.Modality) in [strings.RTDOSE, strings.RTSTRUCT]:
+            return dataset.StudyInstanceUID, dataset.Modality, dir_entry.path
+    return None,None,None
 
 def process_dicom(location, destination, case_number, truth_table, dose_struct_index):
     ''' Function to process a single DICOM RTPLAN
