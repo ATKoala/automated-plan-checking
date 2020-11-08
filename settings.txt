@@ -1,8 +1,7 @@
 ##### Settings file ###############################################
 # For descriptions of all settings, as well as some more in-depth information
-# on setting them, consult the file
-#    docs/Settings.pdf
-# If you can't find it, the file is also available online at:
+# on setting them, consult the file: docs/Settings.pdf
+# The file is also available online at:
 # https://github.com/ATKoala/automated-plan-checking/blob/master/docs/Settings.pdf
 #
 
@@ -12,16 +11,30 @@
 #
 # Only one specification is allowed per line.
 #
-# The terms are typically case-insensitive except when specifying files or 
-# directories when on a system that has case-sensitive filenames.
+# The terms are typically case-insensitive, except when specifying files or 
+# directories on a operating system that has case-sensitive filenames.
 #
-# White space is stripped from the beginning and end of the line, as
+# White space is stripped at the beginning and end of each line, as
 # well as immediately before and after the '='. For the default_input setting,
 # whitespace around the separator (*) is also trimmed. All other whitespace is left intact.
 #
-# Lines starting with hash (#) are comments and do not impact the settings
+# Lines starting with hash (#) are comments and are ignored by the program
+#
 
-
+##### Sample Settings ##############################################
+# Some examples for each setting.
+# You can use them as a base to write your own values for each setting
+#
+# default_input = data/samples
+# default_input = data/samples,7
+# default_input = data/samples/YellowLvlIII_7a.dcm,7 * data/samples/YellowLvlIII_7b.dcm * data/samples2
+# default_input = C:\Users\Jimothy\dicoms\
+# truth_table_file = data/truth_table_lvl2.csv
+# truth_table_file = C:\Users\Jimothy\dicoms\truth_table.csv
+# default_output_folder = C:\Users\Jimothy\dicoms\csvreports
+# silent_run = true
+# skip_dose_strucure = false
+#
 
 ##### Settings ####################################################
 default_input = data/samples/,7  
@@ -30,20 +43,7 @@ truth_table_file = data/truth_table_lvl3.csv
 silent_run = false
 skip_dose_structure = false
 
-##### Sample Settings ##############################################
-# Some examples for each setting
 
-# default_input = data/samples
-# default_input = data/samples,7
-# default_input = data/samples/YellowLvlIII_7a.dcm * data/samples2
-# default_input = C:\Users\Jimothy\dicoms\
-# default_input = C:\Users\Jimothy\dicoms\ * data/samples
 
-# truth_table_file = data/truth_table_lvl2.csv
-# truth_table_file = C:\Users\Jimothy\dicoms\truth_table.csv
 
-# default_output_folder = C:\Users\Jimothy\dicoms\csvreports
 
-# silent_run = true
-
-# skip_dose_strucure = false
