@@ -45,9 +45,7 @@ def main():
         try:
             os.mkdir(output)
         except FileNotFoundError:
-            output = Path(output)
-            print(f"Tried creating the output directory <{output.name}>, but the location <{output.resolve().parent}> doesn't exist")
-            exit()
+            exit(f"Tried creating the output directory <{output}>, but the location <{Path(output).resolve().parent}> doesn't exist!")
 
     # Look for the given file or files or directories (aka folders) and process them
     for location in inputs:
