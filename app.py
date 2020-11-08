@@ -142,17 +142,17 @@ def info_print(text,silent=False):
         print(text)
         
 def parse_arguments():
-    parser = argparse.ArgumentParser(description="Extract and evaluate selected parameters of DICOM files for the purpose of auditing planned radiotherapy treatment.")
+    parser = argparse.ArgumentParser(description="Extract and evaluate information from DICOM files for the purpose of auditing planned radiotherapy treatment.")
     parser.add_argument("-i", "--inputs", nargs='+',
                         help="The locations of one or more DICOMS to be processed, OR the locations of one or more folders containing DICOMS to be processed.")
     parser.add_argument("-t", "--truth_table", dest="truth_table_file",
-                        help="The file containing the truth table to be used for determining pass/fail results.")    
+                        help="The path of the file containing the truth table to be used for determining pass/fail results.")    
     parser.add_argument("-o", "--output", metavar="FOLDER",
                         help="The location where the reports for processed DICOMs should be saved (creates folder if doesn't yet exist). If unspecified, each report will be saved in a Reports folder in this directory.")
     parser.add_argument("-c", "--case_number", metavar="NUMBER", type=int,
                         help="The case number of input DICOMS. If specified, assumes all DICOMS in this batch will be this case.")
-    parser.add_argument("-f", "--format", choices=["csv"], default="csv", dest="output_format",
-                        help="The format of the output file.")
+    parser.add_argument("-f", "--format", metavar="csv", default="csv", dest="output_format",
+                        help="The format of the output file. Csv by default if not set. Also, currently only csv available.")
     args = parser.parse_args()
     return vars(args)
     

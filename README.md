@@ -57,8 +57,9 @@ If you have Anaconda or are willing to install Anaconda, the setup can be done w
 Without Anaconda, it's also possible to set up directly through the command line/shell, with "pip", the python package manager.
 
 1. Ensure Python version 3.6 or higher by running `python --version` in the command line
-2. Install *pandas* (Check if already installed with `pip show pandas`. Installed with `pip install pandas`)
-3. Install *pydicom* (Check with `pip show pydicom`. Install with `pip install pydicom`)
+2. Check that you can use pip, with `pip --version`. If it returns "pip is not recognized ...", try using `python -m pip --version` instead.
+3. Install *pandas* (Check if already installed with `pip show pandas`. Installed with `pip install pandas`)
+4. Install *pydicom* (Check with `pip show pydicom`. Install with `pip install pydicom`)
 
 ## Installation and Usage
 
@@ -78,7 +79,7 @@ Without Anaconda, it's also possible to set up directly through the command line
 ![Running in spyder](docs/images/running-in-spyder.png)
     - In the image above, the program folder was renamed from automated-plan-checking-master to automated-plan-checking.
 
-3. It may be desirable to use the [settings file](settings.txt) and specify different input locations depending on where your dicoms are.
+3. It may be desirable to use the [settings file](settings.txt) and specify different input locations depending on where your dicoms are, each time you run the program.
 
 More options for usage can be found in the [User guide](docs/User-Guide.pdf).
 
@@ -92,7 +93,7 @@ More options for usage can be found in the [User guide](docs/User-Guide.pdf).
 
 ### For Developers
 
-- [Developing a new Parameter](docs/Adding-Parameters.pdf) 
+- [Developing a new Parameter](docs/Adding-Parameters.pdf)
 - [Architecture](docs/System-Design-and-Architecture.pdf) includes components of the program and how modules fit together.
 - [Features](docs/User-Stories.pdf) shows the features completed and not completed, as well as notes on completed features.
 - [Test cases](docs/Test-Cases.pdf) describes the results from manually testing various parts of the system.
