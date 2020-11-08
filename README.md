@@ -64,12 +64,12 @@ Without Anaconda, it's also possible to set up directly through the command line
 
 ### Installation
 
-1. Directly download the zip from: <https://github.com/ATKoala/automated-plan-checking/archive/master.zip>
-    - Or, go to <https://github.com/ATKoala/automated-plan-checking>, click the green Code button and select "Download zip"
-      ![Zip folder from Github page](docs/images/github-zip.png)
-
-2. Unzip it and move it to wherever you want.
-    - Recommend renaming the folder from *automated-plan-checking-master* to *automated-plan-checking*; Github appends the "master" automatically because it comes from the "master" branch, but the program (and repository) itself is automated-plan-checking.
+1. In Spyder, navigate to where you want the program to go. In the example below, we are saving it on the desktop.
+![Spyder navigation](docs/images/navigate-clone-location.png)
+2. In Spyder console, enter `!git clone https://github.com/ATKoala/automated-plan-checking.git`
+![Git clone results](docs/images/run-git-clone.png)
+3. The program will be downloaded as a folder "automated-plan-checking", in the working directory. (in this example on the desktop)
+![Cloned folder](docs/images/show-clone-dir.png)
 
 ### Usage
 
@@ -80,7 +80,7 @@ Without Anaconda, it's also possible to set up directly through the command line
 
 3. It may be desirable to use the [settings file](settings.txt) and specify different input locations depending on where your dicoms are.
 
-More detailed instructions can be found in the [User guide](docs/User-Guide.pdf).
+More options for usage can be found in the [User guide](docs/User-Guide.pdf).
 
 ## Further Documentation
 
@@ -92,7 +92,7 @@ More detailed instructions can be found in the [User guide](docs/User-Guide.pdf)
 
 ### For Developers
 
-- [Developing a new Parameter](docs/Adding-Parameters.pdf)
+- [Developing a new Parameter](docs/Adding-Parameters.pdf) 
 - [Architecture](docs/System-Design-and-Architecture.pdf) includes components of the program and how modules fit together.
 - [Features](docs/User-Stories.pdf) shows the features completed and not completed, as well as notes on completed features.
 - [Test cases](docs/Test-Cases.pdf) describes the results from manually testing various parts of the system.
