@@ -3,7 +3,7 @@
 Each function in supplied with the same arguments:
 
 dataset             - The full data from the RTPLAN being extracted
-dose                - The RTDOSE associated with the RTPLAN. May be None if no associated dose found
+dose                - The RTDOSE associated with the RTPLAN. May be None if no associated dose found!
 struct              - The RTSTRUCT dicom associated with the RTPLAN. May be None. 
 case                - The case number of the RTPLAN being extracted
 '''
